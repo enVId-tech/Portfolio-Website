@@ -28,7 +28,7 @@ const Footer: React.FC = (): JSX.Element => {
             <div>
                 <div>
                     <h1></h1>
-                    <h6>Latest Update: 11-9-2023, Revision 0.0.02</h6>
+                    <h6>Latest Update: 11-10-2023, Revision 0.0.03</h6>
                 </div>
             </div>
         )
