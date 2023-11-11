@@ -1,0 +1,14 @@
+.homePageMainDiv {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: fit-content;
+    display: flex;
+    flex-direction: column;
+    .titleDiv {
+        background-color: lightblue;
+        width: 100%;
+        height: 70vh;
+    }
+}

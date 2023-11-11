@@ -1,0 +1,12 @@
+.footerDiv {
+    width: 100vw;
+    background-color: rgba(18, 184, 235, 0);
+    height: 40vh;
+    display: flex;
+    flex-direction: row;
+    .footerRight {
+        .brandName {
+            font-size: 6vh;
+        }
+    }
+}
