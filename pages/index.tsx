@@ -4,7 +4,7 @@ import styles from '../styles/home.module.scss';
 import Footer from '@/templates/footer.section.tsx';
 import TitleDiv from '@/templates/titleDiv.section.tsx';
 import About from '@/templates/about.section.tsx';
-import ParticlesElement from '@/templates/particles/particles.effects.tsx';
+import ParticlesElement from '@/templates/animations/particles.effects.tsx';
 import PaddingElement from '@/templates/element.padding.section.tsx';
 
 const HomePage: React.FC = (): JSX.Element => {

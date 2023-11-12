@@ -7,6 +7,11 @@
     justify-content: center;
     align-items: flex-start;
     padding-left: 7.5vw;
+    opacity: 0;
+
+    &.content-anim-right {
+        animation: content-anim-right 1s forwards;
+    }
 
     .smallerAboutDiv {
         height: 60vh;
@@ -27,5 +32,16 @@
             text-underline-position: under;
             text-decoration-thickness: 0.5vh;
         }
+    }
+}
+
+@keyframes content-anim-right {
+    0% {
+        opacity: 0;
+        transform: translateX(-100vw);
+    }
+    100% {
+        opacity: 1;
+        transform: translateX(0vw);
     }
 }

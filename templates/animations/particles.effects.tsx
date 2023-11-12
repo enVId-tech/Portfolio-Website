@@ -1,5 +1,5 @@
 import React from 'react';
-import particles from '../particles/particles.json';
+import particles from './particles.json';
 import Particles from 'react-tsparticles';
 import { loadFull } from 'tsparticles';
 
