@@ -9,6 +9,8 @@ const Work_Sans_300 = {
 }
 
 const Footer: React.FC = (): JSX.Element => {
+    const latestUpdate: string = 'Latest Update: 11-11-2023, Revision 0.0.20';
+    const brandName: string = 'enVId Tech';
     try {
         return (
             <div className={`${styles.footerDiv}`}>
@@ -16,8 +18,8 @@ const Footer: React.FC = (): JSX.Element => {
                     <p className={`${styles.label}`}></p>
                 </div>
                 <div className={`${styles.footerRight}`}>
-                    <p className={`${styles.brandName}`}>enVId Tech</p>
-                    <p>Latest Update: 11-10-2023, Revision 0.0.01</p>
+                    <p className={`${styles.brandName}`}>{brandName}</p>
+                    <p>{latestUpdate}</p>
                 </div>
             </div>
         )
@@ -27,8 +29,8 @@ const Footer: React.FC = (): JSX.Element => {
         return (
             <div>
                 <div>
-                    <h1></h1>
-                    <h6>Latest Update: 11-10-2023, Revision 0.0.03</h6>
+                    <h1>{brandName}</h1>
+                    <h6>{latestUpdate}</h6>
                 </div>
             </div>
         )
