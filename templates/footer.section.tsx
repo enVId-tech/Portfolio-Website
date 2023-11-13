@@ -9,7 +9,7 @@ const Work_Sans_300 = {
 }
 
 const Footer: React.FC = (): JSX.Element => {
-    const latestUpdate: string = 'Latest Update: 11-11-2023, Revision 0.0.21';
+    const latestUpdate: string = 'Latest Update: 11-11-2023, Revision 0.0.30';
     const brandName: string = 'enVId Tech';
     try {
         return (

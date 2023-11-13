@@ -3,6 +3,10 @@ body {
     background-color: rgb(0,0,0);
 }
 
+::-webkit-scrollbar {
+    display: none;
+}
+
 .divPadding {
     z-index: 0;
     display: block;

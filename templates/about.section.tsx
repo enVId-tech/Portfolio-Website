@@ -1,7 +1,7 @@
 import React from 'react';
+import Image from 'next/image';
 import styles from './scss/about.module.scss';
 import { Work_Sans } from 'next/font/google';
-import applyPageAnims from './animations/animations.anim.ts';
 
 const Work_Sans_300 = Work_Sans({
     weight: "300",
@@ -9,45 +9,42 @@ const Work_Sans_300 = Work_Sans({
     subsets: ['latin']
 });
 
-const Work_Sans_500 = Work_Sans({
-    weight: "500",
+const Work_Sans_400 = Work_Sans({
+    weight: "400",
     style: 'normal',
     subsets: ['latin']
 });
 
-const About: React.FC = (): JSX.Element => {
-    const mainAbout = React.useRef<HTMLDivElement | null>(null);
+interface AboutProps {
+    aboutScrollHeight: number;
+}
 
-    const refs: React.RefObject<HTMLDivElement>[] = [
-        mainAbout
-    ];
+const About: React.FC<AboutProps> = (props: AboutProps): JSX.Element => {
+    const [aboutScrolled, setAboutScrolled] = React.useState<boolean>(false);
 
-    const anims: string[] = [
-        "c_right"
-    ]
+    const onScroll = React.useCallback((): void => {
+        const scrollY = window;
+        console.log("scrollY: ", scrollY.scrollY);
 
-    const handleAnims = (): void => {
-        applyPageAnims(styles, refs, anims, 1.1);
-    }
-
-    React.useEffect((): void => {
-        handleAnims();
-
-        window.addEventListener('scroll', handleAnims);
-
-        return () => {
-            window.removeEventListener('scroll', handleAnims);
+        if (scrollY.scrollY >= props.aboutScrollHeight) {
+            setAboutScrolled(true);
         }
-    }, []);
+    }, [props.aboutScrollHeight]);
 
-
+    React.useEffect(() => {
+        window.addEventListener("scroll", onScroll);
+        return () => window.removeEventListener("scroll", onScroll);
+    }, [onScroll]);
 
     return (
-        <div className={`${styles.aboutDiv}`} ref={mainAbout}>
-            
-            <div className={`${styles.smallerAboutDiv}`}>
-                <p className={`${styles.sectionHeading} ${Work_Sans_500.className}`}>About Me</p>
+        <div className={`${styles.aboutDiv}`} id="about">
+            <div className={`${styles.smallerAboutDiv} ${aboutScrolled ? styles.contentAnimRight : ""}`}>
+                <p className={`${styles.sectionHeading} ${Work_Sans_400.className}`}>About Me</p>
+                <p className={`${styles.sectionSubHeading} ${Work_Sans_300.className}`}>High school student</p>
+                <p className={`${styles.sectionParagraph1} ${Work_Sans_300.className}`}>Specialized in full stack web development.</p>
+                <p className={`${styles.sectionParagraph2} ${Work_Sans_300.className}`}>Self-studied in software, 3 years</p>
             </div>
+            <Image className={`${styles.aboutImage}`} src="/images/personalPFP.png" alt="Web developer" width={350} height={350} />
         </div>
     )
 };

@@ -11,10 +11,18 @@
     .namePlate {
         font-size: 10vh;
         text-shadow: 0 0 10px white;
+        cursor: default;
+        &::selection {
+            background-color: transparent;
+        }
     }
 
     .subNamePlate {
         font-size: 4vh;
         text-shadow: 0 0 10px white;
+        cursor: default;
+        &::selection {
+            background-color: transparent;
+        }
     }
 }

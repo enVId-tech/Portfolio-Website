@@ -20,6 +20,7 @@ interface TitleDivProps {
     titlePlateDelay: number;
     subTitlePlateDelay: number;
     timeBetweentitleAndSubTitle?: number;
+    waitTime?: number;
 }
 
 const TitleDiv: React.FC<TitleDivProps> = (props: TitleDivProps): JSX.Element => {
@@ -66,13 +67,13 @@ const TitleDiv: React.FC<TitleDivProps> = (props: TitleDivProps): JSX.Element =>
             return;
         }
         animateText(titlePlate, title, props.subTitlePlateDelay);
-    }, 250);
+    }, props.waitTime ? props.waitTime : 250);
 
     try {
         return (
             <div className={styles.titleDiv} id="homePageMainDivHeader">
-                <h1 className={`${styles.namePlate} ${Work_Sans500.className}`} id="Name" ref={namePlate}></h1>
-                <h2 className={`${styles.subNamePlate} ${Work_Sans300.className}`} id="PersonTitle" ref={titlePlate}></h2>
+                <p className={`${styles.namePlate} ${Work_Sans500.className}`} id="Name" ref={namePlate}></p>
+                <p className={`${styles.subNamePlate} ${Work_Sans300.className}`} id="PersonTitle" ref={titlePlate}></p>
             </div>
         )
     } catch (err: unknown) {
