@@ -1,0 +1,22 @@
+.line {
+    width: 100%;
+    height: 2px;
+    background-color: white;
+    margin: -10px;
+
+    @for $i from 1 through 5 {
+        &.animation-delay-#{$i} {
+            animation: line-animation 1s ease-in-out #{$i * 0.5}s forwards;
+        }
+    }
+}
+
+@keyframes line-animation {
+    0% {
+        width: 0;
+    }
+
+    100% {
+        width: 10%;
+    }
+}

@@ -1,0 +1,25 @@
+.box {
+  width: 12.5vw;
+  height: 15vh;
+  background-color: white;
+  margin: 10px;
+  border-radius: 5px;
+
+  @for $i from 1 through 5 {
+    &.animation-delay-#{$i} {
+      animation: box-animation 1s ease-in-out #{$i * 0.5}s forwards;
+    }
+  }
+}
+
+@keyframes box-animation {
+  0% {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
