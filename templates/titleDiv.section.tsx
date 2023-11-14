@@ -39,20 +39,29 @@ const TitleDiv: React.FC<TitleDivProps> = (props: TitleDivProps): JSX.Element =>
     }
 
     const animateText = (target: React.MutableRefObject<HTMLElement | null>, text: string, delay: number): void => {
-        target.current!.innerHTML = "";
+        if (target.current === null) {
+            throw new Error("Target not found" as string);
+        }
+        
+        target.current.innerHTML = "";
         let i: number = 0;
         const intervalId: NodeJS.Timeout = setInterval((): void => {
             if (target.current !== null) {
                 const currentText: string = target.current.innerHTML;
-                if (currentText.includes(text) || currentText.length >= text.length) {
+                if (currentText.includes(text) || currentText.length >= text.length + 2) {
                     target.current.innerHTML = "";
                 }
 
                 target.current.innerHTML += text.charAt(i);
                 i++;
+                target.current.innerHTML = target.current.innerHTML.replace("|", "");
+                target.current.innerHTML += "|";
 
                 if (i === text.length) {
                     clearInterval(intervalId);
+                    setTimeout((): void => {
+                        target.current!.innerHTML = target.current!.innerHTML.replace("|", "");
+                    }, 250);
                 }
             }
         }, delay);
@@ -67,7 +76,7 @@ const TitleDiv: React.FC<TitleDivProps> = (props: TitleDivProps): JSX.Element =>
             return;
         }
         animateText(titlePlate, title, props.subTitlePlateDelay);
-    }, props.waitTime ? props.waitTime : 250);
+    }, props.waitTime ? props.waitTime : 150);
 
     try {
         return (

@@ -41,13 +41,13 @@ const MyPath: React.FC<MyPathProps> = (props: MyPathProps): JSX.Element => {
         <div className={`${styles.myPathDiv}`}>
             <div className={`${styles.myPathMain} ${myPathScrolled ? styles.contentAnimLeft : ""}`}>
                 <span className={`${styles.myPathTitleSpan1}`}>
-                    <Box delay={1} />
-                    <Line delay={1} />
-                    <Box delay={2} />
-                    <Line delay={2} />
-                    <Box delay={3} />
-                    <Line delay={3} />
-                    <Box delay={4} />
+                    <Box delay={1} myPathScrolled={myPathScrolled} text="Journey starts here - May, 2020" />
+                    <Line delay={2} myPathScrolled={myPathScrolled} />
+                    <Box delay={3} myPathScrolled={myPathScrolled} text="Started learning basic HTML - May, 2020" />
+                    <Line delay={4} myPathScrolled={myPathScrolled} />
+                    <Box delay={5} myPathScrolled={myPathScrolled} text="Started learning JS - June, 2020"/>
+                    <Line delay={6} myPathScrolled={myPathScrolled} />
+                    <Box delay={7} myPathScrolled={myPathScrolled} text="Started learning CSS - June, 2020"/>
                 </span>
             </div>
         </div>

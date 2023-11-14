@@ -14,7 +14,7 @@ const HomePage: React.FC = (): JSX.Element => {
             <ParticlesElement />
             <Head>
                 <title>enVId Tech - Home Page</title>
-                <link href="../public/favicon/favicon.ico" type="image/x-icon" rel="icon" />
+                <link href="/favicon/favicon.ico" type="image/x-icon" rel="icon" />
             </Head>
             <TitleDiv 
                 titlePlate={`Hi! I'm Erick Tran.`}
@@ -24,7 +24,7 @@ const HomePage: React.FC = (): JSX.Element => {
                 timeBetweentitleAndSubTitle={1050}
                 waitTime={350}
             />
-            <About aboutScrollHeight={600} />
+            <About aboutScrollHeight={700} />
             <PaddingElement height={15} />
             <MyPath myPathScrollHeight={1463} />
             <PaddingElement height={15} />

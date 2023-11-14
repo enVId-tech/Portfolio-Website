@@ -44,7 +44,7 @@ const About: React.FC<AboutProps> = (props: AboutProps): JSX.Element => {
                 <p className={`${styles.sectionParagraph1} ${Work_Sans_300.className}`}>Specialized in full stack web development.</p>
                 <p className={`${styles.sectionParagraph2} ${Work_Sans_300.className}`}>Self-studied in software, 3 years</p>
             </div>
-            <Image className={`${styles.aboutImage}`} src="/images/personalPFP.png" alt="Web developer" width={350} height={350} />
+            <Image className={`${styles.aboutImage} ${aboutScrolled ? styles.contentAnimUp : ""}`} src="/images/personalPFP.png" alt="Web developer" width={350} height={350} />
         </div>
     )
 };

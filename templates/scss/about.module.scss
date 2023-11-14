@@ -46,13 +46,26 @@
                 animation: content-anim-right 1s 0.75s forwards;
             }
 
-            .sectionSubHeading, .sectionParagraph1, .sectionParagraph2 {
+            .sectionSubHeading,
+            .sectionParagraph1,
+            .sectionParagraph2 {
                 font-size: 3vh;
                 margin-left: 1.5vw;
                 margin-bottom: 2vh;
                 color: white;
                 opacity: 0;
             }
+        }
+    }
+
+    .aboutImage {
+        background-color: transparent; // rgb(255, 255, 255);
+        border-radius: 5px;
+        margin-left: 2vw;
+        opacity: 0;
+
+        &.contentAnimUp {
+            animation: content-anim-up 0.75s 0.25s forwards;
         }
     }
 }
@@ -66,5 +79,17 @@
     100% {
         opacity: 1;
         transform: translateX(0vw);
+    }
+}
+
+@keyframes content-anim-up {
+    0% {
+        opacity: 0;
+        transform: translateY(2vw);
+    }
+
+    100% {
+        opacity: 1;
+        transform: translateY(0vw);
     }
 }
