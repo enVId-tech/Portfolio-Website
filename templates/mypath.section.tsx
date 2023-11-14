@@ -39,6 +39,7 @@ const MyPath: React.FC<MyPathProps> = (props: MyPathProps): JSX.Element => {
 
     return (
         <div className={`${styles.myPathDiv}`}>
+            <p className={`${styles.myPathTitle} ${Work_Sans_300.className}`}>My Path</p>
             <div className={`${styles.myPathMain} ${myPathScrolled ? styles.contentAnimLeft : ""}`}>
                 <span className={`${styles.myPathTitleSpan1}`}>
                     <Box delay={1} myPathScrolled={myPathScrolled} text="Journey starts here - May, 2020" />

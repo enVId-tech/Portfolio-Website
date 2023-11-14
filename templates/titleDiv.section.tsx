@@ -30,14 +30,6 @@ const TitleDiv: React.FC<TitleDivProps> = (props: TitleDivProps): JSX.Element =>
     const name: string = props.titlePlate.toString();
     const title: string = props.subTitlePlate.toString();
 
-    if (!namePlate) {
-        throw new Error("Name plate not found" as string);
-    }
-
-    if (!titlePlate) {
-        throw new Error("Title plate not found" as string);
-    }
-
     const animateText = (target: React.MutableRefObject<HTMLElement | null>, text: string, delay: number): void => {
         if (target.current === null) {
             throw new Error("Target not found" as string);
