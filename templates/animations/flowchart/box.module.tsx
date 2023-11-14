@@ -12,6 +12,7 @@ interface BoxProps {
   delay: number;
   myPathScrolled: boolean;
   text: string;
+  boxType: number;
 }
 
 const Box: React.FC<BoxProps> = (props: BoxProps) => {
@@ -53,10 +54,12 @@ const Box: React.FC<BoxProps> = (props: BoxProps) => {
   };
 
   React.useEffect((): void => {
-    setTimeout((): void => {
-      animateText(box, props.text, 100);
-    }, 250);
-  }, [props.text]);
+    if (props.myPathScrolled) {
+      setTimeout((): void => {
+        animateText(box, props.text, 100);
+      }, 550 + 175 * props.delay);
+    }
+  }, [props.text, props.myPathScrolled]);
 
 
   React.useEffect(() => {
@@ -65,7 +68,7 @@ const Box: React.FC<BoxProps> = (props: BoxProps) => {
   }, [onScroll]);
 
   return (
-    <div className={`${styles.box} ${myPathScrolled ? styles[`animation-delay-${props.delay}`] : ""}`}>
+    <div className={`${props.boxType === 2 ? styles.box2 : styles.box} ${myPathScrolled ? styles[`animation-delay-${props.delay}`] : ""}`}>
       <h1 className={`${styles.boxH1} ${Work_Sans_300.className}`} ref={box}></h1>
     </div>
   )

@@ -34,32 +34,30 @@
                 color: white;
             }
 
-            .sectionSubHeading {
-                animation: content-anim-right 1s 0.25s forwards;
-            }
-
-            .sectionParagraph1 {
-                animation: content-anim-right 1s 0.5s forwards;
-            }
-
-            .sectionParagraph2 {
-                animation: content-anim-right 1s 0.75s forwards;
-            }
-
-            .sectionSubHeading,
-            .sectionParagraph1,
-            .sectionParagraph2 {
-                font-size: 3vh;
-                margin-left: 1.5vw;
-                margin-bottom: 2vh;
-                color: white;
-                opacity: 0;
+            @for $i from 0 through 100 {
+                .sectionParagraph#{$i} {
+                    $i: $i * 0.25;
+                    font-size: 3vh;
+                    margin-left: 1.5vw;
+                    margin-bottom: 2vh;
+                    color: rgba(255, 255, 255, 1);
+                    opacity: 0;
+                    animation: content-anim-right 1s #{$i}s ease-in-out forwards;
+                    a {
+                        color: rgba(255, 255, 255, 1);
+                        transition: 0.5s;
+                        &:hover {
+                            color: rgba(255, 255, 255, 0.5);
+                        }
+                    
+                    }
+                }
             }
         }
     }
 
     .aboutImage {
-        background-color: transparent; // rgb(255, 255, 255);
+        background-color: transparent;
         border-radius: 5px;
         margin-left: 2vw;
         opacity: 0;

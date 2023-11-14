@@ -24,7 +24,6 @@ const About: React.FC<AboutProps> = (props: AboutProps): JSX.Element => {
 
     const onScroll = React.useCallback((): void => {
         const scrollY = window;
-        console.log("scrollY: ", scrollY.scrollY);
 
         if (scrollY.scrollY >= props.aboutScrollHeight) {
             setAboutScrolled(true);
@@ -40,9 +39,10 @@ const About: React.FC<AboutProps> = (props: AboutProps): JSX.Element => {
         <div className={`${styles.aboutDiv}`} id="about">
             <div className={`${styles.smallerAboutDiv} ${aboutScrolled ? styles.contentAnimRight : ""}`}>
                 <p className={`${styles.sectionHeading} ${Work_Sans_400.className}`}>About Me</p>
-                <p className={`${styles.sectionSubHeading} ${Work_Sans_300.className}`}>High school student</p>
-                <p className={`${styles.sectionParagraph1} ${Work_Sans_300.className}`}>Specialized in full stack web development.</p>
-                <p className={`${styles.sectionParagraph2} ${Work_Sans_300.className}`}>Self-studied in software, 3 years</p>
+                <p className={`${styles.sectionParagraph1} ${Work_Sans_300.className}`}>High school student</p>
+                <p className={`${styles.sectionParagraph2} ${Work_Sans_300.className}`}>Specialized in full stack web development.</p>
+                <p className={`${styles.sectionParagraph3} ${Work_Sans_300.className}`}>Self-studied in software, 3 years</p>
+                <p className={`${styles.sectionParagraph4} ${Work_Sans_300.className}`}>Software developer, <a href='https://frc4079.org/' target='_blank' rel='noopener noreferrer'>FRC 4079</a> </p>
             </div>
             <Image className={`${styles.aboutImage} ${aboutScrolled ? styles.contentAnimUp : ""}`} src="/images/personalPFP.png" alt="Web developer" width={350} height={350} />
         </div>

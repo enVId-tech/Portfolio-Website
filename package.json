@@ -1,6 +1,6 @@
 {
   "name": "pblog",
-  "version": "0.0.33",
+  "version": "0.0.40",
   "private": true,
   "scripts": {
     "dev": "next dev",

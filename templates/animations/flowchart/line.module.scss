@@ -5,7 +5,7 @@
 
     @for $i from 1 through 100 {
         &.animation-delay-#{$i} {
-            animation: line-animation 1s ease-in-out #{$i * 0.25}s forwards;
+            animation: line-animation 0.4s ease-in-out #{$i * 0.25}s forwards;
         }
     }
 }
@@ -16,6 +16,6 @@
     }
 
     100% {
-        width: 10%;
+        width: 5%;
     }
 }
