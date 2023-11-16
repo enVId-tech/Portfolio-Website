@@ -17,14 +17,9 @@ interface BoxProps {
 
 const Box: React.FC<BoxProps> = (props: BoxProps) => {
   const box = React.useRef<HTMLHeadingElement | null>(null);
+  const boxH1 = React.useRef<HTMLHeadingElement | null>(null);
 
   const [myPathScrolled, setMyPathScrolled] = React.useState<boolean | null>(false);
-  const [xPos, setXPos] = React.useState<number | null>(0);
-  const [yPos, setYPos] = React.useState<number | null>(0);
-  const [dX, setDX] = React.useState<number | null>(0);
-  const [dY, setDY] = React.useState<number | null>(0);
-  const [mouseRaf, setMouseRaf] = React.useState<number | null>(null);
-  const [gradMoveRaf, setGradMoveRaf] = React.useState<number | null>(null);
 
   const onScroll = React.useCallback((): void => {
     setMyPathScrolled(props.myPathScrolled);
@@ -62,7 +57,7 @@ const Box: React.FC<BoxProps> = (props: BoxProps) => {
   React.useEffect((): void => {
     if (props.myPathScrolled) {
       setTimeout((): void => {
-        animateText(box, props.text, 100);
+        animateText(boxH1, props.text, 100);
       }, 550 + 175 * props.delay as number);
     }
   }, [props.text, props.myPathScrolled, props.delay]);
@@ -95,8 +90,16 @@ const Box: React.FC<BoxProps> = (props: BoxProps) => {
   }, []);
 
   return (
-    <div className={`${props.boxType === 2 ? styles.box2 : styles.box} ${myPathScrolled ? styles[`animation-delay-${props.delay}`] : ""}`} style={{ background: `radial-gradient(at var(--x, 0%) var(--y, 0%), rgba(112, 176, 33, 0.5), rgba(0, 0, 0, 0))` }} ref={box}>
-      <h1 className={`${styles.boxH1} ${Work_Sans_300.className}`}></h1>
+    <div 
+      className={`${props.boxType === 2 ? styles.box2 : styles.box} ${myPathScrolled ? styles[`animation-delay-${props.delay}`] : ""} ${Work_Sans_300.className}`}
+      style={{ background: `radial-gradient(at var(--x, 0%) var(--y, 0%), rgba(112, 176, 33, 0.5), rgba(0, 0, 0, 0))` }}
+      ref={box}
+    >
+      <p 
+        className={`${styles.boxH1} ${Work_Sans_300.className}`} 
+        style={{ color: `rgba(255, 255, 255, ${myPathScrolled ? 1 : 0})` }} 
+        ref={boxH1}
+      />
     </div>
   )
 };

@@ -11,21 +11,21 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
-
-  .boxH1 {
-    color: rgba(255,255,255, 1);
-    font-size: 3vh;
-    font-weight: 400;
-    margin: 0;
-    padding: 0;
-    text-align: center;
-  }
   
   @for $i from 1 through 100 {
     &.animation-delay-#{$i} {
       animation: box-animation 0.3s ease-in-out #{$i * 0.25}s forwards;
     }
   }
+}
+
+.boxH1 {
+  color: rgba(255,255,255, 1);
+  font-size: 3vh;
+  font-weight: 400;
+  margin: 0;
+  padding: 0;
+  text-align: center;
 }
 
 .box2 {
@@ -41,15 +41,6 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
-
-  .boxH1 {
-    color: rgba(255,255,255, 1);
-    font-size: 3vh;
-    font-weight: 400;
-    margin: 0;
-    padding: 0;
-    text-align: center;
-  }
   
   @for $i from 1 through 100 {
     &.animation-delay-#{$i} {
