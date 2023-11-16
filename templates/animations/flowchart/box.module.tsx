@@ -75,42 +75,15 @@ const Box: React.FC<BoxProps> = (props: BoxProps) => {
 
   React.useEffect(() => {
     const handleMouseMove = (event: MouseEvent) => {
-      if (!mouseRaf) {
-        setMouseRaf(requestAnimationFrame(() => {
-          const windowWidth: number = window.innerWidth;
-          const windowHeight: number = window.innerHeight;
+      const windowWidth: number = window.innerWidth;
+      const windowHeight: number = window.innerHeight;
 
-          const mouseXpercentage: number = Math.round(event.pageX / windowWidth * 100);
-          const mouseYpercentage: number = Math.round(event.pageY / windowHeight * 100);
+      const mouseXpercentage: number = Math.round(event.pageX / windowWidth * 100);
+      const mouseYpercentage: number = Math.round(event.pageY / windowHeight * 100);
 
-          if (xPos && yPos) {
-            setDX(mouseXpercentage - xPos);
-            setDY(mouseYpercentage - yPos);
-
-            setMouseRaf(null);
-          }
-        }));
-      }
-
-      if (!gradMoveRaf) {
-        setGradMoveRaf(requestAnimationFrame(gradMove));
-      }
-    };
-
-    const gradMove = () => {
-      if (xPos && yPos && dX && dY) {
-        setXPos(xPos + (dX / 50));
-        setYPos(yPos + (dY / 50));
-
-        const absX: number = Math.abs(xPos - dX);
-        const absY: number = Math.abs(yPos - dY);
-        if (absX < 1 && absY < 1) {
-          setGradMoveRaf(null);
-          console.log("stop");
-        } else {
-          setGradMoveRaf(requestAnimationFrame(gradMove));
-          console.log("repeat");
-        }
+      if (box.current) {
+        box.current.style.setProperty('--x', `${mouseXpercentage}%`);
+        box.current.style.setProperty('--y', `${mouseYpercentage}%`);
       }
     };
 
@@ -119,11 +92,11 @@ const Box: React.FC<BoxProps> = (props: BoxProps) => {
     return () => {
       document.removeEventListener('mousemove', handleMouseMove);
     };
-  }, [xPos, yPos, dX, dY, mouseRaf, gradMoveRaf]);
+  }, []);
 
   return (
-    <div className={`${props.boxType === 2 ? styles.box2 : styles.box} ${myPathScrolled ? styles[`animation-delay-${props.delay}`] : ""}`} style={{ background: `radial-gradient(at ${xPos}% ${yPos}%, #e6e6e6, #1e1e1e)` }}>
-      <h1 className={`${styles.boxH1} ${Work_Sans_300.className}`} ref={box}></h1>
+    <div className={`${props.boxType === 2 ? styles.box2 : styles.box} ${myPathScrolled ? styles[`animation-delay-${props.delay}`] : ""}`} style={{ background: `radial-gradient(at var(--x, 0%) var(--y, 0%), rgba(112, 176, 33, 0.5), rgba(0, 0, 0, 0))` }} ref={box}>
+      <h1 className={`${styles.boxH1} ${Work_Sans_300.className}`}></h1>
     </div>
   )
 };
