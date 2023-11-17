@@ -9,23 +9,22 @@ const Work_Sans_300 = Work_Sans({
 });
 
 const Footer: React.FC = (): JSX.Element => {
-    const latestUpdate: string = 'Latest Update: 11-14-2023, Revision 0.0.43';
+    const latestUpdate: string = 'Latest Update: 11-16-2023, Revision 0.0.44';
     const brandName: string = 'enVId Tech';
     try {
         return (
             <div className={`${styles.footerDiv}`}>
                 <div className={`${styles.footerLeft}`}>
-                    <p className={`${styles.label} ${Work_Sans_300.className}`}></p>
+                    <p className={`${styles.name} ${Work_Sans_300.className}`}>Erick Tran</p>
                 </div>
                 <div className={`${styles.footerRight} ${Work_Sans_300.className}`}>
                     <p className={`${styles.brandName} ${Work_Sans_300.className}`}>{brandName}</p>
-                    <p>{latestUpdate}</p>
+                    <p className={`${styles.latestUpdateLabel} ${Work_Sans_300.className}`}>{latestUpdate}</p>
                 </div>
             </div>
         )
     } catch (err: unknown) {
         console.error(err as string);
-
         return (
             <div>
                 <div>
