@@ -23,6 +23,8 @@ interface MyPathProps {
 const MyPath: React.FC<MyPathProps> = (props: MyPathProps): JSX.Element => {
     const [myPathScrolled, setMyPathScrolled] = React.useState<boolean>(false);
 
+    const box1Delay: number = 1;
+
     const onScroll = React.useCallback((): void => {
         const scrollY = window;
         console.log("scrollY: ", scrollY.scrollY);
@@ -44,9 +46,9 @@ const MyPath: React.FC<MyPathProps> = (props: MyPathProps): JSX.Element => {
             <div className={`${styles.transitionalDivLeft}`} />
                 <div className={`${styles.myPathMain} ${myPathScrolled ? styles.contentAnimLeft : ""}`}>
                     <span className={`${styles.myPathTitleSpan}`}>
-                        <Box delay={1} myPathScrolled={myPathScrolled} text="Journey starts here - May, 2020" boxType={1} />
-                        <Line delay={2} myPathScrolled={myPathScrolled} />
-                        <Box delay={3} myPathScrolled={myPathScrolled} text="Started learning basic HTML - May, 2020" boxType={1} />
+                        <Box delay={box1Delay} myPathScrolled={myPathScrolled} text="Journey starts here - May, 2020" boxType={1} />
+                        <Line delay={box1Delay+1} myPathScrolled={myPathScrolled} />
+                        <Box delay={box1Delay+2} myPathScrolled={myPathScrolled} text="Started learning basic HTML - May, 2020" boxType={1} />
                         <Line delay={4} myPathScrolled={myPathScrolled} />
                         <Box delay={5} myPathScrolled={myPathScrolled} text="Started learning JS - June, 2020" boxType={1} />
                         <Line delay={6} myPathScrolled={myPathScrolled} />
