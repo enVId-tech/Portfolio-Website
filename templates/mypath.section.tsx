@@ -1,8 +1,9 @@
-import React from 'react';
+import React, { EffectCallback } from 'react';
 import styles from './scss/mypath.module.scss';
 import { Work_Sans } from 'next/font/google';
 import Box from './animations/flowchart/box.module.tsx';
 import Line from './animations/flowchart/line.module.tsx';
+import BoxTemplate from './animations/flowchart/box.template.tsx';
 
 const Work_Sans_300 = Work_Sans({
     weight: "300",
@@ -23,21 +24,26 @@ interface MyPathProps {
 const MyPath: React.FC<MyPathProps> = (props: MyPathProps): JSX.Element => {
     const [myPathScrolled, setMyPathScrolled] = React.useState<boolean>(false);
 
-    const box1Delay: number = 1;
-
-    const onScroll = React.useCallback((): void => {
-        const scrollY = window;
-        console.log("scrollY: ", scrollY.scrollY);
-
-        if (scrollY.scrollY >= props.myPathScrollHeight) {
-            setMyPathScrolled(true);
-        }
-    }, [props.myPathScrollHeight]);
+    const boxTemplate1Text: string[] = [
+        "Journey starts here - May, 2020",
+        "Started learning basic HTML - May, 2020",
+        "Started learning JS - June, 2020",
+        "Started learning CSS - June, 2020"
+    ]
 
     React.useEffect(() => {
+        const onScroll = (): void => {
+            const scrollY: number = window.scrollY;
+            console.log("scrollY: ", scrollY);
+
+            if (scrollY >= props.myPathScrollHeight) {
+                setMyPathScrolled(true);
+            }
+        };
+
         window.addEventListener("scroll", onScroll);
         return () => window.removeEventListener("scroll", onScroll);
-    }, [onScroll]);
+    }, [props.myPathScrollHeight]);
 
     return (
         <div className={`${styles.myPathDiv}`}>
@@ -46,13 +52,7 @@ const MyPath: React.FC<MyPathProps> = (props: MyPathProps): JSX.Element => {
             <div className={`${styles.transitionalDivLeft}`} />
                 <div className={`${styles.myPathMain} ${myPathScrolled ? styles.contentAnimLeft : ""}`}>
                     <span className={`${styles.myPathTitleSpan}`}>
-                        <Box delay={box1Delay} myPathScrolled={myPathScrolled} text="Journey starts here - May, 2020" boxType={1} />
-                        <Line delay={box1Delay+1} myPathScrolled={myPathScrolled} />
-                        <Box delay={box1Delay+2} myPathScrolled={myPathScrolled} text="Started learning basic HTML - May, 2020" boxType={1} />
-                        <Line delay={4} myPathScrolled={myPathScrolled} />
-                        <Box delay={5} myPathScrolled={myPathScrolled} text="Started learning JS - June, 2020" boxType={1} />
-                        <Line delay={6} myPathScrolled={myPathScrolled} />
-                        <Box delay={7} myPathScrolled={myPathScrolled} text="Started learning CSS - June, 2020" boxType={1} />
+                        <BoxTemplate textInBoxes={boxTemplate1Text} numBoxes={4} delay={0} myPathScrolled={myPathScrolled} boxType={1} />
                     </span>
                     <br />
                     <span className={`${styles.myPathTitleSpan2}`}>
