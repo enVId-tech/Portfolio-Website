@@ -56,23 +56,11 @@ const MyPath: React.FC<MyPathProps> = (props: MyPathProps): JSX.Element => {
                     </span>
                     <br />
                     <span className={`${styles.myPathTitleSpan2}`}>
-                        <Box delay={9} myPathScrolled={myPathScrolled} text="Journey starts here - May, 2020" boxType={2} />
-                        <Line delay={10} myPathScrolled={myPathScrolled} />
-                        <Box delay={11} myPathScrolled={myPathScrolled} text="Started learning basic HTML - May, 2020" boxType={2} />
-                        <Line delay={12} myPathScrolled={myPathScrolled} />
-                        <Box delay={13} myPathScrolled={myPathScrolled} text="Started learning JS - June, 2020" boxType={2} />
-                        <Line delay={14} myPathScrolled={myPathScrolled} />
-                        <Box delay={15} myPathScrolled={myPathScrolled} text="Started learning CSS - June, 2020" boxType={2} />
+                        <BoxTemplate textInBoxes={boxTemplate1Text} numBoxes={4} delay={8} myPathScrolled={myPathScrolled} boxType={2} />
                     </span>
                     <br />
                     <span className={`${styles.myPathTitleSpan}`}>
-                        <Box delay={17} myPathScrolled={myPathScrolled} text="Journey starts here - May, 2020" boxType={1} />
-                        <Line delay={18} myPathScrolled={myPathScrolled} />
-                        <Box delay={19} myPathScrolled={myPathScrolled} text="Started learning basic HTML - May, 2020" boxType={1} />
-                        <Line delay={20} myPathScrolled={myPathScrolled} />
-                        <Box delay={21} myPathScrolled={myPathScrolled} text="Started learning JS - June, 2020" boxType={1} />
-                        <Line delay={22} myPathScrolled={myPathScrolled} />
-                        <Box delay={23} myPathScrolled={myPathScrolled} text="Started learning CSS - June, 2020" boxType={1} />
+                        <BoxTemplate textInBoxes={boxTemplate1Text} numBoxes={4} delay={16} myPathScrolled={myPathScrolled} boxType={3} />
                     </span>
                 </div>
                 <div className={`${styles.transitionalDivRight}`} />

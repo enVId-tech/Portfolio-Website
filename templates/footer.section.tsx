@@ -8,9 +8,15 @@ const Work_Sans_300 = Work_Sans({
     subsets: ['latin']
 });
 
-const Footer: React.FC = (): JSX.Element => {
-    const latestUpdate: string = 'Latest Update: 12-1-2023, Revision 0.0.47';
-    const brandName: string = 'enVId Tech';
+interface FooterProps {
+    latestUpdate: string;
+    dateUpdated: string;
+    brandName: string;
+}
+
+const Footer: React.FC<FooterProps> = (props: FooterProps): JSX.Element => {
+    const latestUpdate: string = `Latest Update: ${props.dateUpdated}, Revision ${props.latestUpdate}`;
+    const brandName: string = props.brandName;
     try {
         return (
             <div className={`${styles.footerDiv}`}>
