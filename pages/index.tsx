@@ -6,8 +6,6 @@ import TitleDiv from '@/templates/titleDiv.section.tsx';
 import About from '@/templates/about.section.tsx';
 import ParticlesElement from '@/templates/animations/particles.effects.tsx';
 import PaddingElement from '@/templates/element.padding.section.tsx';
-import MyPath from '@/templates/mypath.section.tsx';
-import Projects from '@/templates/projects.section';
 
 const HomePage: React.FC = (): JSX.Element => {
     type PaddingPropsType = { defaultPaddingHeight: number };
@@ -70,10 +68,6 @@ const HomePage: React.FC = (): JSX.Element => {
                 waitTime={TitleProps.waitTime as number}
             />
             <About aboutScrollHeight={AboutProps.aboutScrollHeight as number} />
-            <PaddingElement height={PaddingProps.defaultPaddingHeight as number} />
-            <Projects carouselURLS={ProjectsProps.projectsURLS as string[]} />
-            <PaddingElement height={PaddingProps.defaultPaddingHeight as number} />
-            <MyPath myPathScrollHeight={MyPathProps.myPathScrollHeight as number} />
             <PaddingElement height={PaddingProps.defaultPaddingHeight as number} />
             <Footer
                 latestUpdate={FooterProps.latestUpdate as string}
