@@ -1,11 +1,10 @@
 import Head from 'next/head';
 import React from 'react';
 import styles from '@/styles/home.module.scss';
-import Footer from '@/templates/footer.section.tsx';
-import TitleDiv from '@/templates/titleDiv.section.tsx';
-import About from '@/templates/about.section.tsx';
-import ParticlesElement from '@/templates/animations/particles.effects.tsx';
-import PaddingElement from '@/templates/element.padding.section.tsx';
+import Footer from '@/templates/pages/footer.section';
+import TitleDiv from '@/templates/pages/titleDiv.section';
+import About from '@/templates/pages/about.section';
+import PaddingElement from '@/templates/pages/element.padding.section';
 
 const HomePage: React.FC = (): JSX.Element => {
     type PaddingPropsType = { defaultPaddingHeight: number };
@@ -23,7 +22,7 @@ const HomePage: React.FC = (): JSX.Element => {
     // Title Div
     const TitleProps: TitlePropsType = {
         titlePlate: `Hi! I'm Erick Tran.`,
-        subTitlePlate: `I am a software developer and engineer.`,
+        subTitlePlate: `Full stack web developer and designer.`,
         titlePlateDelay: 45,
         subTitlePlateDelay: 40,
         timeBetweentitleAndSubTitle: 1050,
@@ -47,14 +46,13 @@ const HomePage: React.FC = (): JSX.Element => {
 
     // Footer
     const FooterProps: FooterPropsType = {
-        latestUpdate: '0.0.50',
-        dateUpdated: "12-5-2023",
+        latestUpdate: '0.0.61',
+        dateUpdated: "1-7-2023",
         brandName: "enVId Tech"
     }
 
     return (
         <div className={styles.homePageMainDiv}>
-            <ParticlesElement />
             <Head>
                 <title>enVId Tech - Home Page</title>
                 <link href="/favicon/favicon.ico" type="image/x-icon" rel="icon" />

@@ -1,6 +1,6 @@
 import React from 'react';
 import Image from 'next/image';
-import styles from '../styles/about.module.scss';
+import styles from '../../styles/about.module.scss';
 import { Work_Sans } from 'next/font/google';
 
 const Work_Sans_300 = Work_Sans({
