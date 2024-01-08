@@ -1,9 +1,9 @@
 import React from 'react';
 import Image from 'next/image';
-import styles from '../../styles/about.module.scss';
-import { Work_Sans } from 'next/font/google';
+import styles from '@/styles/about.module.scss';
+import { Work_Sans, Montserrat } from 'next/font/google';
 
-const Work_Sans_300 = Work_Sans({
+const Montserrat_300 = Montserrat({
     weight: "300",
     style: 'normal',
     subsets: ['latin']
@@ -17,6 +17,7 @@ const Work_Sans_400 = Work_Sans({
 
 interface AboutProps {
     aboutScrollHeight: number;
+    aboutText: string[];
 }
 
 const About: React.FC<AboutProps> = (props: AboutProps): JSX.Element => {
@@ -39,10 +40,13 @@ const About: React.FC<AboutProps> = (props: AboutProps): JSX.Element => {
         <div className={`${styles.aboutDiv}`} id="about">
             <div className={`${styles.smallerAboutDiv} ${aboutScrolled ? styles.contentAnimRight : ""}`}>
                 <p className={`${styles.sectionHeading} ${Work_Sans_400.className}`}>About Me</p>
-                <p className={`${styles.sectionParagraph1} ${Work_Sans_300.className}`}>High school student</p>
-                <p className={`${styles.sectionParagraph2} ${Work_Sans_300.className}`}>Specialized in full stack web development.</p>
-                <p className={`${styles.sectionParagraph3} ${Work_Sans_300.className}`}>Self-studied in software, 3 years</p>
-                <p className={`${styles.sectionParagraph4} ${Work_Sans_300.className}`}>Software developer, <a href='https://frc4079.org/' target='_blank' rel='noopener noreferrer'>FRC 4079</a> </p>
+                {
+                    props.aboutText.map((text: string, index: number): JSX.Element => {
+                        return (
+                            <p className={`${styles.sectionParagraph} ${Montserrat_300.className}`} key={index}>{text}</p>
+                        )
+                    })
+                }
             </div>
             <Image className={`${styles.aboutImage} ${aboutScrolled ? styles.contentAnimUp : ""}`} src="/images/personalPFP.png" alt="Web developer" width={350} height={350} />
         </div>

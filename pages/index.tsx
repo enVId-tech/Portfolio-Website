@@ -4,15 +4,15 @@ import styles from '@/styles/home.module.scss';
 import Footer from '@/templates/pages/footer.section';
 import TitleDiv from '@/templates/pages/titleDiv.section';
 import About from '@/templates/pages/about.section';
+import Projects from '@/templates/pages/projects.section';
 import PaddingElement from '@/templates/pages/element.padding.section';
 
 const HomePage: React.FC = (): JSX.Element => {
     type PaddingPropsType = { defaultPaddingHeight: number };
     type TitlePropsType = { titlePlate: string; subTitlePlate: string; titlePlateDelay: number; subTitlePlateDelay: number; timeBetweentitleAndSubTitle?: number; waitTime?: number; };
-    type AboutPropsType = { aboutScrollHeight: number; };
-    type MyPathPropsType = { myPathScrollHeight: number; };
-    type ProjectsPropsType = { projectsURLS: string[]; };
+    type AboutPropsType = { aboutScrollHeight: number; aboutText: string[]; };
     type FooterPropsType = { latestUpdate: string; dateUpdated: string; brandName: string; };
+    type ProjectsPropsType = { defaultShow: number; };
 
     // Padding
     const PaddingProps: PaddingPropsType = {
@@ -31,24 +31,25 @@ const HomePage: React.FC = (): JSX.Element => {
 
     // About
     const AboutProps: AboutPropsType = {
-        aboutScrollHeight: 700
-    }
-
-    // My Path
-    const MyPathProps: MyPathPropsType = {
-        myPathScrollHeight: 1463
-    }
-
-    // Projects
-    const ProjectsProps: ProjectsPropsType = {
-        projectsURLS: []
+        aboutScrollHeight: 700,
+        aboutText: [
+            "3 years of full stack web development experience.",
+            "Specialized in React, MongoDB, and Node.js.",
+            "Self-studied in software.",
+            "Making innovative projects for the community."
+        ]
     }
 
     // Footer
     const FooterProps: FooterPropsType = {
-        latestUpdate: '0.0.61',
+        latestUpdate: '0.0.62',
         dateUpdated: "1-7-2023",
         brandName: "enVId Tech"
+    }
+
+    // Projects
+    const ProjectsProps: ProjectsPropsType = {
+        defaultShow: 24
     }
 
     return (
@@ -57,6 +58,7 @@ const HomePage: React.FC = (): JSX.Element => {
                 <title>enVId Tech - Home Page</title>
                 <link href="/favicon/favicon.ico" type="image/x-icon" rel="icon" />
             </Head>
+
             <TitleDiv
                 titlePlate={TitleProps.titlePlate as string}
                 subTitlePlate={TitleProps.subTitlePlate as string}
@@ -65,8 +67,10 @@ const HomePage: React.FC = (): JSX.Element => {
                 timeBetweentitleAndSubTitle={TitleProps.timeBetweentitleAndSubTitle as number}
                 waitTime={TitleProps.waitTime as number}
             />
-            <About aboutScrollHeight={AboutProps.aboutScrollHeight as number} />
+            <About aboutScrollHeight={AboutProps.aboutScrollHeight as number} aboutText={AboutProps.aboutText as string[]} />
             <PaddingElement height={PaddingProps.defaultPaddingHeight as number} />
+            <Projects defaultShow={ProjectsProps.defaultShow as number} />
+
             <Footer
                 latestUpdate={FooterProps.latestUpdate as string}
                 dateUpdated={FooterProps.dateUpdated as string}

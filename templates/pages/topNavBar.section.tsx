@@ -1,5 +1,5 @@
 import React from 'react';
-import styles from '../../styles/topnavbar.module.scss';
+import styles from '@/styles/topnavbar.module.scss';
 import { Work_Sans } from 'next/font/google';
 
 const Work_Sans_300 = Work_Sans({
