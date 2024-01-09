@@ -39,19 +39,22 @@
                     &:nth-child(#{$i}) {
                         animation: content-anim-right 1s #{$i * 0.25}s ease-in-out forwards;
                     }
+
                     $i: $i * 0.25;
                     font-size: 3vh;
                     margin-left: 1.5vw;
                     margin-bottom: 2vh;
                     color: rgba(255, 255, 255, 1);
                     opacity: 0;
+
                     a {
                         color: rgba(255, 255, 255, 1);
                         transition: 0.5s;
+
                         &:hover {
                             color: rgba(255, 255, 255, 0.5);
                         }
-                    
+
                     }
                 }
             }

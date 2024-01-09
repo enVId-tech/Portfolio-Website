@@ -4,7 +4,6 @@ import styles from '@/styles/home.module.scss';
 import Footer from '@/templates/pages/footer.section';
 import TitleDiv from '@/templates/pages/titleDiv.section';
 import About from '@/templates/pages/about.section';
-import Projects from '@/templates/pages/projects.section';
 import PaddingElement from '@/templates/pages/element.padding.section';
 
 const HomePage: React.FC = (): JSX.Element => {
@@ -42,8 +41,8 @@ const HomePage: React.FC = (): JSX.Element => {
 
     // Footer
     const FooterProps: FooterPropsType = {
-        latestUpdate: '0.0.62',
-        dateUpdated: "1-7-2023",
+        latestUpdate: '0.0.63',
+        dateUpdated: "1-8-2024",
         brandName: "enVId Tech"
     }
 
@@ -69,8 +68,6 @@ const HomePage: React.FC = (): JSX.Element => {
             />
             <About aboutScrollHeight={AboutProps.aboutScrollHeight as number} aboutText={AboutProps.aboutText as string[]} />
             <PaddingElement height={PaddingProps.defaultPaddingHeight as number} />
-            <Projects defaultShow={ProjectsProps.defaultShow as number} />
-
             <Footer
                 latestUpdate={FooterProps.latestUpdate as string}
                 dateUpdated={FooterProps.dateUpdated as string}
