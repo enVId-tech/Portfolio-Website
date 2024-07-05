@@ -1,0 +1,32 @@
+.titleDiv {
+    // background-color: lightblue;
+    width: 100%;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+    padding-left: 8vw;
+    z-index: 1;
+    .namePlate {
+        font-size: 10vh;
+        color: white;
+        // text-shadow: 0 0 10px white;
+        cursor: default;
+        &::selection {
+            background-color: transparent;
+            display: none;
+        }
+    }
+
+    .subNamePlate {
+        font-size: 4vh;
+        color: white;
+        // text-shadow: 0 0 10px white;
+        cursor: default;
+        &::selection {
+            background-color: transparent;
+            display: none;
+        }
+    }
+}
