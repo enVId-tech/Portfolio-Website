@@ -22,25 +22,46 @@ const Montserrat400 = Montserrat({
 });
 
 interface TitleDivProps {
-    title: string;
+    titlePlate: string;
+    subTitlePlate: string;
+    titlePlateDelay: number;
+    subTitlePlateDelay: number;
+    timeBetweentitleAndSubTitle?: number;
+    waitTime?: number;
 }
 
-const TitleDiv: React.FC<TitleDivProps> = ({ title }): React.JSX.Element => {
-    const namePlate: React.RefObject<HTMLDivElement> = React.useRef<HTMLDivElement>(null);
+const TitleDiv: React.FC<TitleDivProps> = (props: TitleDivProps): React.JSX.Element => {
+    const namePlate = React.useRef<HTMLHeadingElement | null>(null);
+    const titlePlate = React.useRef<HTMLHeadingElement | null>(null);
+
+    const name: string = props.titlePlate.toString();
+    const title: string = props.subTitlePlate.toString();
+
+
 
     setTimeout((): void => {
-        animateText(namePlate, title, 100);
-    }, 1000);
+        animateText(namePlate, name, props.titlePlateDelay);
+        if (props.timeBetweentitleAndSubTitle) {
+            setTimeout((): void => {
+                animateText(titlePlate, title, props.subTitlePlateDelay);
+            }, props.timeBetweentitleAndSubTitle);
+            return;
+        }
+        animateText(titlePlate, title, props.subTitlePlateDelay);
+    }, props.waitTime as number ? props.waitTime as number : 150);
 
     try {
         return (
-            <div className={styles.titleDiv}>
-                <p ref={namePlate} className={styles.namePlate}></p>
+            <div className={styles.titleDiv} id="homePageMainDivHeader">
+                <p className={`${styles.namePlate} ${Montserrat400.className}`} id="Name" ref={namePlate}></p>
+                <p className={`${styles.subNamePlate} ${Work_Sans300.className}`} id="PersonTitle" ref={titlePlate}></p>
             </div>
-        );
-    } catch (error: unknown) {
-        console.error(error as string);
-        return <></>
+        )
+    } catch (err: unknown) {
+        console.error(err as string);
+        return (
+            <></>
+        )
     }
 };
 
