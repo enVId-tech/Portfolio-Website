@@ -26,6 +26,10 @@ interface ProjectsProps {
 }
 
 const Projects: React.FC<ProjectsProps> = (props: ProjectsProps): JSX.Element => {
+    if (!props) {
+        return <></>
+    }
+
     return (
         <div className={styles.projectsDiv} id="projects">
             <p className={`${styles.sectionHeading} ${Work_Sans_300.className}`}>Projects</p>
@@ -46,3 +50,5 @@ const Projects: React.FC<ProjectsProps> = (props: ProjectsProps): JSX.Element =>
         </div>
     );
 };
+
+export default Projects;

@@ -4,12 +4,13 @@ import styles from '@/styles/home.module.scss';
 import TitleDiv from "@/templates/pages/titleDiv.section.tsx";
 import About from "@/templates/pages/about.section.tsx";
 import Footer from "@/templates/pages/footer.section.tsx";
+import Projects from "@/templates/pages/projects.section.tsx";
 
 const HomePage: React.FC = (): React.JSX.Element => {
     type TitlePropsType = { titlePlate: string; subTitlePlate: string; titlePlateDelay: number; subTitlePlateDelay: number; timeBetweentitleAndSubTitle?: number; waitTime?: number; };
     type AboutPropsType = { aboutScrollHeight: number; aboutText: string[]; };
+    type ProjectsPropType = { projects: { title: string; description: string; techStack: string[]; githubLink: string; liveLink: string; }[]; };
     type FooterPropsType = { latestUpdate: string; dateUpdated: string; brandName: string; };
-
     // Title Div
     const TitleProps: TitlePropsType = {
         titlePlate: `Hi! I'm Erick Tran.`,
@@ -28,6 +29,32 @@ const HomePage: React.FC = (): React.JSX.Element => {
             "Specialized in React, MongoDB, and Node.js.",
             "Self-studied software engineering, 6 years.",
             "Making innovative projects for the community."
+        ]
+    }
+
+    const ProjectProps: ProjectsPropType = {
+        projects: [
+            {
+                title: "Project 1",
+                description: "This is a project description.",
+                techStack: ["React", "Node.js", "MongoDB"],
+                githubLink: "https://github.com",
+                liveLink: "https://github.com"
+            },
+            {
+                title: "Project 2",
+                description: "This is a project description.",
+                techStack: ["React", "Node.js", "MongoDB"],
+                githubLink: "https://github.com",
+                liveLink: "https://github.com"
+            },
+            {
+                title: "Project 3",
+                description: "This is a project description.",
+                techStack: ["React", "Node.js", "MongoDB"],
+                githubLink: "https://github.com",
+                liveLink: "https://github.com"
+            }
         ]
     }
 
@@ -52,6 +79,7 @@ const HomePage: React.FC = (): React.JSX.Element => {
                 waitTime={TitleProps.waitTime as number}
             />
             <About aboutScrollHeight={AboutProps.aboutScrollHeight as number} aboutText={AboutProps.aboutText as string[]} />
+            <Projects projects={ProjectProps.projects as { title: string; description: string; techStack: string[]; githubLink: string; liveLink: string; }[]} />
             <Footer
                 latestUpdate={FooterProps.latestUpdate as string}
                 dateUpdated={FooterProps.dateUpdated as string}
