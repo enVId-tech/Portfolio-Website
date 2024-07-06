@@ -1,0 +1,37 @@
+.footerDiv {
+    width: 100vw;
+    background-color: rgb(18, 137, 235);
+    height: 40vh;
+    display: flex;
+    flex-direction: row;
+    z-index: 1;
+    .footerLeft {
+        width: 50vw;
+        height: 40vh;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: flex-start;
+        padding: 0 5vw;
+        .name {
+            font-size: 7.5vh;
+        }
+    }
+    .footerRight {
+        width: 50vw;
+        height: 40vh;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: flex-end;
+        padding: 0 5vw;
+        
+        .brandName {
+            font-size: 6vh;
+        }
+
+        .latestUpdateLabel {
+            font-size: 4vh;
+        }
+    }
+}
