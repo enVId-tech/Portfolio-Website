@@ -2,7 +2,8 @@ import React from 'react';
 
 const animateText = (target: React.MutableRefObject<HTMLElement | null>, text: string, delay: number): void => {
     if (target.current === null) {
-        throw new Error("Target not found" as string);
+        // throw new Error("Target not found" as string);
+        return;
     }
 
     target.current.innerHTML = "<span class='text'></span><span class='typebar'>|</span>";
@@ -21,7 +22,8 @@ const animateText = (target: React.MutableRefObject<HTMLElement | null>, text: s
                 clearInterval(intervalId);
                 setTimeout((): void => {
                     if (target.current === null) {
-                        throw new Error("Target not found" as string);
+                        return;
+                        // throw new Error("Target not found" as string);
                     }
 
                     const typebar: HTMLElement | null = target.current.querySelector('.typebar');
@@ -29,6 +31,9 @@ const animateText = (target: React.MutableRefObject<HTMLElement | null>, text: s
                     if (typebar) {
                         const typebar: HTMLElement = target.current.querySelector('.typebar') as HTMLElement;
                         typebar.style.display = 'none';
+                    } else {
+                        // throw new Error("Typebar not found" as string);
+                        return;
                     }
                 }, 250);
             }
