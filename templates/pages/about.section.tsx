@@ -48,7 +48,7 @@ const About: React.FC<AboutProps> = (props: AboutProps): JSX.Element => {
                     })
                 }
             </div>
-            <Image className={`${styles.aboutImage} ${aboutScrolled ? styles.contentAnimUp : ""}`} src="/images/personalPFP.png" alt="Web developer" width={350} height={350} />
+            <Image className={`${styles.aboutImage} ${aboutScrolled ? styles.contentAnimUp : ""}`} src="/images/android-chrome-512x512.png" alt="Web developer" width={350} height={350} />
         </div>
     )
 };
