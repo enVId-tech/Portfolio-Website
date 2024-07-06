@@ -10,3 +10,5 @@ const ScrollDownIndicator: React.FC = (): JSX.Element => {
         </div>
     );
 };
+
+export default ScrollDownIndicator;

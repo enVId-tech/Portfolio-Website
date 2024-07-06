@@ -1,7 +1,7 @@
 import React from "react";
 import styles from "@/styles/resources.module.scss";
 import { Work_Sans } from "next/font/google";
-import ResourceSlideAnim from "@/templates/other/resourceSlideAnim.ts";
+import ResourceSlideAnim from "@/templates/components/resourceSlideAnim.ts";
 
 const Work_Sans_300 = Work_Sans({
     weight: "300",
