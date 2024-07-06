@@ -1,4 +1,5 @@
 import React from "react";
+import styles from '@/styles/projectCard.module.scss';
 
 interface ProjectCardProps {
     title: string;
@@ -11,11 +12,12 @@ interface ProjectCardProps {
 
 const ProjectCard: React.FC<ProjectCardProps> = (props: ProjectCardProps): JSX.Element => {
     return (
-        <div className="projectCard">
-            <img src={props.img} alt={props.title} />
-            <p>{props.title}</p>
-            <p>{props.description}</p>
-            <a href={props.link} target="_blank" rel="noreferrer">Link</a>
+        <div className={styles.projectCard}>
+            <h3 className={styles.projectTitle}>{props.title}</h3>
+            <p className={styles.projectDescription}>{props.description}</p>
+            <iframe src={props.embed} title={props.title} frameBorder="0" allowFullScreen className={styles.embed}></iframe>
+            <a href={props.link} target="_blank" rel="noreferrer" className={styles.projectLink}>Link</a>
+
         </div>
     );
 };
