@@ -55,6 +55,7 @@ const TitleDiv: React.FC<TitleDivProps> = (props: TitleDivProps): React.JSX.Elem
             <div className={styles.titleDiv} id="homePageMainDivHeader">
                 <p className={`${styles.namePlate} ${Montserrat400.className}`} id="Name" ref={namePlate}></p>
                 <p className={`${styles.subNamePlate} ${Work_Sans300.className}`} id="PersonTitle" ref={titlePlate}></p>
+                <div className={styles.divider}></div>
             </div>
         )
     } catch (err: unknown) {
