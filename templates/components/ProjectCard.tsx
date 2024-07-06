@@ -1,6 +1,15 @@
 import React from "react";
 
-const ProjectCard: React.FC<{ title: string; description: string; link: string; img: string }> = (props: { title: string; description: string; link: string; img: string }): JSX.Element => {
+interface ProjectCardProps {
+    title: string;
+    description: string;
+    embed: string;
+    link: string;
+    githubLink: string;
+    techStack: string[];
+}
+
+const ProjectCard: React.FC<ProjectCardProps> = (props: ProjectCardProps): JSX.Element => {
     return (
         <div className="projectCard">
             <img src={props.img} alt={props.title} />

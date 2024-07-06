@@ -19,10 +19,11 @@ interface ProjectsProps {
     projects: {
         title: string;
         description: string;
-        techStack: string[];
+        embed: string;
+        link: string;
         githubLink: string;
-        liveLink: string;
-    }[];
+        techStack: string[];
+    }[]
 }
 
 const Projects: React.FC<ProjectsProps> = (props: ProjectsProps): JSX.Element => {
@@ -40,9 +41,10 @@ const Projects: React.FC<ProjectsProps> = (props: ProjectsProps): JSX.Element =>
                             key={index}
                             title={project.title}
                             description={project.description}
-                            techStack={project.techStack}
+                            embed={project.embed}
+                            link={project.link}
                             githubLink={project.githubLink}
-                            liveLink={project.liveLink}
+                            techStack={project.techStack}
                         />
                     );
                 })}
