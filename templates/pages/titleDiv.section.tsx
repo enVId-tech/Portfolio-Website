@@ -1,3 +1,4 @@
+/* eslint-disable @next/next/no-img-element */
 import React from 'react';
 import styles from '@/styles/titleDiv.module.scss';
 import { Work_Sans, Montserrat } from 'next/font/google';
@@ -55,7 +56,9 @@ const TitleDiv: React.FC<TitleDivProps> = (props: TitleDivProps): React.JSX.Elem
             <div className={styles.titleDiv} id="homePageMainDivHeader">
                 <p className={`${styles.namePlate} ${Montserrat400.className}`} id="Name" ref={namePlate}></p>
                 <p className={`${styles.subNamePlate} ${Work_Sans300.className}`} id="PersonTitle" ref={titlePlate}></p>
-                <div className={styles.divider}></div>
+                <div className={styles.divider}>
+                    <img src="/favicon/android-chrome-512x512.png" alt="Web developer" width={350} height={350} className={styles.image} />
+                </div>
             </div>
         )
     } catch (err: unknown) {
