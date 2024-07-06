@@ -5,12 +5,15 @@ import TitleDiv from "@/templates/pages/titleDiv.section.tsx";
 import About from "@/templates/pages/about.section.tsx";
 import Footer from "@/templates/pages/footer.section.tsx";
 import Projects from "@/templates/pages/projects.section.tsx";
+import Resources from "@/templates/pages/resources.section";
 
 const HomePage: React.FC = (): React.JSX.Element => {
     type TitlePropsType = { titlePlate: string; subTitlePlate: string; titlePlateDelay: number; subTitlePlateDelay: number; timeBetweentitleAndSubTitle?: number; waitTime?: number; };
     type AboutPropsType = { aboutScrollHeight: number; aboutText: string[]; };
+    type ResourcesPropsType = { resources: { title: string; description: string; link: string; }[]; };
     type ProjectsPropType = { projects: { title: string; description: string; techStack: string[]; githubLink: string; liveLink: string; }[]; };
     type FooterPropsType = { latestUpdate: string; dateUpdated: string; brandName: string; };
+
     // Title Div
     const TitleProps: TitlePropsType = {
         titlePlate: `Hi! I'm Erick Tran.`,
@@ -32,6 +35,28 @@ const HomePage: React.FC = (): React.JSX.Element => {
         ]
     }
 
+    // Resources
+    const ResourcesProps: ResourcesPropsType = {
+        resources: [
+            {
+                title: "Resource 1",
+                description: "This is a resource description.",
+                link: "https://github.com"
+            },
+            {
+                title: "Resource 2",
+                description: "This is a resource description.",
+                link: "https://github.com"
+            },
+            {
+                title: "Resource 3",
+                description: "This is a resource description.",
+                link: "https://github.com"
+            }
+        ]
+    }
+
+    // Projects
     const ProjectProps: ProjectsPropType = {
         projects: [
             {
@@ -79,6 +104,7 @@ const HomePage: React.FC = (): React.JSX.Element => {
                 waitTime={TitleProps.waitTime as number}
             />
             <About aboutScrollHeight={AboutProps.aboutScrollHeight as number} aboutText={AboutProps.aboutText as string[]} />
+            <Resources resources={ResourcesProps.resources as { title: string; description: string; link: string; }[]} />
             <Projects projects={ProjectProps.projects as { title: string; description: string; techStack: string[]; githubLink: string; liveLink: string; }[]} />
             <Footer
                 latestUpdate={FooterProps.latestUpdate as string}
