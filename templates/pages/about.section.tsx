@@ -20,8 +20,21 @@ interface AboutProps {
     aboutText: string[];
 }
 
-const About: React.FC<AboutProps> = (props: AboutProps): React.JSX.Element => {
+const About: React.FC<AboutProps> = (props: AboutProps): JSX.Element => {
     const [aboutScrolled, setAboutScrolled] = React.useState<boolean>(false);
+
+    const onScroll = React.useCallback((): void => {
+        const scrollY = window;
+
+        if (scrollY.scrollY >= props.aboutScrollHeight) {
+            setAboutScrolled(true);
+        }
+    }, [props.aboutScrollHeight]);
+
+    React.useEffect(() => {
+        window.addEventListener("scroll", onScroll);
+        return () => window.removeEventListener("scroll", onScroll);
+    }, [onScroll]);
 
     return (
         <div className={`${styles.aboutDiv}`} id="about">
@@ -38,6 +51,6 @@ const About: React.FC<AboutProps> = (props: AboutProps): React.JSX.Element => {
             <Image className={`${styles.aboutImage} ${aboutScrolled ? styles.contentAnimUp : ""}`} src="/images/personalPFP.png" alt="Web developer" width={350} height={350} />
         </div>
     )
-}
+};
 
 export default About;

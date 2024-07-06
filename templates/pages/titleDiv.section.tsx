@@ -1,7 +1,7 @@
-import React from "react";
-import styles from "@/styles/titleDiv.module.scss";
-import { Work_Sans, Montserrat } from "next/font/google";
-import animateText from "@/templates/other/scrollEffect.ts";
+import React from 'react';
+import styles from '@/styles/titleDiv.module.scss';
+import { Work_Sans, Montserrat } from 'next/font/google';
+import animateText from '@/templates//other/scrollEffect.ts';
 
 const Work_Sans300 = Work_Sans({
     weight: "300",
