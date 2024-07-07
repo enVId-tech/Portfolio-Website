@@ -1,24 +1,26 @@
 .aboutDiv {
     width: 100%;
     height: 120vh;
-    background-color: rgb(0, 0, 0);
+    background-color: rgb(255, 255, 255);
     display: flex;
     flex-direction: row;
     justify-content: flex-start;
     align-items: center;
-    padding-left: 7.5vw;
     z-index: 5;
 
 
     .smallerAboutDiv {
-        height: 60vh;
-        width: 55vw;
+        height: 65vh;
+        justify-content: center;
+        width: 49vw;
         display: flex;
         flex-direction: row;
         justify-content: flex-start;
-        background-color: transparent; // rgb(255, 255, 255);
-        border-radius: 5px;
-        padding-left: 3vw;
+        background-color: rgb(0, 119, 255);
+        border-top-right-radius: 10000px;
+        border-bottom-right-radius: 10000px;
+        padding-left: 6.5vw;
+        margin-right: 10vw;
         opacity: 0;
 
         &.contentAnimRight {
@@ -27,12 +29,12 @@
             flex-direction: column;
 
             .sectionHeading {
+                margin-top: 6vh;
                 font-size: 6.5vh;
                 margin-left: 1.5vw;
-                margin-bottom: 2vh;
                 text-decoration-line: underline;
                 text-decoration-thickness: 0.5vh;
-                color: white;
+                color: rgb(0, 0, 0);
             }
 
             @for $i from 0 through 100 {
@@ -45,11 +47,11 @@
                     font-size: 3vh;
                     margin-left: 1.5vw;
                     margin-bottom: 2vh;
-                    color: rgba(255, 255, 255, 1);
+                    color: rgb(0, 0, 0);
                     opacity: 0;
 
                     a {
-                        color: rgba(255, 255, 255, 1);
+                        color: rgb(0, 0, 0);
                         transition: 0.5s;
 
                         &:hover {
@@ -67,6 +69,8 @@
         border-radius: 5px;
         margin-left: 2vw;
         opacity: 0;
+        border: 0.5vh solid rgb(0, 0, 0);
+        border-radius: 100%;
 
         &.contentAnimUp {
             animation: content-anim-up 0.75s 0.25s forwards;
