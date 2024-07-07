@@ -26,7 +26,7 @@ const HomePage: React.FC = (): React.JSX.Element => {
     const AboutProps: AboutPropsType = {
         aboutScrollHeight: 700,
         aboutText: [
-            "4 years of full stack web development experience.",
+            "5 years of full stack web development experience.",
             "Specialized in React, MongoDB, and Node.js.",
             "Self-studied software engineering, 6 years.",
             "Making innovative projects for the community."

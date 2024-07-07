@@ -29,7 +29,7 @@ const Resources: React.FC<ResourcesProps> = (props: ResourcesProps): JSX.Element
 
     return (
         <div className={styles.resourcesDiv} id="resources">
-            <p className={`${styles.sectionHeading} ${Work_Sans_300.className}`}>Resources</p>
+            <p className={`${styles.sectionHeading} ${Work_Sans_300.className}`}>Top Resources</p>
             <div className={styles.resourceCards}>
                 {props.resources.map((resource, index) => {
                     return (
