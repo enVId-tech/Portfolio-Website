@@ -1,7 +1,7 @@
 /* eslint-disable jsx-a11y/alt-text */
 /* eslint-disable @next/next/no-img-element */
 import React from "react";
-import styles from "@/styles/resourcesSlide.module.scss";
+import styles from "@/styles/resourceCard.module.scss";
 import { Montserrat, Work_Sans } from "next/font/google";
 
 interface ResourceSlideAnimProps {
@@ -23,7 +23,7 @@ const Montserrat400 = Montserrat({
     subsets: ['latin']
 });
 
-const ResourceSlideAnim: React.FC<ResourceSlideAnimProps> = (props: ResourceSlideAnimProps): JSX.Element => {
+const ResourceCard: React.FC<ResourceSlideAnimProps> = (props: ResourceSlideAnimProps): JSX.Element => {
     return (
         <div className={styles.resourceCard}>
             <img src={props.image} width={50} height={50} className={styles.image} />
@@ -33,4 +33,4 @@ const ResourceSlideAnim: React.FC<ResourceSlideAnimProps> = (props: ResourceSlid
     );
 };
 
-export default ResourceSlideAnim;
+export default ResourceCard;
