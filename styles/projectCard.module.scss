@@ -6,19 +6,20 @@
     padding: 1vw;
     margin: 2vw;
     width: 15vw;
-    height: 30vh;
+    height: min-content;
     border-radius: 1rem;
     background-color: var(--color-primary);
     color: var(--color-white);
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
     transition: transform 0.2s;
+    cursor: pointer;
     
     &:hover {
         transform: translateY(-0.5rem);
     }
 
     .projectTitle {
-        font-size: 3vw;
+        font-size: 2vw;
         text-align: center;
         margin: 0;
         margin-top: 1vh;
@@ -27,9 +28,11 @@
     }
     
     .projectDescription {
-        font-size: 1.5rem;
+        font-size: 1vw;
         margin-bottom: 1rem;
         white-space: pre-wrap;
         text-align: center;
+        font-family: "Work Sans", sans-serif;
+        font-weight: 400;
     }
 }

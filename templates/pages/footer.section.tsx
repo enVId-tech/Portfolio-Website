@@ -1,7 +1,7 @@
 import React from 'react';
 import styles from '@/styles/footer.module.scss';
 import { Work_Sans } from 'next/font/google';
-import { FooterProps } from '../ts/exportInterfaces.ts';
+import { FooterProps } from '@/templates/ts/exportInterfaces.ts';
 
 const Work_Sans_300 = Work_Sans({
     weight: "300",

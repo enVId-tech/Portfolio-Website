@@ -3,8 +3,8 @@ import React from 'react';
 import styles from '@/styles/titleDiv.module.scss';
 import { Work_Sans, Montserrat } from 'next/font/google';
 import animateText from '@/templates/ts/scrollEffect.ts';
-import { TitleDivProps } from '../ts/exportInterfaces.ts';
-import { exportLogos } from '../ts/exportConsts.ts';
+import { TitleDivProps } from '@/templates/ts/exportInterfaces.ts';
+import { exportLogos } from '@/templates/ts/exportConsts.ts';
 
 const Work_Sans300 = Work_Sans({
     weight: "300",

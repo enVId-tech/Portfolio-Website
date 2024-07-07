@@ -2,7 +2,7 @@ import React from "react";
 import styles from "@/styles/projects.module.scss";
 import { Work_Sans, Montserrat } from "next/font/google";
 import ProjectCard from "@/templates/components/ProjectCard.tsx";
-import { ProjectsProps } from "../ts/exportInterfaces.ts";
+import { ProjectsProps } from "@/templates/ts/exportInterfaces.ts";
 
 const Work_Sans_300 = Work_Sans({
     weight: "300",
