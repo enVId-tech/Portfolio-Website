@@ -8,8 +8,18 @@ import Projects from "@/templates/pages/projects.section.tsx";
 import Resources from "@/templates/pages/resources.section";
 
 // Images
-import image from "@/public/images/ReactJS.png";
-import image2 from "@/public/images/NextJS.png";
+import react from "@/public/images/logos/ReactJS.png";
+import next from "@/public/images/logos/NextJS.png";
+import node from "@/public/images/logos/NodeJS.png";
+import js from "@/public/images/logos/JavaScript.png";
+import mongo from "@/public/images/logos/MongoDB.png";
+import express from "@/public/images/logos/ExpressJS.png";
+import ts from "@/public/images/logos/TypeScript.png";
+import python from "@/public/images/logos/Python.png";
+import java from "@/public/images/logos/Java.png";
+import cpp from "@/public/images/logos/Cpp.png";
+import html from "@/public/images/logos/HTML.png";
+import scss from "@/public/images/logos/SCSS.png";
 
 const HomePage: React.FC = (): React.JSX.Element => {
     type TitlePropsType = { titlePlate: string; subTitlePlate: string; titlePlateDelay: number; subTitlePlateDelay: number; timeBetweentitleAndSubTitle?: number; waitTime?: number; };
@@ -45,14 +55,74 @@ const HomePage: React.FC = (): React.JSX.Element => {
             {
                 title: "ReactJS",
                 description: "React is a JavaScript library for building user interfaces.",
-                image: image.src,
+                image: react.src,
                 link: "https://reactjs.org"
             },
             {
                 title: "NextJS",
                 description: "Next.js is a React framework that enables functionality like server-side rendering and static site generation.",
-                image: image2.src,
+                image: next.src,
                 link: "https://nextjs.org"
+            },
+            {
+                title: "NodeJS",
+                description: "Node.js is a JavaScript runtime built on Chrome's V8 JavaScript engine.",
+                image: node.src,
+                link: "https://nodejs.org"
+            },
+            {
+                title: "JavaScript",
+                description: "JavaScript is a programming language that conforms to the ECMAScript specification.",
+                image: js.src,
+                link: "https://developer.mozilla.org/en-US/docs/Web/JavaScript"
+            },
+            {
+                title: "MongoDB",
+                description: "MongoDB is a general purpose, document-based, distributed database built for modern application developers and for the cloud era.",
+                image: mongo.src,
+                link: "https://www.mongodb.com"
+            },
+            {
+                title: "ExpressJS",
+                description: "Express is a minimal and flexible Node.js web application framework that provides a robust set of features for web and mobile applications.",
+                image: express.src,
+                link: "https://expressjs.com"
+            },
+            {
+                title: "TypeScript",
+                description: "TypeScript is an open-source language which builds on JavaScript, one of the world’s most used tools, by adding static type definitions.",
+                image: ts.src,
+                link: "https://www.typescriptlang.org"
+            },
+            {
+                title: "Python",
+                description: "Python is a programming language that lets you work quickly and integrate systems more effectively.",
+                image: python.src,
+                link: "https://www.python.org"
+            },
+            {
+                title: "Java",
+                description: "Java is a class-based, object-oriented programming language that is designed to have as few implementation dependencies as possible.",
+                image: java.src,
+                link: "https://www.java.com"
+            },
+            {
+                title: "C++",
+                description: "C++ is a general-purpose programming language created by Bjarne Stroustrup as an extension of the C programming language, or 'C with Classes'.",
+                image: cpp.src,
+                link: "https://www.cplusplus.com"
+            },
+            {
+                title: "HTML",
+                description: "HTML is the standard markup language for documents designed to be displayed in a web browser.",
+                image: html.src,
+                link: "https://developer.mozilla.org/en-US/docs/Web/HTML"
+            },
+            {
+                title: "SASS/SCSS",
+                description: "Sass is the most mature, stable, and powerful professional grade CSS extension language in the world.",
+                image: scss.src,
+                link: "https://sass-lang.com"
             }
         ]
     }
@@ -105,7 +175,7 @@ const HomePage: React.FC = (): React.JSX.Element => {
                 waitTime={TitleProps.waitTime as number}
             />
             <About aboutScrollHeight={AboutProps.aboutScrollHeight as number} aboutText={AboutProps.aboutText as string[]} />
-            <Resources resources={ResourcesProps.resources as { title: string; description: string; link: string; }[]} />
+            <Resources resources={ResourcesProps.resources as { title: string; description: string; image: string; link: string; }[]} />
             <Projects projects={ProjectProps.projects as { title: string; description: string; techStack: string[]; githubLink: string; liveLink: string; }[]} />
             <Footer
                 latestUpdate={FooterProps.latestUpdate as string}
