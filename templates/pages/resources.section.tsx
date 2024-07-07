@@ -10,27 +10,33 @@ const Work_Sans_300 = Work_Sans({
     subsets: ["latin"],
 });
 
-const Resources: React.FC<ResourcesProps> = (props: ResourcesProps): JSX.Element => {
+const Resources: React.FC<ResourcesProps> = (props: ResourcesProps): React.JSX.Element => {
+    const resourceCardRef: React.RefObject<HTMLDivElement> = React.createRef<HTMLDivElement>();
+    
     // Add a slide animation to the resource cards
-    React.useEffect(() => {
-        const resourceCards: NodeListOf<Element> = document.querySelectorAll(`.${styles.resourceCard}`);
+    React.useEffect((): void => {
+        const resourceCards: NodeListOf<Element> = document.querySelectorAll(`.${styles.resourceCards}`);
+
+        console.log(resourceCards);
+
         let i: number = 0;
 
-        const slideIn = (): void => {
-            if (i < resourceCards.length) {
-                resourceCards[i].classList.add(styles.slideIn);
-                i++;
-                setTimeout(slideIn, 100);
-            }
-        };
+        resourceCards.forEach((card: Element, index: number) => {
+            if (!resourceCardRef.current) {
+                return;
+            };
 
-        slideIn();
-    }, []);
+            if (resourceCardRef.current?.scrollLeft >= card.clientWidth * index - (card.clientWidth * 2)) {
+                resourceCardRef.current.prepend(card);
+                i++;
+            }
+        })
+    }, [resourceCardRef!.current?.scrollLeft]);
 
     return (
         <div className={styles.resourcesDiv} id="resources">
             <p className={`${styles.sectionHeading} ${Work_Sans_300.className}`}>Top Resources</p>
-            <div className={styles.resourceCards}>
+            <div className={styles.resourceCards} ref={resourceCardRef}>
                 {props.resources.map((resource, index) => {
                     return (
                         <ResourceCard
