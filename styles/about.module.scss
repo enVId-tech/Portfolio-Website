@@ -22,42 +22,50 @@
         padding-left: 6.5vw;
         margin-right: 10vw;
         opacity: 0;
-
+        justify-content: center;
+        
         &.contentAnimRight {
             animation: content-anim-right 1s forwards;
             display: flex;
             flex-direction: column;
 
             .sectionHeading {
-                margin-top: 6vh;
                 font-size: 6.5vh;
-                margin-left: 1.5vw;
-                text-decoration-line: underline;
-                text-decoration-thickness: 0.5vh;
+                margin: 0;
                 color: rgb(0, 0, 0);
             }
 
-            @for $i from 0 through 100 {
-                .sectionParagraph {
-                    &:nth-child(#{$i}) {
-                        animation: content-anim-right 1s #{$i * 0.25}s ease-in-out forwards;
-                    }
+            .divider {
+                width: 100%;
+                height: 40vh;
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                align-items: flex-start;
+                justify-content: space-around;
 
-                    $i: $i * 0.25;
-                    font-size: 3vh;
-                    margin-left: 1.5vw;
-                    margin-bottom: 2vh;
-                    color: rgb(0, 0, 0);
-                    opacity: 0;
-
-                    a {
-                        color: rgb(0, 0, 0);
-                        transition: 0.5s;
-
-                        &:hover {
-                            color: rgba(255, 255, 255, 0.5);
+                @for $i from 0 through 100 {
+                    .sectionParagraph {
+                        &:nth-child(#{$i}) {
+                            animation: content-anim-right 1s #{$i * 0.25}s ease-in-out forwards;
                         }
 
+                        $i: $i * 0.25;
+                        font-size: 3vh;
+                        margin-left: 1.5vw;
+                        margin: 0;
+                        color: rgb(0, 0, 0);
+                        opacity: 0;
+
+                        a {
+                            color: rgb(0, 0, 0);
+                            transition: 0.5s;
+
+                            &:hover {
+                                color: rgba(255, 255, 255, 0.5);
+                            }
+
+                        }
                     }
                 }
             }

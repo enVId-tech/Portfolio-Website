@@ -41,13 +41,15 @@ const About: React.FC<AboutProps> = (props: AboutProps): JSX.Element => {
         <div className={`${styles.aboutDiv}`} id="about">
             <div className={`${styles.smallerAboutDiv} ${aboutScrolled ? styles.contentAnimRight : ""}`}>
                 <p className={`${styles.sectionHeading} ${Work_Sans_400.className}`}>About Me</p>
-                {
-                    props.aboutText.map((text: string, index: number): JSX.Element => {
-                        return (
-                            <p className={`${styles.sectionParagraph} ${Montserrat_300.className}`} key={index}>{text}</p>
-                        )
-                    })
-                }
+                <div className={styles.divider}>
+                    {
+                        props.aboutText.map((text: string, index: number): JSX.Element => {
+                            return (
+                                <p className={`${styles.sectionParagraph} ${Montserrat_300.className}`} key={index}>{text}</p>
+                            )
+                        })
+                    }
+                </div>
             </div>
             <Image className={`${styles.aboutImage} ${aboutScrolled ? styles.contentAnimUp : ""}`} src={exportLogos.enVId.src} alt="Web developer" width={350} height={350} />
         </div>

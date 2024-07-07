@@ -5,12 +5,14 @@
     align-items: center;
     margin-top: 50px;
     background-color: rgb(0, 183, 255);
-    height: 100vh;
+    height: 110vh;
+    justify-content: space-around;
 
     .sectionHeading {
         padding: 0;
         font-size: 5rem;
-        margin-bottom: 1rem;
+        margin-bottom: 2vh;
+        margin-top: 0;
         color: black;
         font-family: "Work Sans", sans-serif;
         font-weight: 500;
@@ -18,8 +20,10 @@
 
     .resourceCards {
         display: flex;
-        justify-content: center;
-        padding-top: 1rem;
+        overflow-y: hidden;
+        overflow-x: auto;
+        overflow-wrap: normal;
+        width: 100vw;
     }
 }
 
