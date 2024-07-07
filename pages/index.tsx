@@ -7,10 +7,14 @@ import Footer from "@/templates/pages/footer.section.tsx";
 import Projects from "@/templates/pages/projects.section.tsx";
 import Resources from "@/templates/pages/resources.section";
 
+// Images
+import image from "@/public/images/ReactJS.png";
+import image2 from "@/public/images/NextJS.png";
+
 const HomePage: React.FC = (): React.JSX.Element => {
     type TitlePropsType = { titlePlate: string; subTitlePlate: string; titlePlateDelay: number; subTitlePlateDelay: number; timeBetweentitleAndSubTitle?: number; waitTime?: number; };
     type AboutPropsType = { aboutScrollHeight: number; aboutText: string[]; };
-    type ResourcesPropsType = { resources: { title: string; description: string; link: string; }[]; };
+    type ResourcesPropsType = { resources: { title: string; description: string; image: string; link: string; }[]; };
     type ProjectsPropType = { projects: { title: string; description: string; techStack: string[]; githubLink: string; liveLink: string; }[]; };
     type FooterPropsType = { latestUpdate: string; dateUpdated: string; brandName: string; };
 
@@ -39,19 +43,16 @@ const HomePage: React.FC = (): React.JSX.Element => {
     const ResourcesProps: ResourcesPropsType = {
         resources: [
             {
-                title: "Resource 1",
-                description: "This is a resource description.",
-                link: "https://github.com"
+                title: "ReactJS",
+                description: "React is a JavaScript library for building user interfaces.",
+                image: image.src,
+                link: "https://reactjs.org"
             },
             {
-                title: "Resource 2",
-                description: "This is a resource description.",
-                link: "https://github.com"
-            },
-            {
-                title: "Resource 3",
-                description: "This is a resource description.",
-                link: "https://github.com"
+                title: "NextJS",
+                description: "Next.js is a React framework that enables functionality like server-side rendering and static site generation.",
+                image: image2.src,
+                link: "https://nextjs.org"
             }
         ]
     }

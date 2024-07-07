@@ -13,6 +13,7 @@ interface ResourcesProps {
     resources: {
         title: string;
         description: string;
+        image: string;
         link: string;
     }[];
 }
@@ -28,6 +29,7 @@ const Resources: React.FC<ResourcesProps> = (props: ResourcesProps): JSX.Element
                             key={index}
                             title={resource.title}
                             description={resource.description}
+                            image={resource.image}
                             link={resource.link}
                         />
                     );
