@@ -2,6 +2,7 @@ import React from 'react';
 import Image from 'next/image';
 import styles from '@/styles/about.module.scss';
 import { Work_Sans, Montserrat } from 'next/font/google';
+import { exportLogos } from '@/templates/ts/exportConsts.ts';
 
 const Montserrat_300 = Montserrat({
     weight: "300",
@@ -48,7 +49,7 @@ const About: React.FC<AboutProps> = (props: AboutProps): JSX.Element => {
                     })
                 }
             </div>
-            <Image className={`${styles.aboutImage} ${aboutScrolled ? styles.contentAnimUp : ""}`} src="/favicon/android-chrome-512x512.png" alt="Web developer" width={350} height={350} />
+            <Image className={`${styles.aboutImage} ${aboutScrolled ? styles.contentAnimUp : ""}`} src={exportLogos.enVId.src} alt="Web developer" width={350} height={350} />
         </div>
     )
 };

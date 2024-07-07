@@ -2,21 +2,13 @@ import React from "react";
 import styles from "@/styles/resources.module.scss";
 import { Work_Sans } from "next/font/google";
 import ResourceCard from "@/templates/components/ResourceCard.tsx";
+import { ResourcesProps } from "../ts/exportInterfaces.ts";
 
 const Work_Sans_300 = Work_Sans({
     weight: "300",
     style: "normal",
     subsets: ["latin"],
 });
-
-interface ResourcesProps {
-    resources: {
-        title: string;
-        description: string;
-        image: string;
-        link: string;
-    }[];
-}
 
 const Resources: React.FC<ResourcesProps> = (props: ResourcesProps): JSX.Element => {
     // Add a slide animation to the resource cards

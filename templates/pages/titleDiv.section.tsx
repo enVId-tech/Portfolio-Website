@@ -3,6 +3,8 @@ import React from 'react';
 import styles from '@/styles/titleDiv.module.scss';
 import { Work_Sans, Montserrat } from 'next/font/google';
 import animateText from '@/templates/ts/scrollEffect.ts';
+import { TitleDivProps } from '../ts/exportInterfaces.ts';
+import { exportLogos } from '../ts/exportConsts.ts';
 
 const Work_Sans300 = Work_Sans({
     weight: "300",
@@ -21,15 +23,6 @@ const Montserrat400 = Montserrat({
     style: 'normal',
     subsets: ['latin']
 });
-
-interface TitleDivProps {
-    titlePlate: string;
-    subTitlePlate: string;
-    titlePlateDelay: number;
-    subTitlePlateDelay: number;
-    timeBetweentitleAndSubTitle?: number;
-    waitTime?: number;
-}
 
 const TitleDiv: React.FC<TitleDivProps> = (props: TitleDivProps): React.JSX.Element => {
     const namePlate = React.useRef<HTMLHeadingElement | null>(null);
@@ -57,7 +50,7 @@ const TitleDiv: React.FC<TitleDivProps> = (props: TitleDivProps): React.JSX.Elem
                 <p className={`${styles.namePlate} ${Montserrat400.className}`} id="Name" ref={namePlate}></p>
                 <p className={`${styles.subNamePlate} ${Work_Sans300.className}`} id="PersonTitle" ref={titlePlate}></p>
                 <div className={styles.divider}>
-                    <img src="/favicon/android-chrome-512x512.png" alt="Web developer" width={350} height={350} className={styles.image} />
+                    <img src={exportLogos.enVId.src} alt="Web developer" width={350} height={350} className={styles.image} />
                 </div>
             </div>
         )

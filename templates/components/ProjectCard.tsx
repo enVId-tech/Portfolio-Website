@@ -1,21 +1,13 @@
 import React from "react";
 import styles from '@/styles/projectCard.module.scss';
 import { Work_Sans } from "next/font/google";
+import { ProjectCardProps } from "../ts/exportInterfaces.ts";
 
 const Work_Sans_300 = Work_Sans({
     weight: "300",
     style: 'normal',
     subsets: ['latin']
 });
-
-interface ProjectCardProps {
-    title: string;
-    description: string;
-    embed: string;
-    link: string;
-    githubLink: string;
-    techStack: string[];
-}
 
 const ProjectCard: React.FC<ProjectCardProps> = (props: ProjectCardProps): JSX.Element => {
     return (

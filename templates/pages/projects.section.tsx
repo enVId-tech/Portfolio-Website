@@ -2,6 +2,7 @@ import React from "react";
 import styles from "@/styles/projects.module.scss";
 import { Work_Sans, Montserrat } from "next/font/google";
 import ProjectCard from "@/templates/components/ProjectCard.tsx";
+import { ProjectsProps } from "../ts/exportInterfaces.ts";
 
 const Work_Sans_300 = Work_Sans({
     weight: "300",
@@ -14,17 +15,6 @@ const Montserrat_400 = Montserrat({
     style: "normal",
     subsets: ["latin"],
 });
-
-interface ProjectsProps {
-    projects: {
-        title: string;
-        description: string;
-        embed: string;
-        link: string;
-        githubLink: string;
-        techStack: string[];
-    }[]
-}
 
 const Projects: React.FC<ProjectsProps> = (props: ProjectsProps): JSX.Element => {
     if (!props) {

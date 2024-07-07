@@ -1,8 +1,5 @@
 import React from 'react';
-
-interface PaddingElementProps {
-    height: number;
-}
+import { PaddingElementProps } from '../ts/exportInterfaces.ts';
 
 const PaddingElement: React.FC<PaddingElementProps> = (numberProp: PaddingElementProps): JSX.Element => {
     const style: object = {

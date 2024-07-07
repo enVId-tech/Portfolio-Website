@@ -10,6 +10,7 @@ import java from "@/public/images/logos/Java.png";
 import cpp from "@/public/images/logos/Cpp.png";
 import html from "@/public/images/logos/HTML.png";
 import scss from "@/public/images/logos/SCSS.png";
+import enVId from "@/public/images/logos/enVId.png";
 
 export const exportLogos = {
     react,
@@ -23,5 +24,6 @@ export const exportLogos = {
     java,
     cpp,
     html,
-    scss
+    scss,
+    enVId
 };

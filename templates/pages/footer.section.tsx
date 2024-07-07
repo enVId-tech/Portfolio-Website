@@ -1,18 +1,13 @@
 import React from 'react';
 import styles from '@/styles/footer.module.scss';
 import { Work_Sans } from 'next/font/google';
+import { FooterProps } from '../ts/exportInterfaces.ts';
 
 const Work_Sans_300 = Work_Sans({
     weight: "300",
     style: 'normal',
     subsets: ['latin']
 });
-
-interface FooterProps {
-    latestUpdate: string;
-    dateUpdated: string;
-    brandName: string;
-}
 
 const Footer: React.FC<FooterProps> = (props: FooterProps): JSX.Element => {
     const latestUpdate: string = `Latest Update: ${props.dateUpdated}, Revision ${props.latestUpdate}`;
