@@ -11,6 +11,8 @@ const Work_Sans_300 = Work_Sans({
 });
 
 const Resources: React.FC<ResourcesProps> = (props: ResourcesProps): React.JSX.Element => {
+    const [isEnabled, setIsEnabled] = React.useState<boolean>(false);
+
     const resourceCardRef: React.RefObject<HTMLDivElement> | null = React.createRef<HTMLDivElement>();
     
     // Add a slide animation to the resource cards
@@ -41,7 +43,25 @@ const Resources: React.FC<ResourcesProps> = (props: ResourcesProps): React.JSX.E
     }, [resourceCardRef!.current?.scrollLeft]);
 
     return (
+        isEnabled ?
         <div className={styles.resourcesDiv} id="resources">
+            <p className={`${styles.sectionHeading} ${Work_Sans_300.className}`}>Top Resources</p>
+            <div className={styles.resourceCards} ref={resourceCardRef}>
+                {props.resources.map((resource, index) => {
+                    return (
+                        <ResourceCard
+                            key={index}
+                            title={resource.title}
+                            description={resource.description}
+                            image={resource.image}
+                            link={resource.link}
+                        />
+                    );
+                })}
+            </div>
+        </div>
+        :
+        <div className={styles.resourcesDiv2} id="resources">
             <p className={`${styles.sectionHeading} ${Work_Sans_300.className}`}>Top Resources</p>
             <div className={styles.resourceCards} ref={resourceCardRef}>
                 {props.resources.map((resource, index) => {

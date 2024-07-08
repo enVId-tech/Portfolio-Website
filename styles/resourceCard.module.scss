@@ -40,3 +40,37 @@
         margin-right: 2vw;
     }
 }
+
+.resourceCard2 {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    height: 25vh;
+    width: 8vw;
+    margin-left: 0.5vw;
+    margin-right: 0.5vw;
+    border-radius: 1rem;
+    background-color: rgb(255, 255, 255);
+    box-shadow: 0 0 1rem rgba(0, 0, 0, 0.1);
+    transition: transform 0.2s;
+
+    &:hover {
+        transform: translateY(-0.5rem);
+    }
+
+    .image {
+        margin: 1vw;
+        margin-bottom: 0;
+        width: auto;
+        height: max-content;
+        border-radius: 1rem;
+    }
+
+    h3 {
+        font-size: 1.4vw;
+        width: 100%;
+        text-align: center;
+        margin-bottom: 1rem;
+        color: black;
+    }
+}
