@@ -59,52 +59,52 @@ export const ProjectProps: ProjectsPropType = {
             techStack: ["HTML", "CSS", "Javascript"]
         },
         {
-            title: "",
-            description: "",
+            title: "Youtube File Storage",
+            description: "A file storage system that can convert a file into a video and upload it to Youtube. The system can also download a video from Youtube and convert it back into a file.",
             embed: "",
             link: "",
-            githubLink: "",
-            techStack: []
+            githubLink: "https://github.com/enVId-tech/Youtube-File-Storage",
+            techStack: ["Python"]
         },
         {
-            title: "",
-            description: "",
+            title: "OpenCV Object Detection",
+            description: "An object detection system that uses OpenCV to detect objects in an image or video. The system can detect objects such as cars, people, and animals.",
             embed: "",
             link: "",
-            githubLink: "",
-            techStack: []
+            githubLink: "https://github.com/enVId-tech/OpenCV-Object-Detection",
+            techStack: ["C++", "OpenCV"]
         },
         {
-            title: "",
-            description: "",
+            title: "Mecanum Drive Arduino",
+            description: "A mecanum drive system that uses an Arduino to control the movement of a robot. The system can move the robot in any direction without turning.",
             embed: "",
             link: "",
-            githubLink: "",
-            techStack: []
+            githubLink: "https://github.com/enVId-tech/Mecanum-Drive-Arduino",
+            techStack: ["Arduino", "C++"]
         },
         {
-            title: "",
-            description: "",
+            title: "FRC 4079, Robotics Management Web",
+            description: "A web app for the FRC 4079 robotics team. The app includes tools for managing the team, its members, and its projects.",
             embed: "",
             link: "",
-            githubLink: "",
-            techStack: []
+            githubLink: "https://github.com/OASTEM/robotics-management-web",
+            techStack: ["React", "TypeScript", "Node.js", "Express", "MongoDB", "SCSS"]
         },
         {
-            title: "",
-            description: "",
+            title: "FRC 4079, Robotics Website",
+            description: "A website for the FRC 4079 robotics team. The website includes information about the team, its members, and its sponsors.",
             embed: "",
             link: "",
-            githubLink: "",
-            techStack: []
+            githubLink: "https://github.com/enVId-tech/Robotics-Website",
+            techStack: ["React", "TypeScript", "Node.js", "Express", "SCSS"]
         },
         {
-            title: "",
-            description: "",
+            title: "Global Youth Scholars Website",
+            description: "A website for the Global Youth Scholars program. The website includes information about the program, its participants, and its projects.",
             embed: "",
             link: "",
-            githubLink: "",
-            techStack: []
+            githubLink: "https://github.com/enVId-tech/Global-Youth-Scholars-Website",
+            techStack: ["React", "TypeScript", "Node.js", "Express", "SCSS"]
         }
     ]
 };
