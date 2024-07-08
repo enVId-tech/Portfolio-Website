@@ -24,12 +24,20 @@ const Montserrat400 = Montserrat({
 });
 
 const ResourceCard: React.FC<ResourceSlideAnimProps> = (props: ResourceSlideAnimProps): JSX.Element => {
+    const [isEnabled, setIsEnabled] = React.useState<boolean>(false);
+
     return (
-        <div className={styles.resourceCard}>
-            <img src={props.image} width={50} height={50} className={styles.image} />
-            <h3 className={`${styles.title} ${Work_Sans400.className}`}>{props.title}</h3>
-            <p className={`${styles.description} ${Montserrat400.className}`}>{props.description}</p>
-        </div>
+        isEnabled ?
+            <div className={styles.resourceCard}>
+                <img src={props.image} width={50} height={50} className={styles.image} />
+                <h3 className={`${styles.title} ${Work_Sans400.className}`}>{props.title}</h3>
+                <p className={`${styles.description} ${Montserrat400.className}`}>{props.description}</p>
+            </div>
+            :
+            <div className={styles.resourceCard2}>
+                <img src={props.image} width={50} height={50} className={styles.image} />
+                <h3 className={`${styles.title} ${Work_Sans400.className}`}>{props.title}</h3>
+            </div>
     );
 };
 
