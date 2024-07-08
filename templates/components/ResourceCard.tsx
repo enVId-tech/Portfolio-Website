@@ -25,16 +25,46 @@ const Montserrat400 = Montserrat({
 
 const ResourceCard: React.FC<ResourceSlideAnimProps> = (props: ResourceSlideAnimProps): JSX.Element => {
     const [isEnabled, setIsEnabled] = React.useState<boolean>(false);
+    const cardRef: React.RefObject<HTMLDivElement> | null = React.createRef<HTMLDivElement>();
+
+    const setEnabledClicked = (): void => {
+        setIsEnabled(!isEnabled);
+        console.log(isEnabled);
+    }
+
+    // Turn off all resource cards other than the one clicked
+    React.useEffect((): void => {
+        const resourceCards: NodeListOf<Element> = document.querySelectorAll(`.${styles.resourceCard}`);
+        const resourceCard: Element = cardRef!.current!;
+
+        if (!resourceCard) return;
+
+        if (isEnabled) {
+            resourceCards.forEach((card: Element): void => {
+                if (card !== resourceCard) {
+                    card.classList.add(styles.resourceCard2);
+                    card.classList.remove(styles.resourceCard);
+                }
+            });
+        } else {
+            resourceCards.forEach((card: Element): void => {
+                if (card !== resourceCard) {
+                    card.classList.add(styles.resourceCard);
+                    card.classList.remove(styles.resourceCard2);
+                }
+            });
+        }
+    }, [isEnabled]);
 
     return (
         isEnabled ?
-            <div className={styles.resourceCard}>
+            <div className={styles.resourceCard} id="resources" onClick={setEnabledClicked} ref={cardRef}>
                 <img src={props.image} width={50} height={50} className={styles.image} />
                 <h3 className={`${styles.title} ${Work_Sans400.className}`}>{props.title}</h3>
                 <p className={`${styles.description} ${Montserrat400.className}`}>{props.description}</p>
             </div>
             :
-            <div className={styles.resourceCard2}>
+            <div className={styles.resourceCard2} id="resources" onClick={setEnabledClicked} ref={cardRef}>
                 <img src={props.image} width={50} height={50} className={styles.image} />
                 <h3 className={`${styles.title} ${Work_Sans400.className}`}>{props.title}</h3>
             </div>
