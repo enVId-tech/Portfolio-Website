@@ -10,12 +10,21 @@ const Work_Sans_400 = Work_Sans({
 });
 
 const ProjectCard: React.FC<ProjectCardProps> = (props: ProjectCardProps): JSX.Element => {
+    const [iframeExpanded, setIframeExpanded] = React.useState<boolean>(false);
+
+    const coverClicked = (): void => {
+        setIframeExpanded(!iframeExpanded);
+        console.log(iframeExpanded);
+    }
+
     return (
-        <div className={`${styles.projectCard} ${Work_Sans_400.style}`} id="projects">
+        <div onClick={coverClicked} className={`${styles.projectCard} ${Work_Sans_400.style}`} id="projects">
             <h3 className={`${styles.projectTitle} ${Work_Sans_400.style}`}>{props.title}</h3>
-            <iframe src={props.embed} title={props.title} frameBorder="0" allowFullScreen className={styles.embed}></iframe>
+            <iframe onClick={coverClicked} src={props.embed} title={props.title} frameBorder="0" allowFullScreen className={styles.embed}>
+            <div className={styles.cover}  />
+            </iframe>
             <p className={`${styles.projectDescription} ${Work_Sans_400.style}`}>{props.description}</p>
-            {/* <a href={props.link} target="_blank" rel="noreferrer" className={styles.projectLink}>Link</a> */}
+            {/* <a href={props.link} target="_blank" rel="noreferrer" className={styles.projectLink}>Link</a> */}   
         </div>
     );
 };

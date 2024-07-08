@@ -8,7 +8,7 @@ export const ProjectProps: ProjectsPropType = {
             embed: "https://calendar-app-production-1457.up.railway.app/",
             link: "https://calendar-app-production-1457.up.railway.app/",
             githubLink: "https://github.com/enVId-tech/Calendar-App",
-            techStack: ["React", "TypeScript", "Node.js", "Express", "MongoDB"]
+            techStack: ["React", "TypeScript", "Node.js", "Express", "MongoDB", "SCSS"]
         },
         {
             title: "FRC 4079, Robotics Safety Test",
@@ -16,23 +16,23 @@ export const ProjectProps: ProjectsPropType = {
             embed: "https://frc4079.org/safetytest",
             link: "https://frc4079.org/safetytest",
             githubLink: "https://github.com/enVId-tech/Safety-Test",
-            techStack: []
+            techStack: ["NextJS", "TypeScript", "Node.js", "Express", "SCSS"]
         },
         {
-            title: "",
-            description: "",
-            embed: "",
-            link: "",
-            githubLink: "",
-            techStack: []
+            title: "Oxford Academy School Website",
+            description: "A website for Oxford Academy, a school in Cypress, California. The website includes information about the school, its programs, and its staff.",
+            embed: "https://oa-website.up.railway.app/",
+            link: "https://oa-website.up.railway.app/",
+            githubLink: "https://github.com/enVId-tech/OA-Website",
+            techStack: ["React", "TypeScript", "Node.js", "Express", "MongoDB", "SCSS"]
         },
         {
-            title: "",
-            description: "",
+            title: "Schedules App",
+            description: "An app that allows users to create and manage schedules. Users can add, edit, and delete schedules, as well as view schedules by day, week, or month.",
             embed: "",
             link: "",
-            githubLink: "",
-            techStack: []
+            githubLink: "https://github.com/enVId-tech/Schedules",
+            techStack: ["React", "TypeScript", "Node.js", "Express", "MongoDB", "SCSS"]
         },
         {
             title: "",
