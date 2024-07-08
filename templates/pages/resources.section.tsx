@@ -11,26 +11,33 @@ const Work_Sans_300 = Work_Sans({
 });
 
 const Resources: React.FC<ResourcesProps> = (props: ResourcesProps): React.JSX.Element => {
-    const resourceCardRef: React.RefObject<HTMLDivElement> = React.createRef<HTMLDivElement>();
+    const resourceCardRef: React.RefObject<HTMLDivElement> | null = React.createRef<HTMLDivElement>();
     
     // Add a slide animation to the resource cards
     React.useEffect((): void => {
-        const resourceCards: NodeListOf<Element> = document.querySelectorAll(`.${styles.resourceCards}`);
+        const resourceCards: NodeListOf<Element> = document.querySelectorAll(`.${styles.resourceCard}`);
 
-        console.log(resourceCards);
+        if (!resourceCardRef!.current) return;
 
-        let i: number = 0;
+        if (resourceCardRef!.current?.scrollLeft > 0) {
+            let lastResourceCard: Element = resourceCards[resourceCards.length - 1];
+            let firstResourceCard: Element = resourceCards[0];
 
-        resourceCards.forEach((card: Element, index: number) => {
-            if (!resourceCardRef.current) {
-                return;
-            };
+            resourceCardRef!.current!.scrollTo({
+                left: lastResourceCard.getBoundingClientRect().left,
+                behavior: "smooth",
+            });
 
-            if (resourceCardRef.current?.scrollLeft >= card.clientWidth * index - (card.clientWidth * 2)) {
-                resourceCardRef.current.prepend(card);
-                i++;
-            }
-        })
+            // When the scroll animation is complete, move the first resource card to the end
+            lastResourceCard.addEventListener("scroll", (event: Event): void => {
+                if (resourceCardRef!.current!.scrollLeft === lastResourceCard.getBoundingClientRect().left) {
+                    resourceCardRef!.current!.scrollTo({
+                        left: firstResourceCard.getBoundingClientRect().left,
+                        behavior: "auto",
+                    });
+                }
+            });
+        }
     }, [resourceCardRef!.current?.scrollLeft]);
 
     return (
