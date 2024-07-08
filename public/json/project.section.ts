@@ -35,6 +35,62 @@ export const ProjectProps: ProjectsPropType = {
             techStack: ["React", "TypeScript", "Node.js", "Express", "MongoDB", "SCSS"]
         },
         {
+            title: "Scouting Website",
+            description: "A website for the FRC 4079 robotics team. The website includes information about the team, its members, and its sponsors.",
+            embed: "",
+            link: "",
+            githubLink: "https://github.com/enVId-tech/Scouting-Website",
+            techStack: ["React", "TypeScript", "Node.js", "Express", "SCSS"]
+        },
+        {
+            title: "Classroom Website",
+            description: "A website for a classroom. The website includes information about the class, its assignments, and its students.",
+            embed: "",
+            link: "",
+            githubLink: "https://github.com/enVId-tech/Classroom-Website",
+            techStack: ["React", "Javascript", "Node.js", "Express", "SCSS"]
+        },
+        {
+            title: "OA Code Club Website",
+            description: "A website for the Oxford Academy Code Club. The website includes information about the club, its members, and its projects.",
+            embed: "",
+            link: "",
+            githubLink: "https://github.com/enVId-tech/OA-Code-Club-Homepage",
+            techStack: ["HTML", "CSS", "Javascript"]
+        },
+        {
+            title: "",
+            description: "",
+            embed: "",
+            link: "",
+            githubLink: "",
+            techStack: []
+        },
+        {
+            title: "",
+            description: "",
+            embed: "",
+            link: "",
+            githubLink: "",
+            techStack: []
+        },
+        {
+            title: "",
+            description: "",
+            embed: "",
+            link: "",
+            githubLink: "",
+            techStack: []
+        },
+        {
+            title: "",
+            description: "",
+            embed: "",
+            link: "",
+            githubLink: "",
+            techStack: []
+        },
+        {
             title: "",
             description: "",
             embed: "",

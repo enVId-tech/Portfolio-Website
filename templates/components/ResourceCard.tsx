@@ -57,17 +57,18 @@ const ResourceCard: React.FC<ResourceSlideAnimProps> = (props: ResourceSlideAnim
     }, [isEnabled]);
 
     return (
-        isEnabled ?
+        isEnabled ? (
             <div className={styles.resourceCard} id="resources" onClick={setEnabledClicked} ref={cardRef}>
                 <img src={props.image} width={50} height={50} className={styles.image} />
                 <h3 className={`${styles.title} ${Work_Sans400.className}`}>{props.title}</h3>
                 <p className={`${styles.description} ${Montserrat400.className}`}>{props.description}</p>
             </div>
-            :
+        ) : (
             <div className={styles.resourceCard2} id="resources" onClick={setEnabledClicked} ref={cardRef}>
                 <img src={props.image} width={50} height={50} className={styles.image} />
                 <h3 className={`${styles.title} ${Work_Sans400.className}`}>{props.title}</h3>
             </div>
+        )
     );
 };
 
