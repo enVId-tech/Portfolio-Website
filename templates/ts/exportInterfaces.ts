@@ -1,3 +1,5 @@
+import { StaticImageData } from "next/image";
+
 interface TitleDivProps {
     titlePlate: string;
     subTitlePlate: string;
@@ -58,6 +60,22 @@ interface ProjectCardProps {
     techStack: string[];
 }
 
+interface exportConstsInterface {
+    react: StaticImageData;
+    next: StaticImageData;
+    node: StaticImageData;
+    js: StaticImageData;
+    mongo: StaticImageData;
+    express: StaticImageData;
+    ts: StaticImageData;
+    python: StaticImageData;
+    java: StaticImageData;
+    cpp: StaticImageData;
+    html: StaticImageData;
+    scss: StaticImageData;
+    enVId: StaticImageData;
+}
+
 export type {
     TitleDivProps,
     ResourcesProps,
@@ -66,5 +84,6 @@ export type {
     PaddingElementProps,
     AboutProps,
     ResourceSlideAnimProps,
-    ProjectCardProps
+    ProjectCardProps,
+    exportConstsInterface
 }

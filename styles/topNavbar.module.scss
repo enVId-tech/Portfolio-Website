@@ -2,13 +2,64 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    flex-direction: row;
+    flex-direction: row-reverse;
     position: fixed;
     top: 0;
     left: 0;
     width: 100vw;
-    height: 10vh;
+    height: 12.5vh;
     background-color: rgb(255, 255, 255);
     z-index: 100;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+
+    .topNavbarLeft {
+        display: flex;
+        justify-content: flex-start;
+        align-items: center;
+        flex-direction: row;
+        margin-left: 2vw;
+
+        .navbarItem {
+            font-size: 4vh;
+            color: rgb(0, 102, 255);
+            cursor: pointer;
+            margin-left: 1vw;
+            margin-right: 1vw;
+            transition: 0.5s;
+
+            &:hover {
+                color: rgb(0, 102, 255, 0.5);
+            }
+        }
+    }
+
+    .topNavbarRight {
+        display: flex;
+        justify-content: flex-end;
+        align-items: center;
+        flex-direction: row;
+        margin-right: 2vw;
+
+        .navbarLogo {
+            transition: 0.5s;
+            width: 8vh;
+            height: 8vh;
+            margin-left: 1vw;
+
+            &:hover {
+                color: rgb(0, 102, 255, 0.5);
+            }
+        }
+
+        .navbarItem {
+            font-size: 4vh;
+            color: rgb(0, 102, 255);
+            cursor: pointer;
+            transition: 0.5s;
+
+            &:hover {
+                color: rgb(0, 102, 255, 0.5);
+            }
+        }
+    }
 }

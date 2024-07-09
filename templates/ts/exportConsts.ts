@@ -11,8 +11,9 @@ import cpp from "@/public/images/logos/Cpp.png";
 import html from "@/public/images/logos/HTML.png";
 import scss from "@/public/images/logos/SCSS.png";
 import enVId from "@/public/images/logos/enVId.png";
+import { exportConstsInterface } from "./exportInterfaces.ts";
 
-export const exportLogos = {
+export const exportLogos: exportConstsInterface = {
     react,
     next,
     node,

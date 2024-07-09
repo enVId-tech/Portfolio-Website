@@ -1,6 +1,7 @@
 import React from 'react';
 import styles from '@/styles/topnavbar.module.scss';
 import { Work_Sans } from 'next/font/google';
+import { exportLogos } from '../ts/exportConsts';
 
 const Work_Sans_300 = Work_Sans({
     weight: "300",
@@ -20,23 +21,19 @@ const TopNavBar: React.FC = (): React.JSX.Element => {
     const navbarRef: React.RefObject<HTMLElement> = React.createRef<HTMLElement>();
 
     React.useEffect(() => {
-        // Add event listeners for scrolling
-        window.addEventListener("scroll", () => {
-            // If the user scrolls past a certain point, change the navbar's background color
-            if (window.scrollY >= 50) {
-                setIsScrolled(true);
-            } else {
-                topNavbar.classList.remove(styles.topNavbarScrolled);
-                topNavbarLeft.classList.remove(styles.topNavbarLeftScrolled);
-                topNavbarRight.classList.remove(styles.topNavbarRightScrolled);
-            }
-        });
+        // // Add event listeners for scrolling
+        // window.addEventListener("scroll", () => {
+        //     // If the user scrolls past a certain point, change the navbar's background color
+        //     if (window.scrollY >= 50) {
+        //         setIsScrolled(isScrolled);
+        //     } else {
+        //         setIsScrolled(!isScrolled);
+        //     }
+        // });
 
-        if (isScrolled) {
-            navbarRef.current!.classList.add(styles.topNavbarScrolled);
-        } else {
-            navbarRef.current!.classList.remove(styles.topNavbarScrolled);
-        }
+        // if (isScrolled) {
+        //     navbarRef.current!.classList.add(styles.topNavbarScrolled);
+        // }
     }, []);
 
     return (
@@ -48,7 +45,8 @@ const TopNavBar: React.FC = (): React.JSX.Element => {
                 <p className={`${styles.navbarItem} ${Work_Sans_300.className}`}>Contact</p>
             </div>
             <div className={`${styles.topNavbarRight}`}>
-                <p className={`${styles.navbarItem} ${Work_Sans_300.className}`}>Resume</p>
+            <img src={`${exportLogos.enVId}`} width={30} height={30} className={styles.navbarLogo} />
+            <p className={`${styles.navbarItem} ${Work_Sans_300.className}`}>Erick Tran</p>
             </div>
         </section>
     )

@@ -9,7 +9,7 @@
     border-radius: 1rem;
     background-color: rgb(255, 255, 255);
     box-shadow: 0 0 1rem rgba(0, 0, 0, 0.1);
-    transition: transform 0.2s;
+    transition: 0.5s;
 
     &:hover {
         transform: translateY(-0.5rem);
@@ -52,7 +52,7 @@
     border-radius: 1rem;
     background-color: rgb(255, 255, 255);
     box-shadow: 0 0 1rem rgba(0, 0, 0, 0.1);
-    transition: transform 0.2s;
+    transition: 0.5s;
 
     &:hover {
         transform: translateY(-0.5rem);
