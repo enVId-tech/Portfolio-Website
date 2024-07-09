@@ -13,6 +13,7 @@ import { AboutProps } from "@/public/json/about.section.ts";
 import { TitleProps } from "@/public/json/title.section.ts";
 import { ProjectProps } from "@/public/json/project.section.ts";
 import { FooterProps } from "@/public/json/footer.section.ts";
+import TopNavBar from "@/templates/pages/topNavBar.section";
 
 const HomePage: React.FC = (): React.JSX.Element => {
     return (
@@ -20,6 +21,7 @@ const HomePage: React.FC = (): React.JSX.Element => {
             <Head>
                 <title>enVId Tech - Home Page</title>
             </Head>
+            <TopNavBar />
             <TitleDiv
                 titlePlate={TitleProps.titlePlate as string}
                 subTitlePlate={TitleProps.subTitlePlate as string}

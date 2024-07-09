@@ -13,8 +13,8 @@ export const ProjectProps: ProjectsPropType = {
         {
             title: "FRC 4079, Robotics Safety Test",
             description: "A safety test for the FRC 4079 robotics team. The test is used to ensure that all team members are aware of the safety rules and guidelines.",
-            embed: "https://frc4079.org/safetytest",
-            link: "https://frc4079.org/safetytest",
+            embed: "", // https://frc4079.org/safetytest
+            link: "", // https://frc4079.org/safetytest
             githubLink: "https://github.com/enVId-tech/Safety-Test",
             techStack: ["NextJS", "TypeScript", "Node.js", "Express", "SCSS"]
         },
