@@ -57,13 +57,13 @@
 
         .navbarItem {
             font-size: 4vh;
-            color: rgb(0, 102, 255);
+            color: rgb(0, 0, 0);
             cursor: pointer;
             transition: 0.5s;
             margin-left: 1.5vw;
 
             &:hover {
-                color: rgb(0, 102, 255, 0.5);
+                color: rgba(0, 0, 0, 0.5);
             }
         }
     }

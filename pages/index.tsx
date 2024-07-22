@@ -14,6 +14,7 @@ import { TitleProps } from "@/public/json/title.section.ts";
 import { ProjectProps } from "@/public/json/project.section.ts";
 import { FooterProps } from "@/public/json/footer.section.ts";
 import TopNavBar from "@/templates/pages/topNavBar.section";
+import Contact from "@/templates/pages/contact.section";
 
 const HomePage: React.FC = (): React.JSX.Element => {
     return (
@@ -33,6 +34,7 @@ const HomePage: React.FC = (): React.JSX.Element => {
             <About aboutScrollHeight={AboutProps.aboutScrollHeight as number} aboutText={AboutProps.aboutText as string[]} />
             <Resources resources={ResourcesProps.resources as { title: string; description: string; image: string; link: string; }[]} />
             <Projects projects={ProjectProps.projects as { title: string; description: string; embed: string; link: string; githubLink: string; techStack: string[]; }[]} />
+            <Contact />
             <Footer
                 latestUpdate={FooterProps.latestUpdate as string}
                 dateUpdated={FooterProps.dateUpdated as string}
