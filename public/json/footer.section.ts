@@ -1,7 +1,7 @@
 import { FooterPropsType } from "@/modules/exportTypes";
 
 export const FooterProps: FooterPropsType = {
-    latestUpdate: 'Update 9',
-    dateUpdated: "July 5th, 2024",
+    latestUpdate: 'Update 51',
+    dateUpdated: "July 22th, 2024",
     brandName: "enVId Tech"
 }

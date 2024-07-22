@@ -2,8 +2,9 @@
     position: absolute;
     top: 0;
     left: 0;
-    width: 100vw;
+    width: 100%;
     height: min-content;
     display: flex;
     flex-direction: column;
+    overflow-x: hidden;
 }

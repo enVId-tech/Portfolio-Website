@@ -15,21 +15,23 @@ const Work_Sans_500 = Work_Sans({
 });
 
 const Contact: React.FC = (): React.JSX.Element => {
+    const nameRef = React.useRef<HTMLInputElement | null>(null);
+    const emailRef = React.useRef<HTMLInputElement | null>(null);
+    const messageRef = React.useRef<HTMLTextAreaElement | null>(null);
+
+
+
     return (
         <div className={styles.contactDiv} id="contact">
             <p className={`${styles.sectionHeading} ${Work_Sans_500.className}`}>Contact Me</p>
-            <div className={styles.divider}></div>
             <div className={styles.contactInfo}>
-                <p className={`${styles.contactItem} ${Work_Sans_300.className}`}>Email:
-                    <a href="mailto:" className={styles.contactLink}>
-                    
+                <div className={styles.contactItem}>
+                    <p>Want to start a project or say hi? Email me at:
+                    <a href="https://mail.google.com/mail/?view=cm&fs=1&tf=1&to=erick.tran@etran.dev" target="_blank" rel="noopener" className={`${styles.contactLink} ${Work_Sans_300.className}`}>
+                        <br/>erick.tran@etran.dev
                     </a>
-                </p>
-                <p className={`${styles.contactItem} ${Work_Sans_300.className}`}>GitHub:
-                    <a href="" className={styles.contactLink}>
-                    
-                    </a>
-                </p>
+                    </p>
+                </div>
             </div>
         </div>
     )

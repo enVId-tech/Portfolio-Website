@@ -10,7 +10,8 @@ const Work_Sans_300 = Work_Sans({
 });
 
 const Footer: React.FC<FooterProps> = (props: FooterProps): JSX.Element => {
-    const latestUpdate: string = `Latest Update: ${props.dateUpdated}, Revision ${props.latestUpdate}`;
+    const latestUpdate: string = `Last Updated: ${props.dateUpdated}`;
+    const revisionName: string = `Revision ${props.latestUpdate}`;
     const brandName: string = props.brandName;
     try {
         return (
@@ -21,6 +22,7 @@ const Footer: React.FC<FooterProps> = (props: FooterProps): JSX.Element => {
                 <div className={`${styles.footerRight} ${Work_Sans_300.className}`}>
                     <p className={`${styles.brandName} ${Work_Sans_300.className}`}>{brandName}</p>
                     <p className={`${styles.latestUpdateLabel} ${Work_Sans_300.className}`}>{latestUpdate}</p>
+                    <p className={`${styles.revisionName} ${Work_Sans_300.className}`}>{revisionName}</p>
                 </div>
             </div>
         )

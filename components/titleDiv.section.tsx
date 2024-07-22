@@ -31,19 +31,21 @@ const TitleDiv: React.FC<TitleDivProps> = (props: TitleDivProps): React.JSX.Elem
     const name: string = props.titlePlate.toString();
     const title: string = props.subTitlePlate.toString();
 
-    setTimeout((): void => {
-        animateText(namePlate, name, props.titlePlateDelay);
+    window.onload = (): void => {
+        setTimeout((): void => {
+            animateText(namePlate, name, props.titlePlateDelay);
 
-        if (props.timeBetweentitleAndSubTitle) {
-            setTimeout((): void => {
-                animateText(titlePlate, title, props.subTitlePlateDelay);
-            }, props.timeBetweentitleAndSubTitle);
-            
-            return;
-        }
+            if (props.timeBetweentitleAndSubTitle) {
+                setTimeout((): void => {
+                    animateText(titlePlate, title, props.subTitlePlateDelay);
+                }, props.timeBetweentitleAndSubTitle);
+                
+                return;
+            }
 
-        animateText(titlePlate, title, props.subTitlePlateDelay);
-    }, props.waitTime as number ? props.waitTime as number : 150);
+            animateText(titlePlate, title, props.subTitlePlateDelay);
+        }, props.waitTime as number ? props.waitTime as number : 150);
+    };
 
 
     try {

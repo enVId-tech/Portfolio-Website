@@ -20,9 +20,6 @@ import Contact from "@/components/contact.section";
 const HomePage: React.FC = (): React.JSX.Element => {
     return (
         <div className={styles.homePageMainDiv}>
-            <Head>
-                <title>enVId Tech - Home Page</title>
-            </Head>
             <TopNavBar />
             <TitleDiv
                 titlePlate={TitleProps.titlePlate as string}
