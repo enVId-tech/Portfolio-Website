@@ -1,4 +1,4 @@
-import { FooterPropsType } from "@/templates/ts/exportTypes.ts";
+import { FooterPropsType } from "@/modules/exportTypes";
 
 export const FooterProps: FooterPropsType = {
     latestUpdate: 'Update 9',

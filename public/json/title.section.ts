@@ -1,4 +1,4 @@
-import { TitlePropsType } from "@/templates/ts/exportTypes.ts";
+import { TitlePropsType } from "@/modules/exportTypes";
 
 export const TitleProps: TitlePropsType = {
     titlePlate: `Hi! I'm Erick Tran.`,

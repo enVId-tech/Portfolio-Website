@@ -2,9 +2,9 @@
 import React from 'react';
 import styles from '@/styles/titleDiv.module.scss';
 import { Work_Sans, Montserrat } from 'next/font/google';
-import animateText from '@/templates/ts/scrollEffect.ts';
-import { TitleDivProps } from '@/templates/ts/exportInterfaces.ts';
-import { exportLogos } from '@/templates/ts/exportConsts.ts';
+import animateText from '@/modules/scrollEffect';
+import { TitleDivProps } from '@/modules/exportInterfaces';
+import { exportLogos } from '@/modules/exportConsts';
 
 const Work_Sans300 = Work_Sans({
     weight: "300",
@@ -31,18 +31,20 @@ const TitleDiv: React.FC<TitleDivProps> = (props: TitleDivProps): React.JSX.Elem
     const name: string = props.titlePlate.toString();
     const title: string = props.subTitlePlate.toString();
 
-
-
     setTimeout((): void => {
         animateText(namePlate, name, props.titlePlateDelay);
+
         if (props.timeBetweentitleAndSubTitle) {
             setTimeout((): void => {
                 animateText(titlePlate, title, props.subTitlePlateDelay);
             }, props.timeBetweentitleAndSubTitle);
+            
             return;
         }
+
         animateText(titlePlate, title, props.subTitlePlateDelay);
     }, props.waitTime as number ? props.waitTime as number : 150);
+
 
     try {
         return (

@@ -1,5 +1,5 @@
-import { exportLogos } from "@/templates/ts/exportConsts"
-import { ResourcesPropsType } from "@/templates/ts/exportTypes"
+import { exportLogos } from "@/modules/exportConsts"
+import { ResourcesPropsType } from "@/modules/exportTypes"
 
 export const ResourcesProps: ResourcesPropsType = {
     resources: [

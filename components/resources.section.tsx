@@ -1,8 +1,8 @@
 import React from "react";
 import styles from "@/styles/resources.module.scss";
 import { Work_Sans } from "next/font/google";
-import ResourceCard from "@/templates/components/ResourceCard.tsx";
-import { ResourcesProps } from "@/templates/ts/exportInterfaces.ts";
+import ResourceCard from "@/templates/ResourceCard";
+import { ResourcesProps } from "@/modules/exportInterfaces";
 
 const Work_Sans_300 = Work_Sans({
     weight: "300",

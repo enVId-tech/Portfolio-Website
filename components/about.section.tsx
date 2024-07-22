@@ -2,7 +2,7 @@ import React from 'react';
 import Image from 'next/image';
 import styles from '@/styles/about.module.scss';
 import { Work_Sans, Montserrat } from 'next/font/google';
-import { exportLogos } from '@/templates/ts/exportConsts.ts';
+import { exportLogos } from '@/modules/exportConsts';
 
 const Montserrat_300 = Montserrat({
     weight: "300",

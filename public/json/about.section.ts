@@ -1,4 +1,4 @@
-import { AboutPropsType } from "@/templates/ts/exportTypes.ts";
+import { AboutPropsType } from "@/modules/exportTypes";
 
 export const AboutProps: AboutPropsType = {
     aboutScrollHeight: 700,

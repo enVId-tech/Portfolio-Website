@@ -1,4 +1,4 @@
-import { ProjectsPropType } from "@/templates/ts/exportTypes.ts";
+import { ProjectsPropType } from "@/modules/exportTypes";
 
 export const ProjectProps: ProjectsPropType = {
     projects: [

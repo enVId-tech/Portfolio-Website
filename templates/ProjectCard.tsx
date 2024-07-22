@@ -1,7 +1,7 @@
 import React from "react";
 import styles from '@/styles/projectCard.module.scss';
 import { Work_Sans } from "next/font/google";
-import { ProjectCardProps } from "../ts/exportInterfaces.ts";
+import { ProjectCardProps } from "../modules/exportInterfaces.ts";
 
 const Work_Sans_400 = Work_Sans({
     weight: "300",

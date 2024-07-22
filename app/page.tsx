@@ -1,11 +1,12 @@
+"use client";
 import React from "react";
 import Head from "next/head";
 import styles from '@/styles/home.module.scss';
-import TitleDiv from "@/templates/pages/titleDiv.section.tsx";
-import About from "@/templates/pages/about.section.tsx";
-import Footer from "@/templates/pages/footer.section.tsx";
-import Projects from "@/templates/pages/projects.section.tsx";
-import Resources from "@/templates/pages/resources.section";
+import TitleDiv from "@/components/titleDiv.section";
+import About from "@/components/about.section";
+import Footer from "@/components/footer.section";
+import Projects from "@/components/projects.section";
+import Resources from "@/components/resources.section";
 
 // JSON Data
 import { ResourcesProps } from "@/public/json/resources.section.ts";
@@ -13,8 +14,8 @@ import { AboutProps } from "@/public/json/about.section.ts";
 import { TitleProps } from "@/public/json/title.section.ts";
 import { ProjectProps } from "@/public/json/project.section.ts";
 import { FooterProps } from "@/public/json/footer.section.ts";
-import TopNavBar from "@/templates/pages/topNavBar.section";
-import Contact from "@/templates/pages/contact.section";
+import TopNavBar from "@/components/topNavBar.section";
+import Contact from "@/components/contact.section";
 
 const HomePage: React.FC = (): React.JSX.Element => {
     return (
