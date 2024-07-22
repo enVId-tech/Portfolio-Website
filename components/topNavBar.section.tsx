@@ -46,7 +46,7 @@ const TopNavBar: React.FC = (): React.JSX.Element => {
             </div>
             <div className={`${styles.topNavbarRight}`}>
             <img src={`${exportLogos.enVId.src}`} width={30} height={30} className={styles.navbarLogo} onClick={() => window.location.href = "/"}/>
-            <p className={`${styles.navbarItem} ${Work_Sans_300.className}`}>Erick Tran</p>
+            <p className={`${styles.navbarItem} ${Work_Sans_300.className}`}>This site is in BETA</p>
             </div>
         </section>
     )

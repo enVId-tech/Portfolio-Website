@@ -1,4 +1,5 @@
 /* eslint-disable @next/next/no-img-element */
+"use client";
 import React from 'react';
 import styles from '@/styles/titleDiv.module.scss';
 import { Work_Sans, Montserrat } from 'next/font/google';
@@ -24,6 +25,22 @@ const Montserrat400 = Montserrat({
     subsets: ['latin']
 });
 
+const runAnimation = (namePlate: React.RefObject<HTMLHeadingElement | null>, titlePlate: React.RefObject<HTMLHeadingElement | null>, name: string, title: string, titlePlateDelay: number, subTitlePlateDelay: number, timeBetweentitleAndSubTitle: number, waitTime: number): void => {
+    setTimeout((): void => {
+        animateText(namePlate, name, titlePlateDelay);
+
+        if (timeBetweentitleAndSubTitle) {
+            setTimeout((): void => {
+                animateText(titlePlate, title, subTitlePlateDelay);
+            }, timeBetweentitleAndSubTitle);
+
+            return;
+        }
+
+        animateText(titlePlate, title, subTitlePlateDelay);
+    }, waitTime);
+}
+
 const TitleDiv: React.FC<TitleDivProps> = (props: TitleDivProps): React.JSX.Element => {
     const namePlate = React.useRef<HTMLHeadingElement | null>(null);
     const titlePlate = React.useRef<HTMLHeadingElement | null>(null);
@@ -31,21 +48,9 @@ const TitleDiv: React.FC<TitleDivProps> = (props: TitleDivProps): React.JSX.Elem
     const name: string = props.titlePlate.toString();
     const title: string = props.subTitlePlate.toString();
 
-    window.onload = (): void => {
-        setTimeout((): void => {
-            animateText(namePlate, name, props.titlePlateDelay);
-
-            if (props.timeBetweentitleAndSubTitle) {
-                setTimeout((): void => {
-                    animateText(titlePlate, title, props.subTitlePlateDelay);
-                }, props.timeBetweentitleAndSubTitle);
-                
-                return;
-            }
-
-            animateText(titlePlate, title, props.subTitlePlateDelay);
-        }, props.waitTime as number ? props.waitTime as number : 150);
-    };
+    React.useEffect(() => {
+        runAnimation(namePlate, titlePlate, name, title, props.titlePlateDelay, props.subTitlePlateDelay, props.timeBetweentitleAndSubTitle!, props.waitTime!);
+    }, []);
 
 
     try {
