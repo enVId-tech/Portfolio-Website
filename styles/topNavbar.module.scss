@@ -18,17 +18,18 @@
         align-items: center;
         flex-direction: row;
         margin-left: 2vw;
+        margin-right: 1vw;
 
         .navbarItem {
-            font-size: 4vh;
-            color: rgb(0, 102, 255);
+            font-size: 3vh;
+            color: rgb(0, 0, 0);
             cursor: pointer;
             margin-left: 1vw;
             margin-right: 1vw;
-            transition: 0.5s;
+            transition: 0.2s;
 
             &:hover {
-                color: rgb(0, 102, 255, 0.5);
+                color: rgba(0, 0, 0, 0.5);
             }
         }
     }
@@ -44,9 +45,12 @@
             transition: 0.5s;
             width: 8vh;
             height: 8vh;
-            margin-left: 1vw;
+            margin-left: 1.5vw;
+            border: 1px solid rgb(0, 102, 255);
+            border-radius: 100%;
 
             &:hover {
+                cursor: pointer;
                 color: rgb(0, 102, 255, 0.5);
             }
         }
@@ -56,6 +60,7 @@
             color: rgb(0, 102, 255);
             cursor: pointer;
             transition: 0.5s;
+            margin-left: 1.5vw;
 
             &:hover {
                 color: rgb(0, 102, 255, 0.5);
