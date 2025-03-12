@@ -2,6 +2,8 @@
 import React from "react";
 import DotBackground from "@/app/_components/dotbackground";
 import Header from "@/app/_components/header";
+import About from "@/app/_components/about";
+import Timeline from "@/app/_components/timeline";
 
 export default async function HomePage(): Promise<React.ReactElement> {
     return (
@@ -14,6 +16,8 @@ export default async function HomePage(): Promise<React.ReactElement> {
             friction: 0.5, // WARNING: Do NOT use values greater than 0.8.
         }}>
             <Header/>
+            <About />
+            <Timeline/>
         </DotBackground>
     )
 }

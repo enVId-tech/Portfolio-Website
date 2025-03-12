@@ -1,0 +1,171 @@
+.container {
+  width: 100%;
+  max-width: 1200px;
+  margin: 4rem auto;
+  padding: 0 1rem;
+}
+
+.timelineTitle {
+  font-size: 2.25rem;
+  margin-bottom: 2rem;
+  color: white;
+  position: relative;
+
+  &:after {
+    content: '';
+    position: absolute;
+    left: 0;
+    bottom: -0.75rem;
+    width: 60px;
+    height: 3px;
+    background-color: rgba(200, 200, 255, 0.7);
+  }
+}
+
+.timeline {
+  position: relative;
+  min-height: 500px;
+  padding: 2rem 0;
+  margin-top: 3rem;
+}
+
+.timelineLine {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 50%;
+  width: 2px;
+  background-color: rgba(200, 200, 255, 0.2);
+  transform: translateX(-50%);
+  z-index: 1;
+}
+
+.progressLine {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  background-color: rgba(200, 200, 255, 0.7);
+  transition: height 0.3s ease;
+}
+
+.timelineEvent {
+  display: flex;
+  position: relative;
+  margin-bottom: 4rem;
+  width: 100%;
+
+  &.active {
+    .eventDot {
+      background-color: rgba(200, 200, 255, 0.9);
+      box-shadow: 0 0 10px rgba(200, 200, 255, 0.7);
+    }
+
+    .eventCard {
+      border-color: rgba(200, 200, 255, 0.5);
+      background-color: rgba(20, 20, 40, 0.4);
+    }
+
+    .eventYear {
+      color: rgba(200, 200, 255, 0.9);
+    }
+  }
+
+  &.left {
+    justify-content: flex-end;
+
+    .eventContent {
+      padding-right: 2rem;
+      align-items: flex-end;
+      text-align: right;
+    }
+
+    .eventDot {
+      right: -6px;
+    }
+  }
+
+  &.right {
+    justify-content: flex-start;
+
+    .eventContent {
+      padding-left: 2rem;
+      align-items: flex-start;
+      text-align: left;
+    }
+
+    .eventDot {
+      left: -6px;
+    }
+  }
+}
+
+.eventDot {
+  position: absolute;
+  width: 12px;
+  height: 12px;
+  top: 25px;
+  border-radius: 50%;
+  background-color: rgba(200, 200, 255, 0.3);
+  z-index: 2;
+  transition: background-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.eventContent {
+  width: 45%;
+  display: flex;
+  flex-direction: column;
+}
+
+.eventYear {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.7);
+  margin-bottom: 0.5rem;
+  transition: color 0.3s ease;
+}
+
+.eventCard {
+  background-color: rgba(20, 20, 40, 0.25);
+  border-radius: 8px;
+  padding: 1.25rem;
+  border: 1px solid rgba(200, 200, 255, 0.2);
+  transition: all 0.3s ease;
+}
+
+.eventTitle {
+  font-size: 1.2rem;
+  color: rgba(200, 200, 255, 0.9);
+  margin-bottom: 0.75rem;
+}
+
+.eventDescription {
+  color: rgba(255, 255, 255, 0.8);
+  font-size: 0.95rem;
+  line-height: 1.5;
+}
+
+@media (max-width: 768px) {
+  .timelineLine {
+    left: 20px;
+  }
+
+  .timelineEvent {
+    &.left, &.right {
+      justify-content: flex-start;
+
+      .eventContent {
+        width: calc(100% - 40px);
+        padding-left: 2rem;
+        padding-right: 0;
+        align-items: flex-start;
+        text-align: left;
+      }
+
+      .eventDot {
+        left: -6px;
+        right: auto;
+      }
+    }
+  }
+}
