@@ -28,7 +28,7 @@ export default function Header(): React.ReactElement {
                     </button>
                 </div>
                 <p className={`${styles.description} ${M_400}`}>
-                    Hi, I am Erick. I have 4 years of experience in full-stack website development, including 3 in ReactJS and 2 in NextJS, and specialize in Node.js. Always learning new things all the time, and ready to make solutions.
+                    Hi, I am Erick. I have 4 years of experience in full-stack website development, including 3 in ReactJS and 2 in NextJS, and I specialize in Node.js. Always learning new things all the time, and ready to make solutions.
                 </p>
             </header>
         </div>

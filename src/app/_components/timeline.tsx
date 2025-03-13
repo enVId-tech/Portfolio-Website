@@ -13,6 +13,7 @@ export default function Timeline(): React.ReactElement {
     const [activeIndex, setActiveIndex] = useState(0);
     const eventRefs = useRef<(HTMLDivElement | null)[]>([]);
     const timelineRef = useRef<HTMLDivElement>(null);
+    const activeDotRef = useRef<HTMLDivElement>(null);
 
     const events: TimelineEvent[] = [
         {
@@ -75,6 +76,50 @@ export default function Timeline(): React.ReactElement {
         };
     }, [events.length]);
 
+    useEffect(() => {
+        const handleScroll = () => {
+            if (!timelineRef.current || !activeDotRef.current) return;
+
+            // Get timeline and viewport positions
+            const timelineRect = timelineRef.current.getBoundingClientRect();
+
+            // Check each event element's position
+            let activeEventIndex = 0;
+
+            eventRefs.current.forEach((ref, index) => {
+                if (!ref) return;
+
+                const eventRect = ref.getBoundingClientRect();
+                // Check if this event is centered in viewport
+                if (eventRect.top <= window.innerHeight/2 && eventRect.bottom >= window.innerHeight/2) {
+                    activeEventIndex = index;
+                }
+            });
+
+            // Set active index
+            setActiveIndex(activeEventIndex);
+
+            // Position active dot at the current active event
+            const activeRef = eventRefs.current[activeEventIndex];
+            if (activeRef && activeDotRef.current) {
+                const dotPosition = activeRef.offsetTop + 25; // 25px is to align with event dot
+                activeDotRef.current.style.transform = `translateY(${dotPosition}px) translateX(-50%)`;
+            }
+        };
+
+        // Add scroll listener
+        window.addEventListener('scroll', handleScroll);
+
+        // Initial position calculation
+        // Use a timeout to ensure DOM is fully rendered
+        const initialTimer = setTimeout(handleScroll, 200);
+
+        return () => {
+            window.removeEventListener('scroll', handleScroll);
+            clearTimeout(initialTimer);
+        };
+    }, []); // Empty dependency array to avoid recreating the effect
+
     return (
         <div className={styles.container}>
             <h2 className={`${styles.timelineTitle} ${M_600}`}>My Journey</h2>
@@ -85,26 +130,30 @@ export default function Timeline(): React.ReactElement {
                         className={styles.progressLine}
                         style={{
                             height: activeIndex >= 0 && eventRefs.current[activeIndex]
-                                ? `${eventRefs.current[activeIndex].offsetTop + 25}px`
+                                ? `${eventRefs.current[activeIndex].offsetTop + 30}px` // Add a bit extra to cover below the dot
                                 : '0'
                         }}
                     />
+                    {/* Active moving dot */}
+                    <div ref={activeDotRef} className={styles.activeDot}></div>
                 </div>
 
                 {events.map((event, index) => (
                     <div
                         key={index}
-                        ref={(el) => { eventRefs.current[index] = el; }}
+                        ref={(el) => {
+                            eventRefs.current[index] = el;
+                        }}
                         className={`${styles.timelineEvent} ${index % 2 === 0 ? styles.left : styles.right} ${index === activeIndex ? styles.active : ''}`}
                     >
-                        <div className={styles.eventDot} />
                         <div className={styles.eventContent}>
-                            <div className={styles.eventYear}>{event.year}</div>
+                            <div className={`${styles.eventYear} ${M_600}`}>{event.year}</div>
                             <div className={styles.eventCard}>
                                 <h3 className={`${styles.eventTitle} ${M_600}`}>{event.title}</h3>
                                 <p className={`${styles.eventDescription} ${M_400}`}>{event.description}</p>
                             </div>
                         </div>
+                        <div className={styles.eventDot}/>
                     </div>
                 ))}
             </div>

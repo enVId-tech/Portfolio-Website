@@ -101,7 +101,7 @@ export default function DotBackground({
         };
 
         const resizeCanvas = () => {
-            const documentWidth = Math.max(document.body.clientWidth, window.innerWidth);
+            const documentWidth = Math.min(document.body.clientWidth, window.innerWidth);
             const documentHeight = Math.max(
                 document.body.scrollHeight,
                 document.documentElement.scrollHeight,
@@ -185,16 +185,7 @@ export default function DotBackground({
             resizeObserver.disconnect();
             cancelAnimationFrame(animationRef.current);
         };
-    }, [
-        effectiveConfig.spacingBetweenDots,
-        effectiveConfig.dotColor,
-        effectiveConfig.dotOpacity,
-        effectiveConfig.dotSize,
-        effectiveConfig.friction,
-        effectiveConfig.maxDistance,
-        effectiveConfig.pushForce,
-        effectiveConfig.returnForce
-    ]);
+    }, [effectiveConfig.spacingBetweenDots, effectiveConfig.dotColor, effectiveConfig.dotOpacity, effectiveConfig.dotSize, effectiveConfig.friction, effectiveConfig.maxDistance, effectiveConfig.pushForce, effectiveConfig.returnForce]);
 
     return (
         <div className={styles.container}>
