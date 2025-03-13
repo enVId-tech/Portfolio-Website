@@ -14,8 +14,8 @@ export default function About(): React.ReactElement {
                         <ul className={`${styles.skillsList} ${M_400}`}>
                             <li>Frontend: React, Next.js, TypeScript</li>
                             <li>Backend: Node.js, Express</li>
-                            <li>Database: MongoDB, SQL</li>
-                            <li>Other: Git, Docker, AWS</li>
+                            <li>Databases: MongoDB, SQL</li>
+                            <li>Other: Git, Docker</li>
                         </ul>
                     </div>
 
