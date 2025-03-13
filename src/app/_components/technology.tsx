@@ -7,6 +7,9 @@ import { M_400, M_600 } from "@/utils/globalFonts";
 import { FaReact, FaGitAlt, FaDocker } from 'react-icons/fa';
 import { SiTypescript, SiNextdotjs } from 'react-icons/si';
 
+/**
+ * Interface representing a technology.
+ */
 interface Tech {
     name: string;
     icon: React.ReactNode;
@@ -15,7 +18,19 @@ interface Tech {
     usage: number;
 }
 
-export default function Technology(): React.ReactElement {
+/**
+ * Props for the Technology component.
+ */
+type TechnologyProps = {
+    children?: React.ReactNode;
+}
+
+/**
+ * Technology component to display a list of technologies with their proficiency and usage.
+ * @param {TechnologyProps} props - The props for the component.
+ * @returns {React.ReactElement} The rendered Technology component.
+ */
+export default function Technology({ children }: TechnologyProps): React.ReactElement {
     const [visibleTechs, setVisibleTechs] = useState<{ [key: string]: boolean }>({});
     const techRefs = useRef<{ [key: string]: HTMLDivElement | null }>({});
 
@@ -58,6 +73,9 @@ export default function Technology(): React.ReactElement {
         }
     ];
 
+    /**
+     * Effect to observe the visibility of technology elements and update state accordingly.
+     */
     useEffect(() => {
         const observer = new IntersectionObserver(
             (entries) => {
@@ -113,6 +131,7 @@ export default function Technology(): React.ReactElement {
                     </div>
                 ))}
             </div>
+            { children }
         </div>
     );
 }

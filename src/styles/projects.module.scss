@@ -1,180 +1,299 @@
+// Container for the projects section
 .container {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 2rem;
+  max-width: 1200px; // Maximum width of the container
+  margin: 0 auto; // Center the container horizontally
+  padding: 0 1rem; // Add padding for mobile screens
 }
 
+// Title styling for the projects section
 .projectsTitle {
-  font-size: 2.5rem;
-  background: linear-gradient(to right, #22ffed, #24a2ff, #571fff);
-  background-clip: text;
-  -webkit-background-clip: text;
-  color: transparent;
-  margin-bottom: 2rem;
+  font-size: clamp(1.8rem, 5vw, 2.5rem); // Responsive font size
+  background: linear-gradient(to right, #22ffed, #24a2ff, #571fff); // Gradient background
+  background-clip: text; // Clip background to text
+  -webkit-background-clip: text; // Webkit-specific background clip
+  color: transparent; // Transparent text color
+  margin-bottom: 1.5rem; // Reduced bottom margin for mobile
 }
 
+// Container for the filter buttons
 .filterContainer {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 10px;
-  margin-bottom: 2rem;
+  display: flex; // Flexbox layout
+  flex-wrap: wrap; // Allow wrapping of items
+  gap: 8px; // Reduced gap for mobile
+  margin-bottom: 1.5rem; // Reduced margin for mobile
 }
 
+// Styling for individual filter buttons
 .filterButton {
-  padding: 8px 16px;
-  border-radius: 8px;
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  background-color: rgba(255, 255, 255, 0.1);
-  color: white;
-  cursor: pointer;
-  transition: all 0.2s ease-in-out;
-  font-size: 0.9rem;
+  padding: 8px 12px; // Slightly reduced padding for mobile
+  border-radius: 8px; // Rounded corners
+  border: 1px solid rgba(255, 255, 255, 0.2); // Border color
+  background-color: rgba(255, 255, 255, 0.1); // Background color
+  color: white; // Text color
+  cursor: pointer; // Pointer cursor on hover
+  transition: all 0.2s ease-in-out; // Smooth transition for all properties
+  font-size: 0.85rem; // Slightly reduced font size for mobile
+  margin-bottom: 4px; // Add margin between wrapped buttons
 
-  &:hover {
-    background-color: rgba(114, 72, 222, 0.3);
-    transform: translateY(-2px);
+  &:hover, &:active { // Added active state for touch devices
+    background-color: rgba(114, 72, 222, 0.3); // Background color on hover/active
+    transform: translateY(-2px); // Move up on hover/active
   }
 
   &.active {
-    background: linear-gradient(to right, rgba(34, 255, 237, 0.3), rgba(36, 162, 255, 0.3), rgba(87, 31, 255, 0.3));
-    border: 1px solid rgba(114, 72, 222, 0.5);
-    transform: translateY(-2px);
+    background: linear-gradient(to right, rgba(34, 255, 237, 0.3), rgba(36, 162, 255, 0.3), rgba(87, 31, 255, 0.3)); // Gradient background for active state
+    border: 1px solid rgba(114, 72, 222, 0.5); // Border color for active state
+    transform: translateY(-2px); // Move up for active state
   }
 }
 
+// Grid layout for the projects
 .projectsGrid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(calc(50% - 1rem), 1fr));
-  gap: 2rem;
-
-  @media (max-width: 768px) {
-    grid-template-columns: 1fr;
-  }
+  display: grid; // Grid layout
+  grid-template-columns: 1fr; // Single column for mobile
+  gap: 1.5rem; // Reduced gap for mobile
 }
 
+// Styling for individual project cards
 .projectCard {
-  border-radius: 12px;
-  overflow: hidden;
-  background-color: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  transition: all 0.3s ease-in-out;
-  height: 100%;
-  display: flex;
-  flex-direction: column;
+  border-radius: 12px; // Rounded corners
+  overflow: hidden; // Hide overflow
+  background-color: rgba(255, 255, 255, 0.05); // Background color
+  border: 1px solid rgba(255, 255, 255, 0.1); // Border color
+  transition: all 0.3s ease-in-out; // Smooth transition for all properties
+  height: 100%; // Full height
+  display: flex; // Flexbox layout
+  flex-direction: column; // Column direction
 
-  &:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 10px 30px rgba(87, 31, 255, 0.2);
-    border-color: rgba(114, 72, 222, 0.5);
-    background-color: rgba(255, 255, 255, 0.08);
+  &:hover, &:active { // Added active state for touch devices
+    transform: translateY(-5px); // Move up on hover/active
+    box-shadow: 0 10px 30px rgba(87, 31, 255, 0.2); // Box shadow on hover/active
+    border-color: rgba(114, 72, 222, 0.5); // Border color on hover/active
+    background-color: rgba(255, 255, 255, 0.08); // Background color on hover/active
   }
 }
 
+// Container for the project image
 .projectImageContainer {
-  width: 100%;
-  height: 200px;
-  overflow: hidden;
+  width: 100%; // Full width
+  height: 180px; // Slightly reduced height for mobile
+  overflow: hidden; // Hide overflow
 }
 
+// Styling for the project image
 .projectImage {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  transition: transform 0.5s ease;
+  width: 100%; // Full width
+  height: 100%; // Full height
+  object-fit: cover; // Cover the container
+  transition: transform 0.5s ease; // Smooth transition for transform
 
-  &:hover {
-    transform: scale(1.05);
+  &:hover, &:active { // Added active state for touch devices
+    transform: scale(1.05); // Scale up on hover/active
   }
 }
 
+// Container for the project content
 .projectContent {
-  padding: 1.5rem;
-  display: flex;
-  flex-direction: column;
-  flex-grow: 1;
+  padding: 1.25rem; // Slightly reduced padding for mobile
+  display: flex; // Flexbox layout
+  flex-direction: column; // Column direction
+  flex-grow: 1; // Grow to fill available space
 }
 
+// Title styling for individual projects
 .projectTitle {
-  font-size: 1.5rem;
-  margin-bottom: 0.5rem;
-  color: white;
+  font-size: 1.3rem; // Reduced font size for mobile
+  margin-bottom: 0.5rem; // Bottom margin
+  color: white; // Text color
 }
 
+// Description styling for individual projects
 .projectDescription {
-  color: rgb(162, 162, 162);
-  margin-bottom: 1.5rem;
-  line-height: 1.5;
-  flex-grow: 1;
+  color: rgb(162, 162, 162); // Text color
+  margin-bottom: 1.25rem; // Slightly reduced margin for mobile
+  line-height: 1.5; // Line height
+  flex-grow: 1; // Grow to fill available space
+  font-size: 0.95rem; // Slightly reduced font size for better mobile readability
 }
 
+// Container for the technology badges
 .techList {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-  margin-bottom: 1.5rem;
+  display: flex; // Flexbox layout
+  flex-wrap: wrap; // Allow wrapping of items
+  gap: 6px; // Reduced gap for mobile
+  margin-bottom: 1.25rem; // Reduced margin for mobile
 }
 
+// Styling for individual technology badges
 .techBadge {
-  font-size: 0.8rem;
-  padding: 4px 10px;
-  border-radius: 20px;
-  background: linear-gradient(to right, rgba(34, 255, 237, 0.15), rgba(87, 31, 255, 0.15));
-  border: 1px solid rgba(36, 162, 255, 0.2);
-  color: #ffffff;
+  font-size: 0.75rem; // Reduced font size for mobile
+  padding: 3px 8px; // Reduced padding for mobile
+  border-radius: 20px; // Rounded corners
+  background: linear-gradient(to right, rgba(34, 255, 237, 0.15), rgba(87, 31, 255, 0.15)); // Gradient background
+  border: 1px solid rgba(36, 162, 255, 0.2); // Border color
+  color: #ffffff; // Text color
 }
 
+// Container for the project links
 .projectLinks {
-  display: flex;
-  gap: 12px;
-  margin-top: auto;
+  display: flex; // Flexbox layout
+  flex-wrap: wrap; // Allow wrapping on very small screens
+  gap: 10px; // Reduced gap for mobile
+  margin-top: auto; // Auto margin to push links to the bottom
 }
 
+// Styling for individual project links
 .projectLink {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  padding: 8px 16px;
-  border-radius: 8px;
-  background-color: rgba(255, 255, 255, 0.1);
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  color: white;
-  text-decoration: none;
-  font-size: 0.9rem;
-  transition: all 0.2s ease-in-out;
+  display: flex; // Flexbox layout
+  align-items: center; // Center align items
+  gap: 6px; // Reduced gap for mobile
+  padding: 8px 14px; // Slightly reduced padding for mobile
+  border-radius: 8px; // Rounded corners
+  background-color: rgba(255, 255, 255, 0.1); // Background color
+  border: 1px solid rgba(255, 255, 255, 0.2); // Border color
+  color: white; // Text color
+  text-decoration: none; // Remove text decoration
+  font-size: 0.85rem; // Reduced font size for mobile
+  transition: all 0.2s ease-in-out; // Smooth transition for all properties
+  flex: 1; // Allow links to grow on small screens
+  justify-content: center; // Center content for better mobile appearance
 
-  &:hover {
-    background-color: rgba(114, 72, 222, 0.5);
-    transform: translateY(-2px);
+  &:hover, &:active { // Added active state for touch devices
+    background-color: rgba(114, 72, 222, 0.5); // Background color on hover/active
+    transform: translateY(-2px); // Move up on hover/active
   }
 
   svg {
-    width: 16px;
-    height: 16px;
+    width: 14px; // Reduced width for mobile
+    height: 14px; // Reduced height for mobile
   }
 }
 
+// Styling for the GitHub badge
 .githubBadge {
-  font-size: 0.7rem;
-  background-color: #24292e;
-  color: white;
-  padding: 2px 6px;
-  border-radius: 4px;
-  margin-left: 8px;
-  vertical-align: middle;
+  font-size: 0.65rem; // Reduced font size for mobile
+  background-color: #24292e; // Background color
+  color: white; // Text color
+  padding: 2px 5px; // Slightly reduced padding for mobile
+  border-radius: 4px; // Rounded corners
+  margin-left: 6px; // Reduced margin for mobile
+  vertical-align: middle; // Align vertically in the middle
 }
 
+// Styling for the filter mode button
 .filterModeButton {
-  font-size: 0.8rem;
-  margin-left: 1rem;
-  background-color: rgba(87, 31, 255, 0.2);
-  color: white;
-  border: 1px solid rgba(114, 72, 222, 0.5);
-  border-radius: 4px;
-  padding: 0.3rem 0.6rem;
-  cursor: pointer;
-  transition: all 0.2s ease;
+  font-size: 0.75rem; // Reduced font size for mobile
+  margin-left: 0.5rem; // Reduced margin for mobile
+  background-color: rgba(87, 31, 255, 0.2); // Background color
+  color: white; // Text color
+  border: 1px solid rgba(114, 72, 222, 0.5); // Border color
+  border-radius: 4px; // Rounded corners
+  padding: 0.3rem 0.5rem; // Slightly reduced padding for mobile
+  cursor: pointer; // Pointer cursor on hover
+  transition: all 0.2s ease; // Smooth transition for all properties
 
-  &:hover {
-    background-color: rgba(87, 31, 255, 0.4);
+  &:hover, &:active { // Added active state for touch devices
+    background-color: rgba(87, 31, 255, 0.4); // Background color on hover/active
+  }
+}
+
+// Media queries for responsive design
+@media (min-width: 480px) {
+  .filterContainer {
+    gap: 10px; // Restore original gap
+  }
+
+  .projectLinks {
+    flex-wrap: nowrap; // Prevent wrapping
+  }
+
+  .projectLink {
+    flex: 0 1 auto; // Don't grow to fill space
+  }
+}
+
+@media (min-width: 640px) {
+  .container {
+    padding: 0 1.5rem; // Increased padding
+  }
+
+  .projectsGrid {
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); // Two columns for medium screens
+    gap: 1.75rem; // Increased gap
+  }
+}
+
+@media (min-width: 768px) {
+  .projectsTitle {
+    margin-bottom: 2rem; // Restore original margin
+  }
+
+  .filterContainer {
+    margin-bottom: 2rem; // Restore original margin
+  }
+
+  .filterButton {
+    padding: 8px 16px; // Restore original padding
+    font-size: 0.9rem; // Restore original font size
+    margin-bottom: 0; // Remove margin
+  }
+
+  .projectsGrid {
+    grid-template-columns: repeat(auto-fill, minmax(calc(50% - 1rem), 1fr)); // Restore original columns
+    gap: 2rem; // Restore original gap
+  }
+
+  .projectImageContainer {
+    height: 200px; // Restore original height
+  }
+
+  .projectContent {
+    padding: 1.5rem; // Restore original padding
+  }
+
+  .projectTitle {
+    font-size: 1.5rem; // Restore original font size
+  }
+
+  .projectDescription {
+    margin-bottom: 1.5rem; // Restore original margin
+    font-size: 1rem; // Restore original font size
+  }
+
+  .techList {
+    gap: 8px; // Restore original gap
+    margin-bottom: 1.5rem; // Restore original margin
+  }
+
+  .techBadge {
+    font-size: 0.8rem; // Restore original font size
+    padding: 4px 10px; // Restore original padding
+  }
+
+  .projectLinks {
+    gap: 12px; // Restore original gap
+  }
+
+  .projectLink {
+    padding: 8px 16px; // Restore original padding
+    font-size: 0.9rem; // Restore original font size
+    justify-content: flex-start; // Left align content
+
+    svg {
+      width: 16px; // Restore original width
+      height: 16px; // Restore original height
+    }
+  }
+
+  .githubBadge {
+    font-size: 0.7rem; // Restore original font size
+    padding: 2px 6px; // Restore original padding
+    margin-left: 8px; // Restore original margin
+  }
+
+  .filterModeButton {
+    font-size: 0.8rem; // Restore original font size
+    margin-left: 1rem; // Restore original margin
+    padding: 0.3rem 0.6rem; // Restore original padding
   }
 }

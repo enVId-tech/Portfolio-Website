@@ -1,39 +1,57 @@
+// Styling for the scroll-to-top button
 .scrollButton {
-  position: fixed;
-  bottom: 30px;
-  right: 30px;
-  z-index: 100;
-  background: rgba(114, 72, 222, 0.2);
-  border: 1px solid rgba(114, 72, 222, 0.5);
-  color: white;
-  width: 50px;
-  height: 50px;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  transition: opacity 0.4s ease, transform 0.4s ease, background-color 0.3s ease;
-  opacity: 0;
-  transform: translateY(20px);
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-  backdrop-filter: blur(4px);
-  pointer-events: none;
+  position: fixed; // Fixed position on the screen
+  bottom: 20px; // Reduced bottom distance for mobile
+  right: 20px; // Reduced right distance for mobile
+  z-index: 100; // High z-index to ensure it is above other elements
+  background: rgba(114, 72, 222, 0.2); // Semi-transparent purple background
+  border: 1px solid rgba(114, 72, 222, 0.5); // Border with a darker purple color
+  color: white; // White text color
+  width: 40px; // Smaller width for mobile
+  height: 40px; // Smaller height for mobile
+  border-radius: 50%; // Circular shape
+  display: flex; // Flexbox layout
+  align-items: center; // Center items vertically
+  justify-content: center; // Center items horizontally
+  cursor: pointer; // Pointer cursor on hover
+  transition: opacity 0.4s ease, transform 0.4s ease, background-color 0.3s ease; // Smooth transitions for opacity, transform, and background color
+  opacity: 0; // Initially hidden
+  transform: translateY(20px); // Initially translated downwards
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2); // Box shadow for depth
+  backdrop-filter: blur(4px); // Blur effect for the background
+  pointer-events: none; // Disable pointer events initially
 
-  &:hover {
-    background: rgba(114, 72, 222, 0.4);
-    transform: translateY(-3px);
+  // Add touch-friendly active state for mobile
+  &:hover, &:active {
+    background: rgba(114, 72, 222, 0.4); // Darker background on hover/touch
+    transform: translateY(-3px); // Slight upward movement on hover/touch
   }
 
   &.visible {
-    opacity: 1;
-    transform: translateY(0);
-    pointer-events: auto;
+    opacity: 1; // Fully visible
+    transform: translateY(0); // No translation
+    pointer-events: auto; // Enable pointer events
   }
 
   &.fading {
-    opacity: 0;
-    transform: translateY(20px);
-    pointer-events: none;
+    opacity: 0; // Fully hidden
+    transform: translateY(20px); // Translated downwards
+    pointer-events: none; // Disable pointer events
+  }
+
+  // Add styles for larger screens (tablets)
+  @media (min-width: 768px) {
+    bottom: 25px; // Increase bottom distance for tablets
+    right: 25px; // Increase right distance for tablets
+    width: 45px; // Slightly larger size for tablets
+    height: 45px; // Slightly larger size for tablets
+  }
+
+  // Restore original desktop styles
+  @media (min-width: 992px) {
+    bottom: 30px; // Original bottom distance for desktop
+    right: 30px; // Original right distance for desktop
+    width: 50px; // Original width for desktop
+    height: 50px; // Original height for desktop
   }
 }

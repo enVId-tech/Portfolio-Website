@@ -1,69 +1,116 @@
+// Footer styling - adaptive for all screen sizes
 .footer {
-  background-color: rgba(7, 7, 11, 0.7);
-  backdrop-filter: blur(8px);
-  border-top: 1px solid rgba(114, 72, 222, 0.2);
-  padding: 2rem 0;
-  margin-top: 3rem;
-  width: 100%;
+  background-color: rgba(7, 7, 11, 0.7); // Semi-transparent dark background
+  backdrop-filter: blur(8px); // Blur effect for the background
+  border-top: 1px solid rgba(114, 72, 222, 0.2); // Top border with light purple color
+  padding: 1.5rem 0; // Reduced vertical padding for mobile
+  margin-top: 2rem; // Reduced top margin for mobile
+  width: 100%; // Full width
 }
 
+// Container for the footer content - mobile-first approach
 .container {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 0 1.5rem;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 1.5rem;
+  max-width: 1200px; // Maximum width
+  margin: 0 auto; // Center horizontally
+  padding: 0 1rem; // Reduced horizontal padding for mobile
+  display: flex; // Flexbox layout
+  flex-direction: column; // Column direction for mobile
+  align-items: center; // Center align items
+  gap: 1.2rem; // Reduced gap for mobile
 }
 
+// Styling for the social links container - adjusted for mobile
 .socialLinks {
-  display: flex;
-  gap: 1.5rem;
+  display: flex; // Flexbox layout
+  gap: 1.8rem; // Increased gap for better touch targets on mobile
+  margin-bottom: 0.5rem; // Add space below social links on mobile
 
+  // Styling for individual links - improved touch areas
   a {
     transition: transform 0.2s ease, color 0.2s ease;
     color: rgba(255, 255, 255, 0.8);
+    padding: 0.5rem; // Added padding to increase touch area
+    margin: -0.5rem; // Negative margin to maintain visual spacing
 
-    &:hover {
+    &:hover, &:active {
       transform: translateY(-3px);
       color: rgb(114, 72, 222);
     }
   }
 }
 
+// Icon styling - larger for mobile touch
 .icon {
-  font-size: 1.5rem;
+  font-size: 1.8rem; // Larger icons for mobile
 }
 
+// Copyright text styling - adjusted for mobile readability
 .copyright {
   color: rgba(255, 255, 255, 0.6);
   text-align: center;
-  font-size: 0.9rem;
+  font-size: 0.85rem; // Slightly smaller font size
+  line-height: 1.4; // Improved line height for readability
+  width: 100%; // Full width on mobile
 }
 
+// Scroll to top button styling - larger for mobile touch
 .scrollTopButton {
   background: rgba(114, 72, 222, 0.2);
   border: 1px solid rgba(114, 72, 222, 0.5);
   color: white;
-  width: 40px;
-  height: 40px;
+  width: 45px; // Larger width for touch
+  height: 45px; // Larger height for touch
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
   transition: all 0.2s ease;
+  margin-top: 0.5rem; // Added top margin for separation
 
-  &:hover {
+  &:hover, &:active {
     background: rgba(114, 72, 222, 0.4);
     transform: translateY(-3px);
   }
 }
 
-@media (min-width: 768px) {
+// Media query for larger phones
+@media (min-width: 480px) {
+  .footer {
+    padding: 1.8rem 0;
+  }
+
   .container {
-    flex-direction: row;
-    justify-content: space-between;
+    padding: 0 1.25rem;
+  }
+}
+
+// Media query for tablets and above
+@media (min-width: 768px) {
+  .footer {
+    padding: 2rem 0;
+    margin-top: 3rem; // Restore original top margin
+  }
+
+  .container {
+    flex-direction: row; // Row direction
+    justify-content: space-between; // Space between items
+    padding: 0 1.5rem;
+    gap: 1.5rem; // Restore original gap
+  }
+
+  .icon {
+    font-size: 1.5rem; // Return to original size
+  }
+
+  .socialLinks {
+    margin-bottom: 0; // Remove margin
+    gap: 1.5rem; // Return to original gap
+  }
+
+  .scrollTopButton {
+    width: 40px; // Return to original size
+    height: 40px; // Return to original size
+    margin-top: 0; // Remove extra margin
   }
 }

@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect, useRef, useState, useCallback } from 'react';
+import React, { useEffect, useRef, useState, useCallback, useMemo } from 'react';
 import styles from '@/styles/timeline.module.scss';
 import { M_400, M_600 } from "@/utils/globalFonts";
 
@@ -9,15 +9,48 @@ interface TimelineEvent {
     description: string;
 }
 
-export default function Timeline(): React.ReactElement {
+type TimelineProps = {
+    children?: React.ReactNode;
+}
+
+const TimelineEvent = React.memo(({
+    event,
+    isActive,
+    isLeft,
+    refCallback
+}: {
+    event: TimelineEvent,
+    isActive: boolean,
+    isLeft: boolean,
+    refCallback: (el: HTMLDivElement | null) => void
+}) => (
+    <div
+        ref={refCallback}
+        className={`${styles.timelineEvent} ${isLeft ? styles.left : styles.right} ${isActive ? styles.active : ''}`}
+    >
+        <div className={styles.eventContent}>
+            <div className={`${styles.eventYear} ${M_600}`}>{event.year}</div>
+            <div className={styles.eventTextContent}>
+                <h3 className={`${styles.eventTitle} ${M_600}`}>{event.title}</h3>
+                <p className={`${styles.eventDescription} ${M_400}`}>{event.description}</p>
+            </div>
+        </div>
+        <div className={styles.eventDot}/>
+    </div>
+));
+
+function Timeline({ children }: TimelineProps): React.ReactElement {
     const [activeIndex, setActiveIndex] = useState(0);
     const [isVisible, setIsVisible] = useState(false);
     const eventRefs = useRef<(HTMLDivElement | null)[]>([]);
     const timelineRef = useRef<HTMLDivElement>(null);
     const activeDotRef = useRef<HTMLDivElement>(null);
     const progressLineRef = useRef<HTMLDivElement>(null);
+    const scrollThrottleRef = useRef<boolean>(false);
+    const positionsRef = useRef<{top: number, height: number}[]>([]);
+    const timelineRectRef = useRef<DOMRect | null>(null);
 
-    const events: TimelineEvent[] = [
+    const events: TimelineEvent[] = useMemo(() => [
         {
             year: "2020",
             title: "Started Programming Journey",
@@ -43,37 +76,50 @@ export default function Timeline(): React.ReactElement {
             title: "Full Stack Development",
             description: "Working with modern full-stack applications using Next.js, React, and various backend technologies."
         }
-    ];
+    ], []);
 
-    // Calculate and update dot position
-    const updateDotPosition = useCallback((index: number) => {
-        const eventElement = eventRefs.current[index];
-        const timelineElement = timelineRef.current;
-        const dotElement = activeDotRef.current;
-        const progressElement = progressLineRef.current;
+    // Calculate element positions and cache them
+    const updateElementPositions = useCallback(() => {
+        if (!timelineRef.current) return;
 
-        if (!eventElement || !timelineElement || !dotElement || !progressElement) return;
+        // Cache timeline position
+        timelineRectRef.current = timelineRef.current.getBoundingClientRect();
 
-        const timelineRect = timelineElement.getBoundingClientRect();
-        const eventRect = eventElement.getBoundingClientRect();
-        const relativeTop = eventRect.top - timelineRect.top + 15;
-
-        // Set position directly
-        dotElement.style.transform = `translateY(${relativeTop}px) translateX(-50%)`;
-        progressElement.style.height = `${relativeTop}px`;
+        // Cache all event positions relative to timeline
+        positionsRef.current = eventRefs.current.map(ref => {
+            if (!ref || !timelineRectRef.current) return { top: 0, height: 0 };
+            const rect = ref.getBoundingClientRect();
+            return {
+                top: rect.top - timelineRectRef.current.top,
+                height: rect.height
+            };
+        });
     }, []);
 
-    // Find the event closest to viewport center
+    // Update dot position based on cached positions
+    const updateDotPosition = useCallback((index: number) => {
+        if (!activeDotRef.current || !progressLineRef.current || !positionsRef.current[index]) return;
+
+        const position = positionsRef.current[index];
+        const relativeTop = position.top + 15;
+
+        activeDotRef.current.style.transform = `translateY(${relativeTop}px) translateX(-50%)`;
+        progressLineRef.current.style.height = `${relativeTop}px`;
+    }, []);
+
+    // Determine active event using cached positions
     const determineActiveEvent = useCallback(() => {
+        if (positionsRef.current.length === 0 || !timelineRectRef.current) return;
+
         const viewportMiddle = window.innerHeight / 2;
+        const timelineTop = timelineRectRef.current.top;
+
         let closestIndex = 0;
         let minDistance = Infinity;
 
-        eventRefs.current.forEach((ref, index) => {
-            if (!ref) return;
-
-            const rect = ref.getBoundingClientRect();
-            const distance = Math.abs(rect.top + rect.height / 2 - viewportMiddle);
+        positionsRef.current.forEach((position, index) => {
+            const elementMiddle = timelineTop + position.top + position.height / 2;
+            const distance = Math.abs(elementMiddle - viewportMiddle);
 
             if (distance < minDistance) {
                 minDistance = distance;
@@ -88,77 +134,79 @@ export default function Timeline(): React.ReactElement {
 
     // Initialize timeline
     useEffect(() => {
-        // Show timeline after a brief delay for smoother mounting
         const visibilityTimer = setTimeout(() => setIsVisible(true), 100);
-
-        // Initialize event refs array
         eventRefs.current = Array(events.length).fill(null);
-
         return () => clearTimeout(visibilityTimer);
     }, [events.length]);
 
-    // Handle scroll and resize events
+    // Handle scroll with throttling
     useEffect(() => {
-        let scrollRAF: number | null = null;
-
         const handleScroll = () => {
-            if (scrollRAF !== null) return;
+            if (scrollThrottleRef.current) return;
 
-            scrollRAF = requestAnimationFrame(() => {
+            scrollThrottleRef.current = true;
+
+            requestAnimationFrame(() => {
+                updateElementPositions();
                 determineActiveEvent();
-                scrollRAF = null;
+                scrollThrottleRef.current = false;
             });
         };
 
         const handleResize = () => {
-            if (scrollRAF !== null) {
-                cancelAnimationFrame(scrollRAF);
-                scrollRAF = null;
-            }
+            // Clear throttle on resize for immediate response
+            scrollThrottleRef.current = false;
+
+            // Recalculate everything on resize
+            updateElementPositions();
             determineActiveEvent();
         };
 
+        // Use passive event listeners for better scroll performance
         window.addEventListener('scroll', handleScroll, { passive: true });
         window.addEventListener('resize', handleResize, { passive: true });
 
-        // Initial calculation
-        const initialTimer = setTimeout(handleScroll, 300);
+        // Initial calculations
+        const initialTimer = setTimeout(() => {
+            updateElementPositions();
+            determineActiveEvent();
+        }, 300);
 
         return () => {
             window.removeEventListener('scroll', handleScroll);
             window.removeEventListener('resize', handleResize);
             clearTimeout(initialTimer);
-            if (scrollRAF !== null) cancelAnimationFrame(scrollRAF);
         };
-    }, [determineActiveEvent]);
+    }, [updateElementPositions, determineActiveEvent]);
 
     // Update dot position when activeIndex changes
     useEffect(() => {
         if (!isVisible) return;
 
-        // Reset transition on the activeDot element
         if (activeDotRef.current) {
             activeDotRef.current.style.transition = 'transform 0.4s cubic-bezier(0.25, 0.1, 0.25, 1)';
         }
 
-        // Update position with a short delay to ensure elements are ready
-        const timer = setTimeout(() => updateDotPosition(activeIndex), 50);
-        return () => clearTimeout(timer);
+        updateDotPosition(activeIndex);
     }, [activeIndex, isVisible, updateDotPosition]);
 
-    // Handle visibility change (tab switching)
+    // Visibility change handler
     useEffect(() => {
         const handleVisibilityChange = () => {
             if (document.visibilityState === 'visible') {
-                // Refresh position calculation when tab becomes visible
-                const timer = setTimeout(() => updateDotPosition(activeIndex), 100);
-                return () => clearTimeout(timer);
+                updateElementPositions();
+                updateDotPosition(activeIndex);
             }
         };
 
         document.addEventListener('visibilitychange', handleVisibilityChange);
         return () => document.removeEventListener('visibilitychange', handleVisibilityChange);
-    }, [activeIndex, updateDotPosition]);
+    }, [activeIndex, updateElementPositions, updateDotPosition]);
+
+    // Create refs callback
+    const createRefCallback = useCallback((index: number) => (el: HTMLDivElement | null) => {
+        eventRefs.current[index] = el;
+    }, []);
 
     return (
         <div className={styles.container}>
@@ -174,22 +222,18 @@ export default function Timeline(): React.ReactElement {
                 </div>
 
                 {events.map((event, index) => (
-                    <div
+                    <TimelineEvent
                         key={index}
-                        ref={(el) => { eventRefs.current[index] = el; }}
-                        className={`${styles.timelineEvent} ${index % 2 === 0 ? styles.left : styles.right} ${index === activeIndex ? styles.active : ''}`}
-                    >
-                        <div className={styles.eventContent}>
-                            <div className={`${styles.eventYear} ${M_600}`}>{event.year}</div>
-                            <div className={styles.eventTextContent}>
-                                <h3 className={`${styles.eventTitle} ${M_600}`}>{event.title}</h3>
-                                <p className={`${styles.eventDescription} ${M_400}`}>{event.description}</p>
-                            </div>
-                        </div>
-                        <div className={styles.eventDot}/>
-                    </div>
+                        event={event}
+                        isActive={index === activeIndex}
+                        isLeft={index % 2 === 0}
+                        refCallback={createRefCallback(index)}
+                    />
                 ))}
             </div>
+            { children }
         </div>
     );
 }
+
+export default React.memo(Timeline);

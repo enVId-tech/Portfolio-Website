@@ -2,7 +2,15 @@ import React from 'react';
 import styles from '@/styles/about.module.scss';
 import {M_400, M_600} from "@/utils/globalFonts";
 
-export default function About(): React.ReactElement {
+type AboutProps = {
+    children?: React.ReactNode;
+}
+
+/**
+ * About component that displays information about skills, experience, and interests.
+ * @returns {React.ReactElement} The rendered About component.
+ */
+export default function About({ children }: AboutProps): React.ReactElement {
     return (
         <div className={styles.container}>
             <h2 className={`${styles.aboutTitle} ${M_600}`}>About Me</h2>
@@ -40,6 +48,7 @@ export default function About(): React.ReactElement {
                     </p>
                 </div>
             </div>
+            { children }
         </div>
     );
 }

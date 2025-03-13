@@ -1,3 +1,4 @@
+// Container for the dot background - adapts to all screen sizes
 .container {
   position: absolute;
   top: 0;
@@ -10,6 +11,7 @@
   justify-content: center;
 }
 
+// Canvas element for the dot background animation - covers the entire viewport
 .canvas {
   position: absolute;
   top: 0;
@@ -19,12 +21,31 @@
   z-index: 1;
 }
 
+// Content container positioned above the canvas - responsive width
 .content {
   position: relative;
   z-index: 10;
-  width: 35%;
-  padding: 2rem 0;
+  width: 90%; // Wider for mobile
+  padding: 1.5rem 0;
   display: flex;
   flex-direction: column;
   align-items: center;
+  justify-content: center;
+
+  // Tablet breakpoint
+  @media (min-width: 768px) {
+    width: 70%;
+    padding: 1.8rem 0;
+  }
+
+  // Desktop breakpoint
+  @media (min-width: 992px) {
+    width: 50%;
+    padding: 2rem 0;
+  }
+
+  // Large desktop breakpoint
+  @media (min-width: 1200px) {
+    width: 35%;
+  }
 }

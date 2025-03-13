@@ -1,21 +1,28 @@
+// Container for the header section
 .container {
-  width: 100%;
-  margin-top: 6vh;
+  width: 100%; // Full width
+  margin: 0;
+  padding: 0;
+
+  // Header text styling with responsive font size
   .header {
     color: white;
-    font-size: 3.5vw;
+    font-size: clamp(1.8rem, 7vw, 3.5vw); // Responsive font size with minimum
+    line-height: 1.2; // Improved line height for mobile
   }
 
+  // Name text styling with underline animation
   .name {
     color: white;
-    font-size: 3.5vw;
+    font-size: clamp(1.8rem, 7vw, 3.5vw); // Responsive font size with minimum
     position: relative;
     padding: 0 6px;
+    display: inline-block; // Ensures the element wraps properly on mobile
 
     &::after {
       content: '';
       position: absolute;
-      width: 0; /* Start with 0 width */
+      width: 0;
       height: 30%;
       bottom: 0;
       left: -1%;
@@ -23,10 +30,11 @@
       border-radius: 3px;
       z-index: -1;
       transform: skew(-12deg);
-      animation: expandUnderline 0.8s ease-in-out forwards 0.2s;//cubic-bezier(0.25, 1, 0.5, 1) forwards 0.2s;
+      animation: expandUnderline 0.8s ease-in-out forwards 0.2s;
     }
   }
 
+  // Keyframes for the underline expansion animation
   @keyframes expandUnderline {
     0% {
       width: 0;
@@ -38,55 +46,65 @@
     }
   }
 
+  // Header name text styling with gradient
   .headerName {
-    font-size: 3vw;
+    font-size: clamp(1.6rem, 6vw, 3vw); // Responsive font size with minimum
     background: linear-gradient(to right, #22ffed, #24a2ff, #571fff);
     background-clip: text;
     -webkit-background-clip: text;
     color: transparent;
-    margin-top: 10px;
+    margin-top: 8px; // Reduced margin for mobile
     letter-spacing: 0.001rem;
+    line-height: 1.2; // Improved line height for mobile
   }
 
+  // Styling for header buttons container
   .headerButtons {
     display: flex;
-    gap: 15px;
-    margin-top: 20px;
-    width: min-content;
+    flex-wrap: wrap; // Allow buttons to wrap on small screens
+    gap: 12px; // Reduced gap for mobile
+    margin-top: 16px; // Reduced margin for mobile
+    width: 100%; // Full width on mobile
 
+    // Styling for individual buttons
     button {
       display: flex;
       align-items: center;
+      justify-content: center; // Center content on mobile
       gap: 8px;
-      padding: 10px 16px;
+      padding: 12px 16px; // Increased padding for better touch targets
       background-color: rgba(255, 255, 255, 0.1);
       border: 1px solid rgba(255, 255, 255, 0.2);
       border-radius: 8px;
       color: white;
-      font-size: 16px;
+      font-size: 15px; // Slightly smaller font size
       cursor: pointer;
       transition: all 0.2s ease-in-out;
+      flex: 1; // Let buttons grow to fill space
+      min-width: 120px; // Minimum width for buttons
 
+      // Styling for SVG icons inside buttons
       svg {
-        width: 20px;
-        height: 20px;
+        width: 18px; // Slightly smaller icons for mobile
+        height: 18px;
       }
 
-      &:hover {
+      &:hover, &:active { // Added active state for touch devices
         background-color: rgba(114, 72, 222, 0.5);
         transform: translateY(-2px);
       }
     }
   }
 
+  // Styling for the description text
   .description {
     color: rgb(162, 162, 162);
-    max-width: 600px;
-    margin-top: 30px;
-    line-height: 1.6;
-    font-size: 1.3rem;
+    max-width: 100%; // Full width on mobile
+    margin-top: 24px; // Reduced margin for mobile
+    line-height: 1.5; // Slightly reduced line height
+    font-size: clamp(1rem, 4vw, 1.3rem); // Responsive font size
     letter-spacing: 0.01rem;
-    padding-bottom: 16px;
+    padding-bottom: 14px; // Reduced padding for mobile
     border-bottom: 2px solid rgba(114, 72, 222, 0.3);
     position: relative;
 
@@ -95,9 +113,86 @@
       position: absolute;
       bottom: -2px;
       left: 0;
-      width: 60px;
+      width: 50px; // Slightly reduced width for mobile
       height: 2px;
       background: linear-gradient(to right, #22ffed, #24a2ff, #571fff);
+    }
+  }
+
+  // Media query for tablets
+  @media (min-width: 768px) {
+    margin-top: 5vh; // Slightly increased top margin for tablets
+    padding: 0 1.5rem; // Increased padding for tablets
+
+    .headerButtons {
+      width: min-content; // Reset to minimum content width
+      flex-wrap: nowrap; // Prevent wrapping
+      gap: 15px; // Original gap
+      margin-top: 18px; // Slightly increased margin
+
+      button {
+        flex: 0 0 auto; // Don't grow to fill space
+        min-width: auto; // Remove minimum width
+
+        svg {
+          width: 19px; // Return to larger icon size
+          height: 19px;
+        }
+      }
+    }
+
+    .description {
+      max-width: 80%; // Limit width on tablets
+      margin-top: 28px; // Increased margin for tablets
+      padding-bottom: 16px; // Original padding
+
+      &::after {
+        width: 55px; // Slightly increased width for tablets
+      }
+    }
+  }
+
+  // Media query for desktop
+  @media (min-width: 992px) {
+    margin-top: 6vh; // Original top margin for desktop
+    padding: 0 2rem; // Original padding for desktop
+
+    .header {
+      font-size: 3.5vw; // Original font size for desktop
+    }
+
+    .name {
+      font-size: 3.5vw; // Original font size for desktop
+    }
+
+    .headerName {
+      font-size: 3vw; // Original font size for desktop
+      margin-top: 10px; // Original margin for desktop
+    }
+
+    .headerButtons {
+      margin-top: 20px; // Original margin for desktop
+
+      button {
+        padding: 10px 16px; // Original padding for desktop
+        font-size: 16px; // Original font size for desktop
+
+        svg {
+          width: 20px; // Original size for desktop
+          height: 20px;
+        }
+      }
+    }
+
+    .description {
+      max-width: 600px; // Original max width for desktop
+      margin-top: 30px; // Original margin for desktop
+      font-size: 1.3rem; // Original font size for desktop
+      line-height: 1.6; // Original line height for desktop
+
+      &::after {
+        width: 60px; // Original width for desktop
+      }
     }
   }
 }

@@ -2,6 +2,9 @@
 import React, { useEffect, useRef } from 'react';
 import styles from '@/styles/dotbackground.module.scss';
 
+/**
+ * Interface representing a dot in the background.
+ */
 interface Dot {
     x: number;
     y: number;
@@ -14,6 +17,9 @@ interface Dot {
     vy: number;
 }
 
+/**
+ * Configuration options for the DotBackground component.
+ */
 interface DotBackgroundConfig {
     spacingBetweenDots?: number;
     maxDistance?: number;
@@ -26,11 +32,19 @@ interface DotBackgroundConfig {
     edgePadding?: number;
 }
 
+/**
+ * Props for the DotBackground component.
+ */
 type DotBackgroundProps = {
     children?: React.ReactNode;
     config?: DotBackgroundConfig;
 }
 
+/**
+ * DotBackground component that renders a canvas with animated dots in the background.
+ * @param {DotBackgroundProps} props - The props for the component.
+ * @returns {React.ReactElement} The rendered DotBackground component.
+ */
 export default function DotBackground({
                                           children,
                                           config = {}
@@ -61,6 +75,9 @@ export default function DotBackground({
         const ctx = canvas.getContext('2d');
         if (!ctx) return;
 
+        /**
+         * Initializes the dots based on the configuration.
+         */
         const initDots = () => {
             const spacing = effectiveConfig.spacingBetweenDots;
             const documentWidth = Math.max(document.body.clientWidth, window.innerWidth);
@@ -100,6 +117,9 @@ export default function DotBackground({
             dotsRef.current = dots;
         };
 
+        /**
+         * Resizes the canvas to match the document dimensions.
+         */
         const resizeCanvas = () => {
             const documentWidth = Math.min(document.body.clientWidth, window.innerWidth);
             const documentHeight = Math.max(
@@ -116,11 +136,18 @@ export default function DotBackground({
             initDots();
         };
 
+        /**
+         * Handles mouse move events to update the mouse position.
+         * @param {MouseEvent} e - The mouse event.
+         */
         const handleMouseMove = (e: MouseEvent) => {
             mouseRef.current.x = e.clientX;
             mouseRef.current.y = e.clientY + window.scrollY;
         };
 
+        /**
+         * Animates the dots on the canvas.
+         */
         const animate = () => {
             ctx.clearRect(0, 0, canvas.width, canvas.height);
 

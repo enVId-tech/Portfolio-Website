@@ -3,7 +3,16 @@ import React from "react";
 import styles from "@/styles/header.module.scss";
 import {M_400, M_600} from "@/utils/globalFonts";
 
-export default function Header(): React.ReactElement {
+
+type HeaderProps = {
+    children?: React.ReactNode;
+}
+
+/**
+ * Header component that displays the name, title, and description.
+ * @returns {React.ReactElement} The rendered header component.
+ */
+export default function Header({ children }: HeaderProps): React.ReactElement {
     return (
         <div className={styles.container}>
             <header>
@@ -31,6 +40,7 @@ export default function Header(): React.ReactElement {
                     Hi, I am Erick. I have 4 years of experience in full-stack website development, including 3 in ReactJS and 2 in NextJS, and I specialize in Node.js. Always learning new things all the time, and ready to make solutions.
                 </p>
             </header>
+            { children }
         </div>
     );
 }

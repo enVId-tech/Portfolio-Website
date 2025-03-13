@@ -4,12 +4,15 @@ import styles from '@/styles/footer.module.scss';
 import { M_400 } from "@/utils/globalFonts";
 import { FaGithub, FaEnvelope, FaArrowUp } from 'react-icons/fa';
 
+type FooterProps = {
+    children?: React.ReactNode;
+}
 
 /**
  * Footer component that displays social links, copyright information, and a scroll-to-top button.
  * @returns {React.ReactElement} The rendered footer component.
  */
-export default function Footer(): React.ReactElement {
+export default function Footer({ children }: FooterProps): React.ReactElement {
     // State to manage the visibility of the footer animation
     const [isVisible, setIsVisible] = useState(false);
     // Get the current year
@@ -53,6 +56,7 @@ export default function Footer(): React.ReactElement {
                     <FaArrowUp />
                 </button>
             </div>
+            { children }
         </footer>
     );
 }
