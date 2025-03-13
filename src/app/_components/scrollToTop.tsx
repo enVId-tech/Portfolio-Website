@@ -8,6 +8,7 @@ import styles from '@/styles/scrolltotop.module.scss';
  * The button becomes visible when the user scrolls down a certain distance.
  * @returns {React.ReactElement} The rendered ScrollToTop component.
  */
+// eslint-disable-next-line react/display-name
 const ScrollToTop = React.memo((): React.ReactElement => {
   // State to manage the button's visibility state
   const [buttonState, setButtonState] = useState<'hidden' | 'visible' | 'fading'>('hidden');

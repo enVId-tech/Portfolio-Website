@@ -77,6 +77,7 @@ const frameworkDetection = {
  * @param {Project} props.project - The project to display.
  * @returns {React.ReactElement} The rendered project card component.
  */
+// eslint-disable-next-line react/display-name
 const ProjectCard = React.memo(({ project }: { project: Project }) => (
     <div className={styles.projectCard}>
         {project.imageUrl && (
@@ -133,6 +134,7 @@ const ProjectCard = React.memo(({ project }: { project: Project }) => (
  * @param {() => void} props.onClick - The click handler for the button.
  * @returns {React.ReactElement} The rendered filter button component.
  */
+// eslint-disable-next-line react/display-name
 const FilterButton = React.memo(({
                                      technology,
                                      isActive,
@@ -157,8 +159,6 @@ const FilterButton = React.memo(({
 export default function Projects(): React.ReactElement {
     // Constants - moved outside of render cycle
     const manualProjects: Project[] = useMemo(() => [], []);
-    const includedRepos = ["Portfolio-Website"];
-    const excludedRepos = ["dotfiles", "notes", "test-repo"];
 
     // State hooks
     const [filterMode, setFilterMode] = useState<RepoFilterMode>('include');
@@ -241,6 +241,9 @@ export default function Projects(): React.ReactElement {
 
     // Fetch GitHub repos with caching
     useEffect(() => {
+        const includedRepos = ["Portfolio-Website"];
+        const excludedRepos = ["dotfiles", "notes", "test-repo"];
+
         const fetchGithubRepos = async () => {
             // Try to get from cache first
             try {

@@ -13,6 +13,7 @@ type TimelineProps = {
     children?: React.ReactNode;
 }
 
+// eslint-disable-next-line react/display-name
 const TimelineEvent = React.memo(({
     event,
     isActive,

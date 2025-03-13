@@ -34,6 +34,7 @@ export default function Technology({ children }: TechnologyProps): React.ReactEl
     const [visibleTechs, setVisibleTechs] = useState<{ [key: string]: boolean }>({});
     const techRefs = useRef<{ [key: string]: HTMLDivElement | null }>({});
 
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     const technologies: Tech[] = [
         // Coding technologies
         {
@@ -98,7 +99,7 @@ export default function Technology({ children }: TechnologyProps): React.ReactEl
         });
 
         return () => observer.disconnect();
-    }, []);
+    }, [technologies]);
 
     return (
         <div className={styles.container}>
