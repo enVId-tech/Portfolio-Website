@@ -40,15 +40,6 @@
   z-index: 1;
 }
 
-.progressLine {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  background-color: rgba(200, 200, 255, 0.7);
-  transition: height 0.3s ease;
-}
-
 .timelineEvent {
   display: flex;
   position: relative;
@@ -143,6 +134,15 @@
   line-height: 1.5;
 }
 
+.progressLine {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  background-color: rgba(200, 200, 255, 0.7);
+  transition: height 0.3s ease;
+}
+
 .activeDot {
   position: absolute;
   left: 50%;
@@ -154,7 +154,7 @@
   box-shadow: 0 0 15px rgba(200, 200, 255, 0.9);
   z-index: 3;
   transform: translateX(-50%);
-  transition: transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  transition: transform 0.4s cubic-bezier(0.25, 0.1, 0.25, 1);
 }
 
 .active {

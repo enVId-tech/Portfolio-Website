@@ -14,6 +14,7 @@ export default function Timeline(): React.ReactElement {
     const eventRefs = useRef<(HTMLDivElement | null)[]>([]);
     const timelineRef = useRef<HTMLDivElement>(null);
     const activeDotRef = useRef<HTMLDivElement>(null);
+    const progressLineRef = useRef<HTMLDivElement>(null);
 
     const events: TimelineEvent[] = [
         {
@@ -44,81 +45,78 @@ export default function Timeline(): React.ReactElement {
     ];
 
     useEffect(() => {
-        // Initialize refs array with nulls to ensure indexes exist
+        // Initialize refs array
         eventRefs.current = Array(events.length).fill(null);
 
-        const observer = new IntersectionObserver(
-            (entries) => {
-                entries.forEach(entry => {
-                    if (entry.isIntersecting) {
-                        // Find the index of this element in our refs array
-                        const index = eventRefs.current.findIndex(ref => ref === entry.target);
-                        if (index !== -1) {
-                            setActiveIndex(index);
-                        }
-                    }
-                });
-            },
-            {
-                threshold: 0.6,
-                rootMargin: '-10% 0px -30% 0px' // Adjust when elements become active
+        let ticking = false;
+
+        const updateActiveDotPosition = (index: number) => {
+            const activeRef = eventRefs.current[index];
+            const timelineElement = timelineRef.current;
+
+            if (activeRef && activeDotRef.current && timelineElement) {
+                // Get positions relative to the viewport
+                const timelineRect = timelineElement.getBoundingClientRect();
+                const eventRect = activeRef.getBoundingClientRect();
+
+                // Calculate position relative to timeline container
+                const relativeTop = eventRect.top - timelineRect.top + 25; // 25px for alignment
+
+                // Apply the transform with both Y and X translations
+                activeDotRef.current.style.transform = `translateY(${relativeTop}px) translateX(-50%)`;
+
+                if (progressLineRef.current) {
+                    progressLineRef.current.style.height = `${relativeTop}px`;
+                }
             }
-        );
-
-        eventRefs.current.forEach(ref => {
-            if (ref) observer.observe(ref);
-        });
-
-        return () => {
-            eventRefs.current.forEach(ref => {
-                if (ref) observer.unobserve(ref);
-            });
         };
-    }, [events.length]);
 
-    useEffect(() => {
-        const handleScroll = () => {
-            if (!timelineRef.current || !activeDotRef.current) return;
+        const determineActiveEvent = () => {
+            // Calculate viewport middle point
+            const viewportMiddle = window.scrollY + window.innerHeight / 2;
 
-            // Get timeline and viewport positions
-            const timelineRect = timelineRef.current.getBoundingClientRect();
-
-            // Check each event element's position
-            let activeEventIndex = 0;
+            let closestIndex = 0;
+            let minDistance = Infinity;
 
             eventRefs.current.forEach((ref, index) => {
                 if (!ref) return;
 
-                const eventRect = ref.getBoundingClientRect();
-                // Check if this event is centered in viewport
-                if (eventRect.top <= window.innerHeight/2 && eventRect.bottom >= window.innerHeight/2) {
-                    activeEventIndex = index;
+                const rect = ref.getBoundingClientRect();
+                const elementCenter = window.scrollY + rect.top + rect.height / 2;
+                const distance = Math.abs(elementCenter - viewportMiddle);
+
+                if (distance < minDistance) {
+                    minDistance = distance;
+                    closestIndex = index;
                 }
             });
 
-            // Set active index
-            setActiveIndex(activeEventIndex);
+            setActiveIndex(closestIndex);
+            updateActiveDotPosition(closestIndex);
+            ticking = false;
+        };
 
-            // Position active dot at the current active event
-            const activeRef = eventRefs.current[activeEventIndex];
-            if (activeRef && activeDotRef.current) {
-                const dotPosition = activeRef.offsetTop + 25; // 25px is to align with event dot
-                activeDotRef.current.style.transform = `translateY(${dotPosition}px) translateX(-50%)`;
+        const handleScroll = () => {
+            if (!ticking) {
+                // Use requestAnimationFrame for better performance
+                window.requestAnimationFrame(() => {
+                    determineActiveEvent();
+                });
+                ticking = true;
             }
         };
 
-        // Add scroll listener
-        window.addEventListener('scroll', handleScroll);
+        window.addEventListener('scroll', handleScroll, { passive: true });
+        window.addEventListener('resize', handleScroll, { passive: true });
 
-        // Initial position calculation
-        // Use a timeout to ensure DOM is fully rendered
-        const initialTimer = setTimeout(handleScroll, 200);
+        // Initial position after DOM is ready
+        setTimeout(handleScroll, 500);
 
         return () => {
             window.removeEventListener('scroll', handleScroll);
-            clearTimeout(initialTimer);
+            window.removeEventListener('resize', handleScroll);
         };
-    }, []); // Empty dependency array to avoid recreating the effect
+    }, [events.length]); // Only depend on events length
 
     return (
         <div className={styles.container}>
@@ -126,15 +124,7 @@ export default function Timeline(): React.ReactElement {
 
             <div className={styles.timeline} ref={timelineRef}>
                 <div className={styles.timelineLine}>
-                    <div
-                        className={styles.progressLine}
-                        style={{
-                            height: activeIndex >= 0 && eventRefs.current[activeIndex]
-                                ? `${eventRefs.current[activeIndex].offsetTop + 30}px` // Add a bit extra to cover below the dot
-                                : '0'
-                        }}
-                    />
-                    {/* Active moving dot */}
+                    <div className={styles.progressLine} ref={progressLineRef} />
                     <div ref={activeDotRef} className={styles.activeDot}></div>
                 </div>
 

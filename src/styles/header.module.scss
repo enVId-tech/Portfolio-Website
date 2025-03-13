@@ -15,7 +15,7 @@
     &::after {
       content: '';
       position: absolute;
-      width: 102%;
+      width: 0; /* Start with 0 width */
       height: 30%;
       bottom: 0;
       left: -1%;
@@ -23,6 +23,18 @@
       border-radius: 3px;
       z-index: -1;
       transform: skew(-12deg);
+      animation: expandUnderline 0.8s ease-in-out forwards 0.2s;//cubic-bezier(0.25, 1, 0.5, 1) forwards 0.2s;
+    }
+  }
+
+  @keyframes expandUnderline {
+    0% {
+      width: 0;
+      left: 0;
+    }
+    100% {
+      width: 102%;
+      left: -1%;
     }
   }
 
