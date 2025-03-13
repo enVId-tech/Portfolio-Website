@@ -1,18 +1,13 @@
 .container {
   width: 100%;
-  max-width: 1200px;
+  max-width: 1100px;
   margin: 0 auto;
-}
-
-.about {
-  display: flex;
-  flex-direction: column;
-  gap: 2rem;
+  padding: 0 1rem;
 }
 
 .aboutTitle {
-  font-size: 2.25rem;
-  margin-bottom: 0.5rem;
+  font-size: 1.8rem;
+  margin-bottom: 1.2rem;
   color: white;
   position: relative;
 
@@ -20,41 +15,50 @@
     content: '';
     position: absolute;
     left: 0;
-    bottom: -0.75rem;
-    width: 60px;
-    height: 3px;
+    bottom: -0.4rem;
+    width: 40px;
+    height: 2px;
     background-color: rgba(200, 200, 255, 0.7);
   }
 }
 
-.aboutContent {
-  display: flex;
-  flex-direction: column;
-  gap: 1.5rem;
-
-  @media (max-width: 768px) {
-    grid-template-columns: 1fr;
-  }
+.cardGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.8rem;
 }
 
 .card {
   background-color: rgba(20, 20, 40, 0.3);
   border-radius: 8px;
-  padding: 1.5rem;
+  padding: 1rem;
   border: 1px solid rgba(200, 200, 255, 0.2);
-  transition: transform 0.3s ease;
+  transition: all 0.3s ease;
   color: white;
+  height: 100%;
 
   &:hover {
-    transform: translateY(-4px);
+    transform: translateY(-2px);
     border-color: rgba(200, 200, 255, 0.4);
+  }
+
+  &:only-child {
+    grid-column: 1 / -1; // Make single cards span all columns
+  }
+}
+
+// When there are exactly 2 cards in the grid
+.cardGrid:has(.card:first-child:nth-last-child(2)),
+.cardGrid:has(.card:first-child:nth-last-child(2) ~ .card) {
+  .card {
+    grid-column: span 3 / span 3; // Default full width
   }
 }
 
 .cardTitle {
-  font-size: 1.5rem;
+  font-size: 1.15rem;
   color: rgba(200, 200, 255, 0.9);
-  margin-bottom: 1rem;
+  margin-bottom: 0.6rem;
 }
 
 .skillsList {
@@ -65,7 +69,8 @@
 
   li {
     position: relative;
-    padding: 0.5rem 0 0.5rem 1.5rem;
+    padding: 0.15rem 0 0.15rem 1rem;
+    font-size: 0.95rem;
 
     &:before {
       content: "•";
@@ -81,12 +86,57 @@
   font-weight: 600;
 }
 
+.separator {
+  display: none;
+}
+
+.experienceText {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.5rem;
+  width: 100%;
+}
+
+.experienceItem {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.compactText {
+  font-size: 0.95rem;
+  line-height: 1.4;
+}
+
+@media (min-width: 769px) and (max-width: 1100px) {
+  .cardGrid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  // When exactly 2 cards
+  .cardGrid:has(.card:first-child:nth-last-child(2)),
+  .cardGrid:has(.card:first-child:nth-last-child(2) ~ .card) {
+    .card {
+      grid-column: span 1; // Each card takes half width
+    }
+  }
+}
+
 @media (max-width: 768px) {
   .aboutTitle {
-    font-size: 1.75rem;
+    font-size: 1.6rem;
   }
 
   .cardTitle {
-    font-size: 1.25rem;
+    font-size: 1.05rem;
+  }
+
+  .cardGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .card {
+    grid-column: 1 / -1 !important; // All cards full width on mobile
   }
 }

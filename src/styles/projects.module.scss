@@ -1,0 +1,180 @@
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2rem;
+}
+
+.projectsTitle {
+  font-size: 2.5rem;
+  background: linear-gradient(to right, #22ffed, #24a2ff, #571fff);
+  background-clip: text;
+  -webkit-background-clip: text;
+  color: transparent;
+  margin-bottom: 2rem;
+}
+
+.filterContainer {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 2rem;
+}
+
+.filterButton {
+  padding: 8px 16px;
+  border-radius: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  background-color: rgba(255, 255, 255, 0.1);
+  color: white;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+  font-size: 0.9rem;
+
+  &:hover {
+    background-color: rgba(114, 72, 222, 0.3);
+    transform: translateY(-2px);
+  }
+
+  &.active {
+    background: linear-gradient(to right, rgba(34, 255, 237, 0.3), rgba(36, 162, 255, 0.3), rgba(87, 31, 255, 0.3));
+    border: 1px solid rgba(114, 72, 222, 0.5);
+    transform: translateY(-2px);
+  }
+}
+
+.projectsGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(calc(50% - 1rem), 1fr));
+  gap: 2rem;
+
+  @media (max-width: 768px) {
+    grid-template-columns: 1fr;
+  }
+}
+
+.projectCard {
+  border-radius: 12px;
+  overflow: hidden;
+  background-color: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  transition: all 0.3s ease-in-out;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+
+  &:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 30px rgba(87, 31, 255, 0.2);
+    border-color: rgba(114, 72, 222, 0.5);
+    background-color: rgba(255, 255, 255, 0.08);
+  }
+}
+
+.projectImageContainer {
+  width: 100%;
+  height: 200px;
+  overflow: hidden;
+}
+
+.projectImage {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.5s ease;
+
+  &:hover {
+    transform: scale(1.05);
+  }
+}
+
+.projectContent {
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+}
+
+.projectTitle {
+  font-size: 1.5rem;
+  margin-bottom: 0.5rem;
+  color: white;
+}
+
+.projectDescription {
+  color: rgb(162, 162, 162);
+  margin-bottom: 1.5rem;
+  line-height: 1.5;
+  flex-grow: 1;
+}
+
+.techList {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 1.5rem;
+}
+
+.techBadge {
+  font-size: 0.8rem;
+  padding: 4px 10px;
+  border-radius: 20px;
+  background: linear-gradient(to right, rgba(34, 255, 237, 0.15), rgba(87, 31, 255, 0.15));
+  border: 1px solid rgba(36, 162, 255, 0.2);
+  color: #ffffff;
+}
+
+.projectLinks {
+  display: flex;
+  gap: 12px;
+  margin-top: auto;
+}
+
+.projectLink {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 16px;
+  border-radius: 8px;
+  background-color: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: white;
+  text-decoration: none;
+  font-size: 0.9rem;
+  transition: all 0.2s ease-in-out;
+
+  &:hover {
+    background-color: rgba(114, 72, 222, 0.5);
+    transform: translateY(-2px);
+  }
+
+  svg {
+    width: 16px;
+    height: 16px;
+  }
+}
+
+.githubBadge {
+  font-size: 0.7rem;
+  background-color: #24292e;
+  color: white;
+  padding: 2px 6px;
+  border-radius: 4px;
+  margin-left: 8px;
+  vertical-align: middle;
+}
+
+.filterModeButton {
+  font-size: 0.8rem;
+  margin-left: 1rem;
+  background-color: rgba(87, 31, 255, 0.2);
+  color: white;
+  border: 1px solid rgba(114, 72, 222, 0.5);
+  border-radius: 4px;
+  padding: 0.3rem 0.6rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+
+  &:hover {
+    background-color: rgba(87, 31, 255, 0.4);
+  }
+}

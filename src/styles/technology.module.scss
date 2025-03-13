@@ -1,0 +1,132 @@
+.container {
+  width: 100%;
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 0 1rem;
+}
+
+.techTitle {
+  font-size: 1.8rem;
+  margin-bottom: 1.2rem;
+  color: white;
+  position: relative;
+
+  &:after {
+    content: '';
+    position: absolute;
+    left: 0;
+    bottom: -0.4rem;
+    width: 40px;
+    height: 2px;
+    background-color: rgba(200, 200, 255, 0.7);
+  }
+}
+
+.techGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1rem;
+}
+
+.techCard {
+  background-color: rgba(30, 30, 35, 0.95);
+  border-radius: 8px;
+  padding: 1.2rem;
+  border: 1px solid rgba(200, 200, 255, 0.2);
+  transition: all 0.4s ease;
+  color: white;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  opacity: 0;
+  transform: translateY(20px);
+
+  &.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  &:hover {
+    transform: translateY(-2px);
+    border-color: rgba(200, 200, 255, 0.4);
+    background-color: rgba(40, 35, 80, 0.95);
+  }
+}
+
+.logoContainer {
+  height: 60px;
+  width: 60px;
+  margin-bottom: 0.8rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.techLogo {
+  max-height: 100%;
+  max-width: 100%;
+}
+
+.techName {
+  font-size: 1.15rem;
+  color: rgba(200, 200, 255, 0.9);
+  margin-bottom: 1rem;
+  text-align: center;
+}
+
+.proficiencyContainer, .usageContainer {
+  width: 100%;
+  margin-bottom: 0.8rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+}
+
+.proficiencyLabel, .usageLabel {
+  font-size: 0.85rem;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.proficiencyBar, .usageBar {
+  height: 6px;
+  background-color: rgba(200, 200, 255, 0.1);
+  border-radius: 3px;
+  overflow: hidden;
+  width: 100%;
+}
+
+.proficiencyFill {
+  height: 100%;
+  border-radius: 3px;
+  background: linear-gradient(90deg, rgba(140, 140, 255, 0.7) 0%, rgba(200, 200, 255, 0.8) 100%);
+  box-shadow: 0 0 6px rgba(200, 200, 255, 0.3);
+  transition: width 1.2s cubic-bezier(0.1, 0.5, 0.3, 1);
+}
+
+.usageFill {
+  height: 100%;
+  border-radius: 3px;
+  background: linear-gradient(90deg, rgba(100, 200, 255, 0.7) 0%, rgba(180, 240, 255, 0.8) 100%);
+  box-shadow: 0 0 6px rgba(100, 200, 255, 0.3);
+  transition: width 1.2s cubic-bezier(0.1, 0.5, 0.3, 1);
+}
+
+@media (min-width: 769px) and (max-width: 1100px) {
+  .techGrid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 768px) {
+  .techTitle {
+    font-size: 1.6rem;
+  }
+
+  .techGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .techCard {
+    padding: 1rem;
+  }
+}

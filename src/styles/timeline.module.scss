@@ -1,13 +1,13 @@
 .container {
   width: 100%;
-  max-width: 1200px;
-  margin: 4rem auto;
+  max-width: 1000px;
+  margin: 3rem auto;
   padding: 0 1rem;
 }
 
 .timelineTitle {
   font-size: 2.25rem;
-  margin-bottom: 2rem;
+  margin-bottom: 1.5rem;
   color: white;
   position: relative;
 
@@ -15,18 +15,28 @@
     content: '';
     position: absolute;
     left: 0;
-    bottom: -0.75rem;
-    width: 60px;
-    height: 3px;
+    bottom: -0.5rem;
+    width: 50px;
+    height: 2px;
     background-color: rgba(200, 200, 255, 0.7);
   }
 }
 
 .timeline {
   position: relative;
-  min-height: 500px;
-  padding: 2rem 0;
-  margin-top: 3rem;
+  min-height: 350px;
+  padding: 1rem 0;
+  margin-top: 2rem;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(20px);
+  transition: opacity 0.5s ease, transform 0.5s ease, visibility 0.5s ease;
+
+  &.visible {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+  }
 }
 
 .timelineLine {
@@ -34,41 +44,55 @@
   top: 0;
   bottom: 0;
   left: 50%;
-  width: 2px;
-  background-color: rgba(200, 200, 255, 0.2);
+  width: 1px;
+  background-color: rgba(200, 200, 255, 0.15);
   transform: translateX(-50%);
   z-index: 1;
+  will-change: height;
+  transform-style: preserve-3d;
+  backface-visibility: hidden;
+}
+
+.progressLine {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 0;
+  min-height: 1px;
+  background-color: rgba(200, 200, 255, 0.6);
+  transition: height 0.3s ease;
+  will-change: height;
+}
+
+.activeDot {
+  position: absolute;
+  left: 50%;
+  top: 0;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background-color: rgba(200, 200, 255, 1);
+  box-shadow: 0 0 12px rgba(200, 200, 255, 0.9);
+  z-index: 3;
+  transform: translateY(0) translateX(-50%);
+  will-change: transform;
+  transform-origin: center center;
+  /* Transition is set dynamically in JS for better control */
 }
 
 .timelineEvent {
   display: flex;
   position: relative;
-  margin-bottom: 4rem;
+  margin-bottom: 2.5rem;
   width: 100%;
   flex-direction: row-reverse;
-
-  &.active {
-
-    .eventDot {
-      background-color: rgba(200, 200, 255, 0.9);
-      box-shadow: 0 0 10px rgba(200, 200, 255, 0.7);
-    }
-
-    .eventCard {
-      border-color: rgba(200, 200, 255, 0.5);
-      background-color: rgba(20, 20, 40, 0.4);
-    }
-
-    .eventYear {
-      color: rgba(200, 200, 255, 0.9);
-    }
-  }
 
   &.left {
     justify-content: flex-end;
 
     .eventContent {
-      padding-right: 2rem;
+      padding-right: 1.5rem;
       align-items: flex-end;
       text-align: right;
     }
@@ -78,26 +102,50 @@
     justify-content: flex-start;
 
     .eventContent {
-      padding-left: 2rem;
+      padding-left: 1.5rem;
       align-items: flex-start;
       text-align: left;
     }
+  }
 
+  &.active {
+    .eventDot {
+      opacity: 0;
+    }
+
+    .eventTextContent {
+      transform: translateY(-2px);
+      transition: transform 0.3s ease;
+    }
+
+    .eventTitle {
+      color: rgba(200, 200, 255, 1);
+      text-shadow: 0 0 10px rgba(200, 200, 255, 0.5);
+    }
+
+    .eventYear {
+      color: rgba(200, 200, 255, 1);
+      text-shadow: 0 0 8px rgba(200, 200, 255, 0.5);
+    }
+
+    .eventDescription {
+      color: rgba(255, 255, 255, 1);
+    }
   }
 }
 
 .eventDot {
   position: absolute;
-  top: 25px;
-  width: 12px;
-  height: 12px;
+  top: 15px;
+  width: 8px;
+  height: 8px;
   border-radius: 50%;
   background-color: rgba(200, 200, 255, 0.3);
   z-index: 2;
   transform: translateX(-50%);
-  left: 50%; // Centers on the timeline line at desktop sizes
+  left: 50%;
   opacity: 0.7;
-  transition: background-color 0.3s ease, box-shadow 0.3s ease, opacity 0.3s ease;
+  transition: opacity 0.3s ease, background-color 0.3s ease;
 }
 
 .eventContent {
@@ -107,71 +155,30 @@
 }
 
 .eventYear {
-  font-size: 0.9rem;
+  font-size: 0.8rem;
   font-weight: 600;
   color: rgba(255, 255, 255, 0.7);
-  margin-bottom: 0.5rem;
-  transition: color 0.3s ease;
+  margin-bottom: 0.3rem;
+  transition: color 0.3s ease, text-shadow 0.3s ease;
 }
 
-.eventCard {
-  background-color: rgba(20, 20, 40, 0.25);
-  border-radius: 8px;
-  padding: 1.25rem;
-  border: 1px solid rgba(200, 200, 255, 0.2);
-  transition: all 0.3s ease;
+.eventTextContent {
+  transition: transform 0.3s ease;
+  padding: 0.5rem 0;
 }
 
 .eventTitle {
-  font-size: 1.2rem;
+  font-size: 1.1rem;
   color: rgba(200, 200, 255, 0.9);
-  margin-bottom: 0.75rem;
+  margin-bottom: 0.5rem;
+  transition: color 0.3s ease, text-shadow 0.3s ease;
 }
 
 .eventDescription {
-  color: rgba(255, 255, 255, 0.8);
-  font-size: 0.95rem;
-  line-height: 1.5;
-}
-
-.progressLine {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  background-color: rgba(200, 200, 255, 0.7);
-  transition: height 0.3s ease;
-}
-
-.activeDot {
-  position: absolute;
-  left: 50%;
-  top: 0;
-  width: 18px;
-  height: 18px;
-  border-radius: 50%;
-  background-color: rgba(200, 200, 255, 1);
-  box-shadow: 0 0 15px rgba(200, 200, 255, 0.9);
-  z-index: 3;
-  transform: translateX(-50%);
-  transition: transform 0.4s cubic-bezier(0.25, 0.1, 0.25, 1);
-}
-
-.active {
-  .eventDot {
-    opacity: 0;
-  }
-
-  .eventCard {
-    border-color: rgba(200, 200, 255, 0.8);
-    background-color: rgba(20, 20, 40, 0.6);
-    transform: translateY(-5px);
-    box-shadow: 0 5px 15px rgba(0, 0, 20, 0.3);
-  }
-
-  .eventYear {
-    color: rgba(200, 200, 255, 1);
-  }
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 0.9rem;
+  line-height: 1.4;
+  transition: color 0.3s ease;
 }
 
 @media (max-width: 768px) {
@@ -180,28 +187,27 @@
   }
 
   .timelineEvent {
-    &.left {
-      justify-content: flex-end;
-
-      .eventContent {
-        padding-right: 2rem;
-        align-items: flex-end;
-        text-align: right;
-      }
-    }
-
-    &.right {
+    &.left, &.right {
       justify-content: flex-start;
 
       .eventContent {
-        padding-left: 2rem;
+        padding-left: 1.5rem;
+        padding-right: 0;
         align-items: flex-start;
         text-align: left;
       }
     }
   }
 
+  .eventDot {
+    left: 20px;
+  }
+
   .activeDot {
     left: 20px;
+  }
+
+  .eventContent {
+    width: 85%;
   }
 }
