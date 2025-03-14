@@ -1,10 +1,7 @@
 'use client';
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useMemo } from 'react';
 import styles from '@/styles/dotbackground.module.scss';
 
-/**
- * Interface representing a dot in the background.
- */
 interface Dot {
     x: number;
     y: number;
@@ -17,9 +14,6 @@ interface Dot {
     vy: number;
 }
 
-/**
- * Configuration options for the DotBackground component.
- */
 interface DotBackgroundConfig {
     spacingBetweenDots?: number;
     maxDistance?: number;
@@ -32,30 +26,24 @@ interface DotBackgroundConfig {
     edgePadding?: number;
 }
 
-/**
- * Props for the DotBackground component.
- */
 type DotBackgroundProps = {
     children?: React.ReactNode;
     config?: DotBackgroundConfig;
 }
 
-/**
- * DotBackground component that renders a canvas with animated dots in the background.
- * @param {DotBackgroundProps} props - The props for the component.
- * @returns {React.ReactElement} The rendered DotBackground component.
- */
 export default function DotBackground({
                                           children,
                                           config = {}
                                       }: DotBackgroundProps): React.ReactElement {
     const canvasRef = useRef<HTMLCanvasElement>(null);
     const contentRef = useRef<HTMLDivElement>(null);
+    const containerRef = useRef<HTMLDivElement>(null);
     const dotsRef = useRef<Dot[]>([]);
     const mouseRef = useRef({ x: 0, y: 0 });
     const animationRef = useRef<number>(0);
 
-    const effectiveConfig = {
+    // Memoize config to prevent unnecessary re-renders
+    const effectiveConfig = useMemo(() => ({
         spacingBetweenDots: 80,
         maxDistance: 100,
         dotSize: 1.5,
@@ -66,30 +54,52 @@ export default function DotBackground({
         pushForce: 2,
         edgePadding: 20,
         ...config
-    };
+    }), [config]);
 
     useEffect(() => {
         const canvas = canvasRef.current;
-        if (!canvas) return;
+        const container = containerRef.current;
+        const content = contentRef.current;
+        if (!canvas || !container || !content) return;
 
-        const ctx = canvas.getContext('2d');
+        const ctx = canvas.getContext('2d', { alpha: true });
         if (!ctx) return;
 
-        /**
-         * Initializes the dots based on the configuration.
-         */
+        // Throttle function for performance
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-function-type
+        const throttle = (fn: Function, delay: number) => {
+            let lastCall = 0;
+            return (...args: unknown[]) => {
+                const now = Date.now();
+                if (now - lastCall >= delay) {
+                    lastCall = now;
+                    fn(...args);
+                }
+            };
+        };
+
+        const lastDimensions = {
+            width: window.innerWidth,
+            height: document.body.scrollHeight
+        };
+
         const initDots = () => {
             const spacing = effectiveConfig.spacingBetweenDots;
             const documentWidth = Math.max(document.body.clientWidth, window.innerWidth);
             const documentHeight = Math.max(
                 document.body.scrollHeight,
                 document.documentElement.scrollHeight,
+                document.body.offsetHeight,
                 window.innerHeight
             );
 
             const extraBuffer = effectiveConfig.maxDistance * 2;
             const cols = Math.ceil((documentWidth + extraBuffer) / spacing);
             const rows = Math.ceil((documentHeight + extraBuffer) / spacing);
+
+            // Update tracked dimensions
+            lastDimensions.width = documentWidth;
+            lastDimensions.height = documentHeight;
 
             const dots: Dot[] = [];
             const startX = -extraBuffer / 2;
@@ -117,105 +127,141 @@ export default function DotBackground({
             dotsRef.current = dots;
         };
 
-        /**
-         * Resizes the canvas to match the document dimensions.
-         */
         const resizeCanvas = () => {
+            canvas.height = 0;
+            canvas.style.height = '0px';
+
             const documentWidth = Math.min(document.body.clientWidth, window.innerWidth);
             const documentHeight = Math.max(
                 document.body.scrollHeight,
                 document.documentElement.scrollHeight,
+                document.body.offsetHeight,
                 window.innerHeight
             );
 
-            canvas.width = documentWidth;
-            canvas.height = documentHeight;
-            canvas.style.width = `${documentWidth}px`;
-            canvas.style.height = `${documentHeight}px`;
+            // Resize if dimensions changed significantly (1px buffer for minor fluctuations)
+            if (
+                Math.abs(canvas.width - documentWidth) > 1 ||
+                Math.abs(canvas.height - documentHeight) > 1
+            ) {
+                canvas.width = documentWidth;
+                canvas.height = documentHeight;
+                canvas.style.width = `${documentWidth}px`;
+                canvas.style.height = `${documentHeight}px`;
 
-            initDots();
+                initDots();
+            }
         };
-
-        /**
-         * Handles mouse move events to update the mouse position.
-         * @param {MouseEvent} e - The mouse event.
-         */
-        const handleMouseMove = (e: MouseEvent) => {
+        const handleMouseMove = throttle((e: MouseEvent) => {
             mouseRef.current.x = e.clientX;
             mouseRef.current.y = e.clientY + window.scrollY;
-        };
+        }, 16); // ~60fps
 
-        /**
-         * Animates the dots on the canvas.
-         */
         const animate = () => {
             ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-            const visibleTop = window.scrollY - effectiveConfig.maxDistance;
-            const visibleBottom = window.scrollY + window.innerHeight + effectiveConfig.maxDistance;
-            const visibleLeft = -effectiveConfig.maxDistance;
-            const visibleRight = window.innerWidth + effectiveConfig.maxDistance;
+            const { maxDistance, pushForce, returnForce, friction } = effectiveConfig;
+            const visibleTop = window.scrollY - maxDistance * 2;
+            const visibleBottom = window.scrollY + window.innerHeight + maxDistance * 2;
+            const visibleLeft = -maxDistance * 2;
+            const visibleRight = window.innerWidth + maxDistance * 2;
+            const mouseX = mouseRef.current.x;
+            const mouseY = mouseRef.current.y;
+
+            // Batch drawing operations for performance
+            ctx.beginPath();
 
             dotsRef.current.forEach(dot => {
+                // Skip dots outside visible area
                 if (
-                    dot.y < visibleTop - effectiveConfig.maxDistance ||
-                    dot.y > visibleBottom + effectiveConfig.maxDistance ||
-                    dot.x < visibleLeft - effectiveConfig.maxDistance ||
-                    dot.x > visibleRight + effectiveConfig.maxDistance
+                    dot.y < visibleTop ||
+                    dot.y > visibleBottom ||
+                    dot.x < visibleLeft ||
+                    dot.x > visibleRight
                 ) {
                     return;
                 }
 
-                const dx = mouseRef.current.x - dot.x;
-                const dy = mouseRef.current.y - dot.y;
-                const distance = Math.sqrt(dx * dx + dy * dy);
+                const dx = mouseX - dot.x;
+                const dy = mouseY - dot.y;
+                const distanceSquared = dx * dx + dy * dy;
 
-                if (distance < effectiveConfig.maxDistance) {
-                    const force = (effectiveConfig.maxDistance - distance) / effectiveConfig.maxDistance;
+                // Use squared distance for performance (avoid sqrt when possible)
+                if (distanceSquared < maxDistance * maxDistance) {
+                    const distance = Math.sqrt(distanceSquared);
+                    const force = (maxDistance - distance) / maxDistance;
                     const angle = Math.atan2(dy, dx);
 
-                    dot.vx -= Math.cos(angle) * force * effectiveConfig.pushForce;
-                    dot.vy -= Math.sin(angle) * force * effectiveConfig.pushForce;
+                    dot.vx -= Math.cos(angle) * force * pushForce;
+                    dot.vy -= Math.sin(angle) * force * pushForce;
                 }
 
-                dot.vx += (dot.originalX - dot.x) * effectiveConfig.returnForce;
-                dot.vy += (dot.originalY - dot.y) * effectiveConfig.returnForce;
+                // Apply return force and friction
+                dot.vx += (dot.originalX - dot.x) * returnForce;
+                dot.vy += (dot.originalY - dot.y) * returnForce;
 
-                dot.vx *= effectiveConfig.friction;
-                dot.vy *= effectiveConfig.friction;
+                dot.vx *= friction;
+                dot.vy *= friction;
 
                 dot.x += dot.vx;
                 dot.y += dot.vy;
 
-                ctx.fillStyle = dot.color.replace('rgb', 'rgba').replace(')', `, ${dot.opacity})`);
-                ctx.beginPath();
+                // Draw dot
+                ctx.moveTo(dot.x + dot.size, dot.y);
                 ctx.arc(dot.x, dot.y, dot.size, 0, Math.PI * 2);
-                ctx.fill();
             });
+
+            // Set fill style and fill all dots at once
+            ctx.fillStyle = effectiveConfig.dotColor.replace('rgb', 'rgba').replace(')', `, ${effectiveConfig.dotOpacity})`);
+            ctx.fill();
 
             animationRef.current = requestAnimationFrame(animate);
         };
 
         window.addEventListener('mousemove', handleMouseMove);
 
-        const resizeObserver = new ResizeObserver(() => {
-            resizeCanvas();
-        });
+        // Throttled resize handler
+        const throttledResize = throttle(resizeCanvas, 100);
+        window.addEventListener('resize', throttledResize);
 
-        resizeObserver.observe(document.body);
+        // Set up ResizeObservers for both document body and content
+        const documentObserver = new ResizeObserver(throttledResize);
+        documentObserver.observe(document.body);
 
+        // Add specific content observer to detect when projects load or filter changes
+        const contentObserver = new ResizeObserver(throttledResize);
+        contentObserver.observe(content);
+
+        // Check height periodically for dynamic content changes
+        const heightCheckInterval = setInterval(() => {
+            const currentHeight = Math.max(
+                document.body.scrollHeight,
+                document.documentElement.scrollHeight,
+                document.body.offsetHeight,
+                window.innerHeight
+            );
+
+            if (Math.abs(lastDimensions.height - currentHeight) > 5) {
+                throttledResize();
+            }
+        }, 1000);
+
+        // Initial setup
         resizeCanvas();
         animationRef.current = requestAnimationFrame(animate);
 
         return () => {
             window.removeEventListener('mousemove', handleMouseMove);
-            resizeObserver.disconnect();
+            window.removeEventListener('resize', throttledResize);
+            documentObserver.disconnect();
+            contentObserver.disconnect();
+            clearInterval(heightCheckInterval);
             cancelAnimationFrame(animationRef.current);
         };
-    }, [effectiveConfig.spacingBetweenDots, effectiveConfig.dotColor, effectiveConfig.dotOpacity, effectiveConfig.dotSize, effectiveConfig.friction, effectiveConfig.maxDistance, effectiveConfig.pushForce, effectiveConfig.returnForce]);
+    }, [effectiveConfig]);
 
     return (
-        <div className={styles.container}>
+        <div className={styles.container} ref={containerRef}>
             <canvas ref={canvasRef} className={styles.canvas} />
             <div className={styles.content} ref={contentRef}>
                 {children}

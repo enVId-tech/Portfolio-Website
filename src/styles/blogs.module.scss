@@ -1,0 +1,302 @@
+// Container for the blogs section
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 1rem;
+}
+
+// Title styling for the blogs section
+.blogsTitle {
+  font-size: clamp(1.8rem, 5vw, 2.5rem);
+  background: linear-gradient(to right, #22ffed, #24a2ff, #571fff);
+  background-clip: text;
+  -webkit-background-clip: text;
+  color: transparent;
+  margin-bottom: 1.5rem;
+}
+
+// Container for filter buttons
+.filterContainer {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 1.5rem;
+}
+
+// Styling for filter buttons
+.filterButton {
+  padding: 8px 12px;
+  border-radius: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  background-color: rgba(255, 255, 255, 0.1);
+  color: white;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+  font-size: 0.85rem;
+  margin-bottom: 4px;
+
+  &:hover, &:active {
+    background-color: rgba(114, 72, 222, 0.3);
+    transform: translateY(-2px);
+  }
+
+  &.active {
+    background: linear-gradient(to right, rgba(34, 255, 237, 0.3), rgba(36, 162, 255, 0.3), rgba(87, 31, 255, 0.3));
+    border: 1px solid rgba(114, 72, 222, 0.5);
+    transform: translateY(-2px);
+  }
+}
+
+// Loading state display
+.loading {
+  text-align: center;
+  padding: 2rem 0;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+// Grid layout for blogs
+.blogsGrid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1.2rem;
+}
+
+// No results message
+.noResults {
+  text-align: center;
+  padding: 2rem 0;
+  grid-column: 1 / -1;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+// Blog card styling
+.blogCard {
+  border-radius: 12px;
+  overflow: hidden;
+  background-color: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  transition: all 0.3s ease-in-out;
+  height: 100%;
+  width: 100%; // Ensure full width
+  max-width: 100%; // Prevent overflow
+}
+
+// Blog link (wraps the entire card)
+.blogLink {
+  text-decoration: none;
+  color: inherit;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+// Blog image container
+.blogImageContainer {
+  position: relative;
+  width: 100%;
+  height: 140px; // Reduced height
+  overflow: hidden;
+}
+
+// Blog image
+.blogImage {
+  object-fit: cover;
+  transition: transform 0.5s ease;
+
+  &:hover, &:active {
+    transform: scale(1.05);
+  }
+}
+
+// Blog content container
+.blogContent {
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+}
+
+// Blog metadata (date and read time)
+.blogMeta {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-bottom: 0.75rem;
+  color: rgba(255, 255, 255, 0.65);
+  font-size: 0.85rem;
+}
+
+// Blog date display
+.blogDate, .blogReadTime {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+
+  svg {
+    font-size: 1rem;
+  }
+}
+
+// Blog title
+.blogTitle {
+  font-size: 1.1rem;
+  margin-bottom: 0.5rem;
+  color: white;
+  font-weight: 600;
+  line-height: 1.3;
+}
+// Blog excerpt
+.blogExcerpt {
+  color: rgb(162, 162, 162);
+  margin-bottom: 0.75rem;
+  line-height: 1.5;
+  flex-grow: 1;
+  font-size: 0.85rem;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+// Tag list container
+.tagList {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-bottom: 1rem;
+}
+
+// Individual tag
+.tag {
+  font-size: 0.75rem;
+  padding: 3px 8px;
+  border-radius: 20px;
+  background: linear-gradient(to right, rgba(34, 255, 237, 0.15), rgba(87, 31, 255, 0.15));
+  border: 1px solid rgba(36, 162, 255, 0.2);
+  color: #ffffff;
+}
+
+// Read more link
+.readMore {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: #24a2ff;
+  font-size: 0.9rem;
+  font-weight: 500;
+  margin-top: auto;
+  transition: all 0.2s ease;
+
+  svg {
+    transition: transform 0.2s ease;
+  }
+
+  &:hover, &:active {
+    color: #22ffed;
+
+    svg {
+      transform: translateX(3px);
+    }
+  }
+}
+
+// Media queries for responsive design
+@media (min-width: 480px) {
+  .filterContainer {
+    gap: 10px;
+  }
+}
+
+@media (min-width: 640px) {
+  .container {
+    padding: 0 1.5rem;
+  }
+
+  .blogsGrid {
+    gap: 1.75rem;
+  }
+}
+
+@media (min-width: 768px) {
+  .blogsGrid {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr); // Use 6 columns for better control
+    grid-template-rows: auto auto; // Two rows layout
+    gap: 1.5rem;
+  }
+
+  // First article spans full width
+  .blogsGrid article:first-child {
+    grid-column: span 6; // Full width - all 6 columns
+    grid-row: 1;
+
+    .blogImageContainer {
+      height: 200px; // Taller image for featured
+    }
+
+    .blogTitle {
+      font-size: 1.3rem;
+    }
+
+    .blogExcerpt {
+      -webkit-line-clamp: 3; // Show more text in featured
+    }
+  }
+
+  // Second and third articles each span 3 columns (half width)
+  .blogsGrid article:nth-child(2),
+  .blogsGrid article:nth-child(3) {
+    grid-column: span 3; // Half width - 3 columns each
+    grid-row: 2;
+  }
+
+  .blogContent {
+    padding: 1.25rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .blogsGrid {
+    gap: 2rem;
+  }
+
+  // First article spans 2/3 width
+  .blogsGrid article:first-child {
+    grid-column: span 4; // 2/3 width (4 of 6 columns)
+    grid-row: 1;
+
+    .blogImageContainer {
+      height: 220px;
+    }
+
+    .blogTitle {
+      font-size: 1.4rem;
+    }
+  }
+
+  // Second article spans 1/3 width next to first
+  .blogsGrid article:nth-child(2) {
+    grid-column: span 2; // 1/3 width (2 of 6 columns)
+    grid-row: 1;
+  }
+
+  // Third article spans 1/2 width in second row
+  .blogsGrid article:nth-child(3) {
+    grid-column: span 3; // 1/2 width (3 of 6 columns)
+    grid-row: 2;
+  }
+
+  // Fourth article spans 1/2 width in second row
+  .blogsGrid article:nth-child(4) {
+    grid-column: span 3; // 1/2 width (3 of 6 columns)
+    grid-row: 2;
+  }
+}
+
+@media (min-width: 1280px) {
+  .blogsGrid article:first-child .blogImageContainer {
+    height: 250px;
+  }
+}

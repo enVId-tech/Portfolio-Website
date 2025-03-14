@@ -12,7 +12,7 @@ type AboutProps = {
  */
 export default function About({ children }: AboutProps): React.ReactElement {
     return (
-        <div className={styles.container}>
+        <div className={styles.container} id={"about"}>
             <h2 className={`${styles.aboutTitle} ${M_600}`}>About Me</h2>
 
             <div className={styles.cardGrid}>

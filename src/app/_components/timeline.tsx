@@ -210,7 +210,7 @@ function Timeline({ children }: TimelineProps): React.ReactElement {
     }, []);
 
     return (
-        <div className={styles.container}>
+        <div className={styles.container} id={"timeline"}>
             <h2 className={`${styles.timelineTitle} ${M_600}`}>My Journey</h2>
 
             <div

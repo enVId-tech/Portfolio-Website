@@ -102,7 +102,7 @@ export default function Technology({ children }: TechnologyProps): React.ReactEl
     }, [technologies]);
 
     return (
-        <div className={styles.container}>
+        <div className={styles.container} id={"technology"}>
             <h2 className={`${styles.techTitle} ${M_600}`}>Technology Stack</h2>
 
             <div className={styles.techGrid}>

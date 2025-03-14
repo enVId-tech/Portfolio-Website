@@ -58,7 +58,7 @@
 .projectCard {
   border-radius: 12px; // Rounded corners
   overflow: hidden; // Hide overflow
-  background-color: rgba(255, 255, 255, 0.05); // Background color
+  background-color: rgba(32, 32, 32, 1); // Background color
   border: 1px solid rgba(255, 255, 255, 0.1); // Border color
   transition: all 0.3s ease-in-out; // Smooth transition for all properties
   height: 100%; // Full height
@@ -105,6 +105,11 @@
   font-size: 1.3rem; // Reduced font size for mobile
   margin-bottom: 0.5rem; // Bottom margin
   color: white; // Text color
+  overflow: hidden; // Hide overflow
+  text-overflow: ellipsis; // Show ellipsis for overflowed text
+  white-space: wrap; // Prevent wrapping
+  display: flex; // Use flexbox for badge alignment
+  align-items: center; // Align items vertically
 }
 
 // Description styling for individual projects
@@ -114,6 +119,11 @@
   line-height: 1.5; // Line height
   flex-grow: 1; // Grow to fill available space
   font-size: 0.95rem; // Slightly reduced font size for better mobile readability
+  overflow: hidden; // Hide overflow
+  display: -webkit-box;
+  -webkit-line-clamp: 3; // Show max 3 lines
+  -webkit-box-orient: vertical;
+  text-overflow: ellipsis; // Show ellipsis for overflowed text
 }
 
 // Container for the technology badges
@@ -137,35 +147,42 @@
 // Container for the project links
 .projectLinks {
   display: flex; // Flexbox layout
-  flex-wrap: wrap; // Allow wrapping on very small screens
-  gap: 10px; // Reduced gap for mobile
-  margin-top: auto; // Auto margin to push links to the bottom
+  flex-wrap: wrap; // Allow wrapping on small screens
+  gap: 10px; // Reduce gap for better wrapping
+  margin-top: auto; // Push links to the bottom
+  width: 100%; // Ensure full width
 }
 
 // Styling for individual project links
 .projectLink {
   display: flex; // Flexbox layout
   align-items: center; // Center align items
-  gap: 6px; // Reduced gap for mobile
-  padding: 8px 14px; // Slightly reduced padding for mobile
+  gap: 6px; // Gap between icon and text
+  padding: 8px 14px; // Padding for links
   border-radius: 8px; // Rounded corners
   background-color: rgba(255, 255, 255, 0.1); // Background color
   border: 1px solid rgba(255, 255, 255, 0.2); // Border color
   color: white; // Text color
   text-decoration: none; // Remove text decoration
-  font-size: 0.85rem; // Reduced font size for mobile
-  transition: all 0.2s ease-in-out; // Smooth transition for all properties
-  flex: 1; // Allow links to grow on small screens
-  justify-content: center; // Center content for better mobile appearance
+  font-size: 0.85rem; // Font size
+  transition: all 0.2s ease-in-out; // Smooth transition
+  min-width: 0; // Allow shrinking below content size
+  flex: 0 1 auto; // Don't grow, allow shrink, auto basis
+  justify-content: center; // Center content
+  white-space: nowrap; // Keep text on one line
+  overflow: hidden; // Hide overflow
+  text-overflow: ellipsis; // Show ellipsis for overflowed text
+  max-width: 100%; // Maximum width is 100% of container
 
-  &:hover, &:active { // Added active state for touch devices
-    background-color: rgba(114, 72, 222, 0.5); // Background color on hover/active
-    transform: translateY(-2px); // Move up on hover/active
+  &:hover, &:active {
+    background-color: rgba(114, 72, 222, 0.5);
+    transform: translateY(-2px);
   }
 
   svg {
-    width: 14px; // Reduced width for mobile
-    height: 14px; // Reduced height for mobile
+    width: 14px;
+    height: 14px;
+    flex-shrink: 0; // Prevent icon from shrinking
   }
 }
 
@@ -178,6 +195,7 @@
   border-radius: 4px; // Rounded corners
   margin-left: 6px; // Reduced margin for mobile
   vertical-align: middle; // Align vertically in the middle
+  flex-shrink: 0; // Prevent badge from shrinking
 }
 
 // Styling for the filter mode button
@@ -197,6 +215,13 @@
   }
 }
 
+.titleText {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: wrap;
+  flex: 1;
+}
+
 // Media queries for responsive design
 @media (min-width: 480px) {
   .filterContainer {
@@ -208,7 +233,7 @@
   }
 
   .projectLink {
-    flex: 0 1 auto; // Don't grow to fill space
+    max-width: calc(50% - 5px); // Set max width to half minus half of gap
   }
 }
 
@@ -220,6 +245,14 @@
   .projectsGrid {
     grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); // Two columns for medium screens
     gap: 1.75rem; // Increased gap
+  }
+
+  .projectLinks {
+    gap: 12px; // Slightly larger gap
+  }
+
+  .projectLink {
+    max-width: calc(50% - 6px); // Adjust for new gap
   }
 }
 
@@ -271,13 +304,14 @@
   }
 
   .projectLinks {
-    gap: 12px; // Restore original gap
+    flex-wrap: wrap; // Still allow wrapping on medium screens
   }
 
   .projectLink {
     padding: 8px 16px; // Restore original padding
     font-size: 0.9rem; // Restore original font size
     justify-content: flex-start; // Left align content
+    max-width: calc(50% - 6px);
 
     svg {
       width: 16px; // Restore original width

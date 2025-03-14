@@ -1,0 +1,146 @@
+.sectionSelector {
+  position: fixed;
+  left: 30px;
+  top: 50%;
+  transform: translateY(-50%);
+  display: flex;
+  flex-direction: column;
+  gap: 25px; // Reduced gap between items
+  z-index: 90;
+  padding: 20px 15px; // Smaller padding
+  background-color: rgba(18, 18, 35, 0.6);
+  backdrop-filter: blur(10px);
+  border-radius: 25px; // Slightly smaller radius
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+  pointer-events: auto;
+
+  @media (max-width: 768px) {
+    display: none;
+  }
+}
+
+.selectorIndicator {
+  position: absolute;
+  width: 35px; // Slightly smaller
+  height: 35px; // Slightly smaller
+  background: linear-gradient(to right, #22ffed, #24a2ff);
+  border-radius: 50%;
+  top: 0;
+  z-index: 0; // Between background and icon
+  transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+  box-shadow: 0 0 20px rgba(36, 162, 255, 0.5);
+}
+
+.dot {
+  width: 35px; // Slightly smaller
+  height: 35px; // Slightly smaller
+  border-radius: 50%;
+  background-color: rgba(255, 255, 255, 0.15); // Added subtle background to dot
+  border: none;
+  cursor: pointer;
+  position: relative;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: auto;
+
+  &:hover {
+    .label {
+      opacity: 1;
+      transform: translateX(20px);
+    }
+
+    .iconWrapper::after {
+      opacity: 0.7;
+      transform: scale(1.5);
+    }
+  }
+
+  &.active {
+    .label {
+      opacity: 1;
+      transform: translateX(20px);
+    }
+
+    .iconWrapper {
+      color: #ffffff;
+      text-shadow: 0 0 5px rgba(255, 255, 255, 0.8);
+
+      svg {
+        transform: scale(1.2);
+        filter: drop-shadow(0 0 5px rgba(255, 255, 255, 0.8));
+      }
+
+      &::after {
+        opacity: 1;
+        animation: pulse 2s infinite;
+      }
+    }
+  }
+}
+
+.label {
+  position: absolute;
+  left: 45px;
+  white-space: nowrap;
+  background-color: rgba(18, 18, 35, 0.9);
+  color: white;
+  padding: 7px 12px;
+  border-radius: 8px;
+  font-size: 14px; // Slightly smaller
+  font-weight: 500;
+  opacity: 0;
+  transform: translateX(10px);
+  transition: all 0.3s ease;
+  pointer-events: none;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+}
+
+.iconWrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  color: rgba(255, 255, 255, 0.8);
+  transition: all 0.3s ease;
+  position: relative;
+  z-index: 1; // Above the indicator
+
+  &::after {
+    content: '';
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background: radial-gradient(circle, rgba(36, 162, 255, 0.3) 0%, rgba(36, 162, 255, 0) 70%);
+    border-radius: 50%;
+    opacity: 0.4;
+    transition: all 0.3s ease;
+    z-index: -1;
+  }
+
+  svg {
+    font-size: 18px; // Slightly smaller
+    transition: all 0.3s ease;
+    position: relative;
+    z-index: 2; // Ensures icon is on top
+  }
+}
+
+@keyframes pulse {
+  0% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  50% {
+    transform: scale(1.8);
+    opacity: 0.5;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}

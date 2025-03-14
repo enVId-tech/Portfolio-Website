@@ -241,10 +241,30 @@ export default function Projects(): React.ReactElement {
 
     // Fetch GitHub repos with caching
     useEffect(() => {
-        const includedRepos = ["Portfolio-Website"];
-        const excludedRepos = ["dotfiles", "notes", "test-repo"];
+        const includedRepos: string[] = [
+            "Portfolio-Website",
+            "Nginx-404",
+            "Terminal-Commands",
+            "New-Robotics-Website-Redesign",
+            "Docker-Web-Creator",
+            "Safety-Test",
+            "DB-Reader-Electron-App",
+            "PythonDBGenerator",
+            "Website-Login-Template",
+            "Calendar-App",
+            "Mecanum-Drive-Arduino",
+            "Youtube-File-Storage",
+            "CSV-Convert-From-DB",
+            "OA-Website",
+            "OpenCV-Object-Detection",
+            "Classroom-Website"
+        ];
+        const excludedRepos = ["DockerTemplates", "enVId-tech"]
 
         const fetchGithubRepos = async () => {
+            setIsLoading(true);
+            setError(null);
+
             // Try to get from cache first
             try {
                 const cachedData = localStorage.getItem(cacheKey);
@@ -253,16 +273,13 @@ export default function Projects(): React.ReactElement {
                     // Use cache if less than 1 hour old
                     if (Date.now() - timestamp < 3600000) {
                         setGithubProjects(data);
+                        setIsLoading(false);
                         return;
                     }
                 }
             } catch (e) {
                 console.error("Cache retrieval error:", e);
             }
-
-            // Fetch fresh data if cache miss or expired
-            setIsLoading(true);
-            setError(null);
 
             try {
                 const response = await fetch('https://api.github.com/users/enVId-tech/repos?sort=updated&direction=desc');
@@ -316,7 +333,7 @@ export default function Projects(): React.ReactElement {
             }
         };
 
-        fetchGithubRepos();
+        fetchGithubRepos().then(r => r);
     }, [filterMode, cacheKey, processRepo]);
 
     // Combine manual and GitHub projects
@@ -358,7 +375,7 @@ export default function Projects(): React.ReactElement {
     }, []);
 
     return (
-        <div className={styles.container}>
+        <div className={styles.container} id={"projects"}>
             <h2 className={`${styles.projectsTitle} ${M_600}`}>
                 My Projects
                 <button

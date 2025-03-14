@@ -14,7 +14,7 @@ type HeaderProps = {
  */
 export default function Header({ children }: HeaderProps): React.ReactElement {
     return (
-        <div className={styles.container}>
+        <div className={styles.container} id={"header"}>
             <header>
                 <h1 className={`${styles.header} ${M_600}`}>
                     Hi, I&#39;m <span className={`${styles.name} ${M_600}`}>Erick</span>
