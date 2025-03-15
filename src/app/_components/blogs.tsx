@@ -28,8 +28,6 @@ export default function Blogs() {
   useEffect(() => {
     const fetchBlogs = async () => {
       try {
-        // Replace with your actual data fetching logic
-        // This is a mock data example
         const mockBlogs: BlogPost[] = [
           {
             id: '1',
@@ -85,7 +83,7 @@ export default function Blogs() {
   };
 
   return (
-    <section className={styles.container}>
+    <section className={styles.container} id={"blogs"}>
       <h2 className={`${styles.blogsTitle} ${M_600}`}>Latest Blogs</h2>
 
       {/* Filter tags */}

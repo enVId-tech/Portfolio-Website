@@ -8,8 +8,9 @@ import Projects from "@/app/_components/projects";
 import Technology from "@/app/_components/technology";
 import Footer from "@/app/_components/footer";
 import ScrollToTop from "@/app/_components/scrollToTop";
-// import Blogs from "@/app/_components/blogs";
+// import Blogs from "@/app/_components/blog";
 import SectionSelector from "@/app/_components/sectionSelector";
+import Blogs from "@/app/_components/blogs";
 
 export default async function HomePage(): Promise<React.ReactElement> {
     const sections = [
@@ -17,7 +18,7 @@ export default async function HomePage(): Promise<React.ReactElement> {
         { id: "about", label: "About" },
         { id: "timeline", label: "Timeline" },
         { id: "projects", label: "Projects" },
-        // { id: "blogs", label: "Blogs" },
+        { id: "blogs", label: "Blogs" },
         { id: "technology", label: "Skills" }
     ];
 
@@ -36,7 +37,7 @@ export default async function HomePage(): Promise<React.ReactElement> {
                 <About />
                 <Timeline/>
                 <Projects/>
-                {/*<Blogs/>*/}
+                <Blogs/>
                 <Technology/>
                 <Footer/>
                 <ScrollToTop/>
