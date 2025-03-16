@@ -1,5 +1,7 @@
 import React from 'react';
 import '@/styles/globals.scss';
+import {AuthProvider} from "@/context/AuthContext.tsx";
+import {M_600} from "@/utils/globalFonts.ts";
 
 /**
  * Metadata for the webpage.
@@ -29,7 +31,11 @@ export default function RootLayout({
             <link rel="icon" href="/favicon/favicon.ico" />
             <title>{metadata.title}</title>
         </head>
-        <body>{children}</body>
+            <body className={M_600}>
+                <AuthProvider>
+                    {children}
+                </AuthProvider>
+            </body>
         </html>
     )
 }

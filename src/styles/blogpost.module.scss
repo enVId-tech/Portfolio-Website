@@ -1,7 +1,8 @@
-// src/styles/blogpost.module.scss
 .blogPostContainer {
   width: 100%;
-  padding: 2rem 0;
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 2rem 1rem;
 }
 
 .backButton {
@@ -26,6 +27,7 @@
   img {
     width: 100%;
     height: auto;
+    max-height: 500px;
     object-fit: cover;
   }
 }
@@ -36,6 +38,7 @@
   border-radius: 8px;
   padding: 2rem;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  color: white;
 
   header {
     margin-bottom: 2rem;
@@ -121,6 +124,23 @@
   strong {
     color: #fff;
   }
+
+  pre {
+    background: rgba(0, 0, 0, 0.3);
+    padding: 1rem;
+    border-radius: 4px;
+    overflow-x: auto;
+    margin: 1.5rem 0;
+    font-family: monospace;
+  }
+
+  code {
+    background: rgba(0, 0, 0, 0.3);
+    padding: 0.2rem 0.4rem;
+    border-radius: 3px;
+    font-family: monospace;
+    font-size: 0.9em;
+  }
 }
 
 .postFooter {
@@ -158,53 +178,16 @@
 }
 
 .loading {
-  text-align: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   padding: 4rem;
   font-size: 1.2rem;
   color: #ddd;
+  min-height: 400px;
 }
 
-@media (max-width: 768px) {
-  .blogPost {
-    padding: 1.5rem;
-
-    header h1 {
-      font-size: 2rem;
-    }
-  }
-
-  .content {
-    font-size: 1rem;
-  }
-
-  .socialButtons {
-    justify-content: center;
-
-    button {
-      padding: 0.4rem 0.8rem;
-      font-size: 0.9rem;
-    }
-  }
-}
-
-@media (min-width: 768px) {
-  .blogPostContainer {
-    max-width: 95%;
-  }
-}
-
-@media (min-width: 992px) {
-  .blogPostContainer {
-    max-width: 90%;
-  }
-}
-
-@media (min-width: 1200px) {
-  .blogPostContainer {
-    max-width: 85%;
-  }
-}
-
+// Admin edit controls
 .editButton {
   position: fixed;
   bottom: 30px;
@@ -231,51 +214,24 @@
 }
 
 .editorContainer {
-  margin-top: 2rem;
-  border-radius: 8px;
   background: rgba(20, 20, 20, 0.9);
-  padding: 1.5rem;
+  backdrop-filter: blur(10px);
+  border-radius: 8px;
+  padding: 2rem;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
-}
+  margin-bottom: 2rem;
 
-.editorControls {
-  display: flex;
-  gap: 1rem;
-  margin-top: 1rem;
-
-  button {
-    padding: 0.5rem 1rem;
-    border-radius: 4px;
-    font-weight: 600;
-    cursor: pointer;
-    transition: all 0.2s ease;
-
-    &.saveButton {
-      background: #4CAF50;
-      color: white;
-      border: none;
-
-      &:hover {
-        background: #45a049;
-      }
-    }
-
-    &.cancelButton {
-      background: transparent;
-      color: #ddd;
-      border: 1px solid #666;
-
-      &:hover {
-        border-color: #999;
-        color: #fff;
-      }
-    }
+  h2 {
+    margin-top: 0;
+    margin-bottom: 2rem;
+    color: #fff;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    padding-bottom: 1rem;
   }
 }
 
 .editorField {
-  width: 100%;
-  margin-bottom: 1rem;
+  margin-bottom: 1.5rem;
 
   label {
     display: block;
@@ -284,7 +240,7 @@
     font-weight: 500;
   }
 
-  input, textarea {
+  input, textarea, select {
     width: 100%;
     padding: 0.75rem;
     background: rgba(255, 255, 255, 0.1);
@@ -305,16 +261,89 @@
     line-height: 1.6;
     resize: vertical;
   }
+
+  .checkboxField {
+    display: flex;
+    align-items: center;
+
+    input[type="checkbox"] {
+      width: auto;
+      margin-right: 10px;
+    }
+  }
+}
+
+.editorControls {
+  display: flex;
+  gap: 1rem;
+  margin-top: 2rem;
+  justify-content: flex-end;
+
+  button {
+    padding: 0.75rem 1.5rem;
+    border-radius: 4px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+
+    &.saveButton {
+      background: #4CAF50;
+      color: white;
+      border: none;
+
+      &:hover {
+        background: #45a049;
+      }
+
+      &:disabled {
+        background: #cccccc;
+        cursor: not-allowed;
+      }
+    }
+
+    &.cancelButton {
+      background: transparent;
+      color: #ddd;
+      border: 1px solid #666;
+
+      &:hover {
+        border-color: #999;
+        color: #fff;
+      }
+    }
+  }
+}
+
+.statusMessage {
+  padding: 0.5rem;
+  border-radius: 4px;
+  margin-right: 1rem;
+
+  &.success {
+    color: #4CAF50;
+  }
+
+  &.error {
+    color: #f44336;
+  }
+
+  &.saving {
+    color: #2196F3;
+  }
 }
 
 .tagsInput {
   display: flex;
   flex-wrap: wrap;
   gap: 0.5rem;
-  margin-top: 0.5rem;
+  padding: 0.75rem;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 4px;
+  min-height: 50px;
 
   .tagItem {
-    background: rgba(255, 255, 255, 0.1);
+    background: rgba(138, 180, 248, 0.2);
     color: #ddd;
     border-radius: 2rem;
     padding: 0.3rem 0.8rem;
@@ -324,7 +353,7 @@
     .removeTag {
       margin-left: 0.5rem;
       cursor: pointer;
-      font-size: 0.9rem;
+      font-size: 1.1rem;
       opacity: 0.7;
 
       &:hover {
@@ -344,5 +373,198 @@
     &:focus {
       outline: none;
     }
+  }
+}
+
+.date {
+  color: #999;
+}
+
+.author {
+  font-style: italic;
+  color: #bbb;
+}
+
+.deleteButton {
+  bottom: 100px; // Position it above the edit button
+  background: rgba(244, 67, 54, 0.8); // Red color
+
+  &:hover {
+    background: rgba(244, 67, 54, 1);
+    transform: translateY(-3px);
+  }
+}
+
+.deleteModal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.7);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.deleteModalContent {
+  background: rgb(30, 30, 35);
+  padding: 2rem;
+  border-radius: 8px;
+  width: 100%;
+  max-width: 500px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+
+  h3 {
+    color: #f44336;
+    margin-top: 0;
+    margin-bottom: 1.5rem;
+  }
+
+  p {
+    color: #ddd;
+    margin-bottom: 1.5rem;
+    line-height: 1.5;
+
+    strong {
+      color: #fff;
+    }
+  }
+}
+
+.deleteConfirmField {
+  margin-bottom: 1.5rem;
+
+  input {
+    width: 100%;
+    padding: 0.75rem;
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 4px;
+    color: #fff;
+    font-size: 1rem;
+
+    &:focus {
+      outline: none;
+      border-color: #f44336;
+    }
+  }
+}
+
+.deleteModalButtons {
+  display: flex;
+  justify-content: flex-end;
+  gap: 1rem;
+}
+
+.cancelDeleteButton {
+  padding: 0.75rem 1.5rem;
+  background: transparent;
+  color: #ddd;
+  border: 1px solid #666;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: all 0.2s ease;
+
+  &:hover {
+    border-color: #999;
+    color: #fff;
+  }
+}
+
+.confirmDeleteButton {
+  padding: 0.75rem 1.5rem;
+  background: #f44336;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: all 0.2s ease;
+
+  &:hover {
+    background: #d32f2f;
+  }
+
+  &:disabled {
+    background: #999;
+    cursor: not-allowed;
+  }
+}
+
+.deleteError {
+  color: #f44336;
+  margin-top: 1rem;
+  padding: 0.5rem;
+  background: rgba(244, 67, 54, 0.1);
+  border-radius: 4px;
+  text-align: center;
+}
+
+.scheduledInfo {
+  margin-top: 0.5rem;
+  padding: 0.5rem;
+  background: rgba(138, 180, 248, 0.1);
+  border-radius: 4px;
+  color: #8ab4f8;
+  font-size: 0.9rem;
+}
+
+@media (max-width: 768px) {
+  .blogPostContainer {
+    padding: 1rem;
+  }
+
+  .blogPost {
+    padding: 1.5rem;
+
+    header h1 {
+      font-size: 2rem;
+    }
+  }
+
+  .content {
+    font-size: 1rem;
+  }
+
+  .editorContainer {
+    padding: 1.5rem;
+  }
+
+  .editorControls {
+    flex-direction: column;
+
+    button {
+      width: 100%;
+    }
+  }
+
+  .socialButtons {
+    justify-content: center;
+
+    button {
+      padding: 0.4rem 0.8rem;
+      font-size: 0.9rem;
+    }
+  }
+
+  .deleteModalContent {
+    width: 90%;
+    padding: 1.5rem;
+  }
+
+  .deleteModalButtons {
+    flex-direction: column;
+
+    button {
+      width: 100%;
+    }
+  }
+
+  .deleteButton {
+    bottom: 30px;
+    right: 100px; // Position it to the left of the edit button
   }
 }
