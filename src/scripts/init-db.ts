@@ -3,13 +3,13 @@ import dotenv from 'dotenv';
 import path from 'path';
 import fs from 'fs';
 
-const stackEnvPath = process.env.STACK_ENV_PATH || path.resolve('/data/stack.env');
-
+// Load environment variables with better error handling
+const stackEnvPath = path.resolve(process.cwd(), 'stack.env');
 if (fs.existsSync(stackEnvPath)) {
   console.log(`Loading environment from: ${stackEnvPath}`);
   dotenv.config({ path: stackEnvPath });
 } else {
-  console.log(`Stack env file not found at ${stackEnvPath}, falling back to default .env`);
+  console.log('stack.env not found, using default environment variables');
   dotenv.config();
 }
 

@@ -12,4 +12,5 @@ export interface BlogInterface {
   tags: string[];
   publishStatus: 'published' | 'private' | 'unlisted';
   scheduledPublish?: string;
+  readTime: string;
 }

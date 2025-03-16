@@ -1,6 +1,7 @@
 // Container for the blogs section
 .container {
   max-width: 1200px;
+  width: 100%;
   margin: 0 auto;
   padding: 0 1rem;
 }
@@ -292,6 +293,50 @@
   .blogsGrid article:nth-child(4) {
     grid-column: span 3; // 1/2 width (3 of 6 columns)
     grid-row: 2;
+  }
+}
+
+.headerContainer {
+  display: flex;
+  width: 100%;
+  justify-content: space-between;
+  padding: 0;
+  align-items: center;
+  margin: 0 0 1.5rem;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+// Update the viewAllButton style to match site aesthetic
+.viewAllButton {
+  padding: 0.6rem 1rem;
+  background: linear-gradient(to right, rgba(34, 255, 237, 0.2), rgba(87, 31, 255, 0.2));
+  border: 1px solid rgba(36, 162, 255, 0.3);
+  border-radius: 8px;
+  color: white;
+  font-weight: 500;
+  text-decoration: none;
+  font-size: 0.9rem;
+  transition: all 0.2s ease;
+  opacity: 0.9;
+  transform: translateY(2px);
+
+  &:hover {
+    background: linear-gradient(to right, rgba(34, 255, 237, 0.3), rgba(87, 31, 255, 0.3));
+    transform: translateY(0px);
+  }
+}
+
+// Remove the old viewAllContainer since we don't need it anymore
+.viewAllContainer {
+  display: none;
+}
+
+// For mobile responsiveness
+@media (max-width: 640px) {
+  .headerContainer {
+    flex-direction: column;
+    align-items: flex-start;
   }
 }
 

@@ -24,7 +24,7 @@ export async function GET(request: NextRequest) {
     // For scheduled posts that have reached their time, update them to published
     const updatedBlogs = blogs.map(blog => {
       if (blog.scheduledPublish && new Date(blog.scheduledPublish) <= new Date() && blog.publishStatus === 'private') {
-        // Update this blog to published status
+        // Update this blogs to published status
         collection.updateOne(
             { id: blog.id },
             { $set: { publishStatus: 'published' } }
@@ -46,7 +46,7 @@ export async function GET(request: NextRequest) {
   }
 }
 
-// Create a new blog post
+// Create a new blogs post
 export async function POST(request: NextRequest) {
   const client = new MongoClient(process.env.MONGODB_URI as string);
 
@@ -96,8 +96,8 @@ export async function POST(request: NextRequest) {
       blog: { ...newBlog, _id: result.insertedId }
     });
   } catch (error) {
-    console.error('Error creating blog:', error);
-    return NextResponse.json({ success: false, error: 'Failed to create blog post' }, { status: 500 });
+    console.error('Error creating blogs:', error);
+    return NextResponse.json({ success: false, error: 'Failed to create blogs post' }, { status: 500 });
   } finally {
     await client.close();
   }

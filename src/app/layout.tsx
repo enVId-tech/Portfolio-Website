@@ -1,15 +1,10 @@
-import React from 'react';
+"use client";
+import React, { useState, useEffect } from 'react';
+import { usePathname, useSearchParams } from 'next/navigation';
 import '@/styles/globals.scss';
+import { M_600 } from "@/utils/globalFonts.ts";
+import Loading from '@/app/_components/loading';
 import {AuthProvider} from "@/context/AuthContext.tsx";
-import {M_600} from "@/utils/globalFonts.ts";
-
-/**
- * Metadata for the webpage.
- */
-export const metadata = {
-    title: 'enVId Tech - Home Page',
-    description: 'enVId Tech - Personal Webpage',
-}
 
 /**
  * RootLayout component that serves as the root layout for the application.
@@ -22,20 +17,37 @@ export default function RootLayout({
                                    }: {
     children: React.ReactNode
 }) {
+    const [isLoading, setIsLoading] = useState(false);
+    const pathname = usePathname();
+    const searchParams = useSearchParams();
+
+    useEffect(() => {
+        // Show loading state at the start of navigation
+        setIsLoading(true);
+
+        // Small delay to ensure the loading screen appears
+        // even for very fast page transitions
+        const handleRouteChangeComplete = () => {
+            const timer = setTimeout(() => {
+                setIsLoading(false);
+            }, 100);
+
+            return () => clearTimeout(timer);
+        };
+
+        // Execute once when the route changes
+        handleRouteChangeComplete();
+    }, [pathname, searchParams]);
+
     return (
         <html lang="en">
-        <head>
-            <meta charSet="utf-8" />
-            <meta name="viewport" content="width=device-width, initial-scale=1" />
-            <meta name="description" content={metadata.description} />
-            <link rel="icon" href="/favicon/favicon.ico" />
-            <title>{metadata.title}</title>
-        </head>
-            <body className={M_600}>
-                <AuthProvider>
-                    {children}
-                </AuthProvider>
-            </body>
+        <body className={M_600}>
+        <Loading isLoading={isLoading}>
+            <AuthProvider>
+                {children}
+            </AuthProvider>
+        </Loading>
+        </body>
         </html>
-    )
+    );
 }

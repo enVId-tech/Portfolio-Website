@@ -49,7 +49,7 @@ export default function BlogPost() {
                         setPost({
                             id: slug,
                             title: 'Blog Post Not Found',
-                            content: '<p>The requested blog post could not be found.</p>',
+                            content: '<p>The requested blogs post could not be found.</p>',
                             date: new Date().toISOString(),
                             author: 'System',
                             tags: ['Error'],
@@ -57,11 +57,11 @@ export default function BlogPost() {
                         });
                     }
                 } catch (error) {
-                    console.error('Error fetching blog post:', error);
+                    console.error('Error fetching blogs post:', error);
                     setPost({
                         id: slug,
                         title: 'Blog Post Not Found',
-                        content: '<p>The requested blog post could not be found.</p>',
+                        content: '<p>The requested blogs post could not be found.</p>',
                         date: new Date().toISOString(),
                         author: 'System',
                         tags: ['Error'],
@@ -112,7 +112,7 @@ export default function BlogPost() {
             const data = await response.json();
 
             if (data.success) {
-                router.push('/blog');
+                router.push('/blogs');
             } else {
                 setDeleteStatus('error');
                 console.error('Error deleting post:', data.error);
@@ -243,7 +243,7 @@ export default function BlogPost() {
             friction: 0.8,
         }}>
             <main className={styles.blogPostContainer}>
-                <Link href="/blog" className={`${styles.backButton} ${M_600}`}>
+                <Link href="/blogs" className={`${styles.backButton} ${M_600}`}>
                     &larr; Back to Blog
                 </Link>
 

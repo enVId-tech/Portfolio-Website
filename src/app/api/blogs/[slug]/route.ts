@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { MongoClient, ObjectId } from 'mongodb';
 
-// Type to represent blog data
+// Type to represent blogs data
 interface BlogData {
   id?: string;
   title?: string;
@@ -18,7 +18,7 @@ async function getCollection(collectionName: string) {
   return { collection: db.collection(collectionName), client };
 }
 
-// Get a specific blog by slug
+// Get a specific blogs by slug
 export async function GET(
     req: NextRequest,
     { params }: { params: Promise<{ slug: string }> }
@@ -41,9 +41,9 @@ export async function GET(
 
     return NextResponse.json({ success: true, blog });
   } catch (error) {
-    console.error('Error fetching blog:', error);
+    console.error('Error fetching blogs:', error);
     return NextResponse.json(
-        { success: false, error: 'Failed to fetch blog' },
+        { success: false, error: 'Failed to fetch blogs' },
         { status: 500 }
     );
   } finally {
@@ -51,7 +51,7 @@ export async function GET(
   }
 }
 
-// Update a specific blog by slug
+// Update a specific blogs by slug
 export async function PUT(
     req: NextRequest,
     { params }: { params: Promise<{ slug: string }> }
@@ -91,9 +91,9 @@ export async function PUT(
       updated: result.modifiedCount > 0
     });
   } catch (error) {
-    console.error('Error updating blog:', error);
+    console.error('Error updating blogs:', error);
     return NextResponse.json(
-        { success: false, error: 'Failed to update blog' },
+        { success: false, error: 'Failed to update blogs' },
         { status: 500 }
     );
   } finally {
@@ -101,7 +101,7 @@ export async function PUT(
   }
 }
 
-// Delete a specific blog by slug
+// Delete a specific blogs by slug
 export async function DELETE(
     req: NextRequest,
     { params }: { params: Promise<{ slug: string }> }
@@ -125,9 +125,9 @@ export async function DELETE(
 
     return NextResponse.json({ success: true });
   } catch (error) {
-    console.error('Error deleting blog:', error);
+    console.error('Error deleting blogs:', error);
     return NextResponse.json(
-        { success: false, error: 'Failed to delete blog' },
+        { success: false, error: 'Failed to delete blogs' },
         { status: 500 }
     );
   } finally {

@@ -1,18 +1,80 @@
 'use client';
-import React, { useState } from 'react';
-import styles from '@/styles/blogs.module.scss';
+import React, {useState, useEffect} from 'react';
+import styles from '@/styles/blogsComponent.module.scss';
 import Link from 'next/link';
-import { IoArrowForward, IoCalendarOutline, IoTimeOutline } from 'react-icons/io5';
+import {IoArrowForward, IoCalendarOutline, IoTimeOutline} from 'react-icons/io5';
 import Image from 'next/image';
 import {M_400, M_600} from "@/utils/globalFonts";
-import { BlogInterface } from "@/models/Blog";
+import {BlogInterface} from "@/models/Blog";
 
 interface BlogsProps {
-  blogPosts?: BlogInterface[];
+  initialBlogs?: BlogInterface[],
+  autoRefresh?: boolean
 }
 
-export default function Blogs({ blogPosts = [] }: BlogsProps) {
+export default function BlogsComponent({initialBlogs = [], autoRefresh = true}: BlogsProps) {
+  const [blogPosts, setBlogPosts] = useState<BlogInterface[]>(initialBlogs);
   const [activeTag, setActiveTag] = useState<string>('all');
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+
+  // Fetch blogs from API
+  const fetchBlogs = async () => {
+    try {
+      setIsLoading(true);
+      const response = await fetch('/api/blogs', {
+        headers: {'Cache-Control': 'no-cache'}
+      });
+      const data = await response.json();
+
+      // Set the most recent 4 blog posts
+        if (data.success) {
+            setBlogPosts(data.blogs.slice(0, 4));
+        }
+    } catch (error) {
+      console.error('Failed to fetch blogs:', error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  // Initial fetch and periodic refresh
+  useEffect(() => {
+    // Only fetch if autoRefresh is enabled or initialBlogs is empty
+    if (autoRefresh || initialBlogs.length === 0) {
+      fetchBlogs().then(r => r);
+    }
+
+    // Set up periodic refresh
+    if (autoRefresh) {
+      const interval = setInterval(() => {
+        fetchBlogs().then(r => r);
+      }, 30000); // Refresh every 30 seconds
+
+      return () => clearInterval(interval);
+    }
+  }, [autoRefresh, initialBlogs.length]);
+
+  // Check for scheduled posts that might have been published
+  useEffect(() => {
+    const checkScheduledPosts = async () => {
+      try {
+        const response = await fetch('/api/cron/publish-scheduled');
+        const data = await response.json();
+
+        if (data.success && data.updatedCount > 0) {
+          console.log(`${data.updatedCount} scheduled posts published, refreshing blogs`);
+          fetchBlogs();
+        }
+      } catch (error) {
+        console.error('Failed to check scheduled posts:', error);
+      }
+    };
+
+    if (autoRefresh) {
+      const interval = setInterval(checkScheduledPosts, 15000);
+      return () => clearInterval(interval);
+    }
+  }, [autoRefresh]);
 
   // Extract all unique tags from provided blogs
   const allTags = ['all', ...new Set(blogPosts.flatMap(blog => blog.tags || []))];
@@ -33,8 +95,13 @@ export default function Blogs({ blogPosts = [] }: BlogsProps) {
   };
 
   return (
-      <section className={styles.container} id={"blogs"}>
-        <h2 className={`${styles.blogsTitle} ${M_600}`}>Latest Blogs</h2>
+      <section className={styles.container} id="blogs">
+        <div className={styles.headerContainer}>
+          <h2 className={`${styles.blogsTitle} ${M_600}`}>Latest Blogs</h2>
+          <Link href="/blogs" className={styles.viewAllButton}>
+            View All Blogs
+          </Link>
+        </div>
 
         {/* Filter tags */}
         {blogPosts.length > 0 && (
@@ -51,12 +118,16 @@ export default function Blogs({ blogPosts = [] }: BlogsProps) {
             </div>
         )}
 
-        {blogPosts.length > 0 ? (
+        {isLoading && blogPosts.length === 0 ? (
+            <div className={styles.loadingState}>
+              <p>Loading latest blogs...</p>
+            </div>
+        ) : blogPosts.length > 0 ? (
             <div className={styles.blogsGrid}>
               {filteredBlogs.length > 0 ? (
                   filteredBlogs.map(blog => (
                       <article key={blog.id} className={styles.blogCard}>
-                        <Link href={`/blog/${blog.id}`} className={styles.blogLink}>
+                        <Link href={`/blogs/${blog.id}`} className={styles.blogLink}>
                           <div className={styles.blogImageContainer}>
                             {blog.coverImage && (
                                 <Image
@@ -73,12 +144,12 @@ export default function Blogs({ blogPosts = [] }: BlogsProps) {
                           <div className={styles.blogContent}>
                             <div className={styles.blogMeta}>
                       <span className={`${styles.blogDate} ${M_400}`}>
-                        <IoCalendarOutline />
+                        <IoCalendarOutline/>
                         {formatDate(blog.date)}
                       </span>
                               <span className={`${styles.blogReadTime} ${M_400}`}>
-                        <IoTimeOutline />
-                                {blog.date ? '5 min' : ''}
+                        <IoTimeOutline/>
+                                {blog.readTime || '5 min'}
                       </span>
                             </div>
 
@@ -94,7 +165,7 @@ export default function Blogs({ blogPosts = [] }: BlogsProps) {
                             </div>
 
                             <div className={`${styles.readMore} ${M_400}`}>
-                              Read More <IoArrowForward />
+                              Read More <IoArrowForward/>
                             </div>
                           </div>
                         </Link>

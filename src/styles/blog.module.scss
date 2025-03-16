@@ -1,4 +1,4 @@
-// styles/blog.module.scss
+// styles/blogsComponent.module.scss
 .blogContainer {
   width: 100%;
   padding: 2rem 0;
@@ -292,6 +292,43 @@
   background: rgba(30, 30, 30, 0.7);
   border-radius: 8px;
   color: #ddd;
+}
+
+.topNavigation {
+  display: flex;
+  margin-bottom: 1rem;
+  position: relative;
+  z-index: 10;
+}
+
+.bottomNavigation {
+  display: flex;
+  margin-top: 2rem;
+  padding-bottom: 2rem;
+}
+
+.homeButton {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  background-color: var(--primary-color);
+  color: white;
+  border: none;
+  border-radius: 4px;
+  padding: 0.5rem 1rem;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+
+  &:hover {
+    background-color: var(--primary-color-dark);
+  }
+
+  &:focus {
+    outline: 2px solid var(--accent-color);
+    outline-offset: 2px;
+  }
 }
 
 @media (max-width: 768px) {

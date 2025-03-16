@@ -1,6 +1,5 @@
 "use server"
 import React from "react";
-import { MongoClient } from 'mongodb';
 import DotBackground from "@/app/_components/dotbackground";
 import Header from "@/app/_components/header";
 import About from "@/app/_components/about";
@@ -10,8 +9,7 @@ import Technology from "@/app/_components/technology";
 import Footer from "@/app/_components/footer";
 import ScrollToTop from "@/app/_components/scrollToTop";
 import SectionSelector from "@/app/_components/sectionSelector";
-import Blogs from "@/app/_components/blogs";
-import { BlogInterface } from "@/models/Blog";
+import BlogsComponent from "@/app/_components/blogsComponent.tsx";
 
 export default async function HomePage(): Promise<React.ReactElement> {
     const sections = [
@@ -22,9 +20,6 @@ export default async function HomePage(): Promise<React.ReactElement> {
         { id: "blogs", label: "Blogs" },
         { id: "technology", label: "Skills" }
     ];
-
-    // Fetch 4 most recent blogs
-    const recentBlogs = await getRecentBlogs(4);
 
     return (
         <>
@@ -41,45 +36,11 @@ export default async function HomePage(): Promise<React.ReactElement> {
                 <About />
                 <Timeline/>
                 <Projects/>
-                <Blogs blogPosts={recentBlogs}/>
+                <BlogsComponent/>
                 <Technology/>
                 <Footer/>
                 <ScrollToTop/>
             </DotBackground>
         </>
     )
-}
-
-async function getRecentBlogs(limit: number): Promise<BlogInterface[]> {
-    try {
-        const MONGODB_URI = process.env.MONGODB_URI || 'mongodb://localhost:27017';
-        const DB_NAME = process.env.CLIENT_DB || 'blog';
-
-        const client = await MongoClient.connect(MONGODB_URI);
-        const db = client.db(DB_NAME);
-        const blogsCollection = db.collection('blogs');
-
-        // Find published blogs, sorted by date (newest first)
-        const blogs = await blogsCollection.find({
-            publishStatus: 'published',
-            $or: [
-                { scheduledPublish: { $exists: false } },
-                { scheduledPublish: null },
-                { scheduledPublish: { $lte: new Date().toISOString() } }
-            ]
-        })
-            .sort({ date: -1 })
-            .limit(limit)
-            .toArray();
-
-        await client.close();
-
-        return blogs.map(blog => ({
-            ...blog,
-            _id: blog._id.toString(),
-        })) as BlogInterface[];
-    } catch (error) {
-        console.error("Error fetching recent blogs:", error);
-        return [];
-    }
 }
