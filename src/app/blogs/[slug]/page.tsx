@@ -276,7 +276,7 @@ export default function BlogPost() {
                             </header>
 
                             <div
-                                className={styles.content}
+                                className={`${styles.content} ${M_400}`}
                                 dangerouslySetInnerHTML={{ __html: post.content || '' }}
                             />
                         </article>

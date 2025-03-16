@@ -133,7 +133,7 @@ export default function Blog() {
                 {/* Top navigation button */}
                 <div className={styles.topNavigation}>
                     <button
-                        className={styles.homeButton}
+                        className={`${styles.homeButton} ${M_600}`}
                         onClick={navigateToHome}
                         aria-label="Return to home page"
                     >
@@ -271,7 +271,7 @@ export default function Blog() {
                                             <span key={tag} className={styles.tag}>{tag}</span>
                                         ))}
                                     </div>
-                                    <Link href={`/blog/${post.id}`} className={styles.readMore}>
+                                    <Link href={`/blog/${post.id}`} className={`${styles.readMore} ${M_600}`}>
                                         Read More →
                                     </Link>
                                 </div>
@@ -287,7 +287,7 @@ export default function Blog() {
                 {/* Bottom navigation button */}
                 <div className={styles.bottomNavigation}>
                     <button
-                        className={styles.homeButton}
+                        className={`${styles.homeButton} ${M_600}`}
                         onClick={navigateToHome}
                         aria-label="Return to home page"
                     >

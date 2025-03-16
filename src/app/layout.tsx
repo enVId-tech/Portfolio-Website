@@ -1,6 +1,6 @@
 "use client";
-import React, { useState, useEffect } from 'react';
-import { usePathname, useSearchParams } from 'next/navigation';
+import React, { useState, useEffect, Suspense } from 'react';
+import { usePathname } from 'next/navigation';
 import '@/styles/globals.scss';
 import { M_600 } from "@/utils/globalFonts.ts";
 import Loading from '@/app/_components/loading';
@@ -17,37 +17,41 @@ export default function RootLayout({
                                    }: {
     children: React.ReactNode
 }) {
-    const [isLoading, setIsLoading] = useState(false);
-    const pathname = usePathname();
-    const searchParams = useSearchParams();
-
-    useEffect(() => {
-        // Show loading state at the start of navigation
-        setIsLoading(true);
-
-        // Small delay to ensure the loading screen appears
-        // even for very fast page transitions
-        const handleRouteChangeComplete = () => {
-            const timer = setTimeout(() => {
-                setIsLoading(false);
-            }, 100);
-
-            return () => clearTimeout(timer);
-        };
-
-        // Execute once when the route changes
-        handleRouteChangeComplete();
-    }, [pathname, searchParams]);
-
     return (
         <html lang="en">
         <body className={M_600}>
-        <Loading isLoading={isLoading}>
-            <AuthProvider>
-                {children}
-            </AuthProvider>
-        </Loading>
+        <Suspense fallback={<div>Loading...</div>}>
+            <PageTransitions>
+                <AuthProvider>
+                    {children}
+                </AuthProvider>
+            </PageTransitions>
+        </Suspense>
         </body>
         </html>
+    );
+}
+
+// This component handles page transitions
+function PageTransitions({ children }: { children: React.ReactNode }) {
+    const [isLoading, setIsLoading] = useState(false);
+    const pathname = usePathname();
+
+    useEffect(() => {
+        // Show loading state when navigation starts
+        setIsLoading(true);
+
+        // Hide loading state shortly after navigation completes
+        const timer = setTimeout(() => {
+            setIsLoading(false);
+        }, 300);
+
+        return () => clearTimeout(timer);
+    }, [pathname]);
+
+    return (
+        <Loading isLoading={isLoading}>
+            {children}
+        </Loading>
     );
 }
