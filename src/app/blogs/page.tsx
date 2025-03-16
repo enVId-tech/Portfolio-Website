@@ -19,32 +19,33 @@ export default function Blog() {
     const [loginError, setLoginError] = useState('');
     const [blogPosts, setBlogPosts] = useState<BlogInterface[]>([]);
 
-    useEffect(() => {
-        const fetchBlogs = async () => {
-            try {
-                let url = filteredTag
-                    ? `/api/blogs?tag=${encodeURIComponent(filteredTag)}`
-                    : '/api/blogs';
+    const fetchBlogs = async () => {
+        try {
+            let url = filteredTag
+                ? `/api/blogs?tag=${encodeURIComponent(filteredTag)}`
+                : '/api/blogs';
 
-                if (isAdmin()) {
-                    url += `${url.includes('?') ? '&' : '?'}includePrivate=true`;
-                }
-
-                const response = await fetch(url, {
-                    // Add cache busting to ensure fresh data
-                    headers: { 'Cache-Control': 'no-cache' }
-                });
-                const data = await response.json();
-
-                if (data.success) {
-                    setBlogPosts(data.blogs);
-                }
-            } catch (error) {
-                console.error('Failed to fetch blogs:', error);
+            if (isAdmin()) {
+                url += `${url.includes('?') ? '&' : '?'}includePrivate=true`;
             }
-        };
 
-        fetchBlogs();
+            const response = await fetch(url, {
+                // Add cache busting to ensure fresh data
+                headers: { 'Cache-Control': 'no-cache' }
+            });
+            const data = await response.json();
+
+            if (data.success) {
+                setBlogPosts(data.blogs);
+            }
+        } catch (error) {
+            console.error('Failed to fetch blogs:', error);
+        }
+    };
+
+
+    useEffect(() => {
+        fetchBlogs().then(r => r);
     }, [filteredTag, isAdmin]);
 
     useEffect(() => {
@@ -56,33 +57,10 @@ export default function Blog() {
                 // If posts were published, refresh the blog list
                 if (data.success && data.updatedCount > 0) {
                     console.log(`${data.updatedCount} posts were published, refreshing blog list`);
-                    fetchBlogs();
+                    await fetchBlogs();
                 }
             } catch (error) {
                 console.error('Failed to check scheduled posts:', error);
-            }
-        };
-
-        const fetchBlogs = async () => {
-            try {
-                let url = filteredTag
-                    ? `/api/blogs?tag=${encodeURIComponent(filteredTag)}`
-                    : '/api/blogs';
-
-                if (isAdmin()) {
-                    url += `${url.includes('?') ? '&' : '?'}includePrivate=true`;
-                }
-
-                const response = await fetch(url, {
-                    headers: { 'Cache-Control': 'no-cache' }
-                });
-                const data = await response.json();
-
-                if (data.success) {
-                    setBlogPosts(data.blogs);
-                }
-            } catch (error) {
-                console.error('Failed to fetch blogs:', error);
             }
         };
 
@@ -171,7 +149,7 @@ export default function Blog() {
                                 {isAdmin() && (
                                     <button
                                         className={styles.newPostButton}
-                                        onClick={() => router.push('/blog/new')}
+                                        onClick={() => router.push('/blogs/new')}
                                     >
                                         <span className={styles.plusIcon}>+</span> New Post
                                     </button>
@@ -237,7 +215,7 @@ export default function Blog() {
                 {filteredPosts.length > 0 ? (
                     <section className={styles.blogGrid}>
                         {filteredPosts.map(post => (
-                            <article key={post.id} className={styles.blogCard}>
+                            <article key={post.id} className={styles.blogCard} onClick={() => {window.location.href = `/blogs/${post.id}`}}>
                                 {post.coverImage && (
                                     <div className={styles.imageContainer}>
                                         <img src={post.coverImage} alt={post.title} />
@@ -271,7 +249,7 @@ export default function Blog() {
                                             <span key={tag} className={styles.tag}>{tag}</span>
                                         ))}
                                     </div>
-                                    <Link href={`/blog/${post.id}`} className={`${styles.readMore} ${M_600}`}>
+                                    <Link href={`/blogs/${post.id}`} className={`${styles.readMore} ${M_600}`}>
                                         Read More →
                                     </Link>
                                 </div>

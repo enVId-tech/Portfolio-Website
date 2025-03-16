@@ -6,75 +6,38 @@ import {IoArrowForward, IoCalendarOutline, IoTimeOutline} from 'react-icons/io5'
 import Image from 'next/image';
 import {M_400, M_600} from "@/utils/globalFonts";
 import {BlogInterface} from "@/models/Blog";
+import useSWR from 'swr';
+import { useRouter } from 'next/navigation';
 
 interface BlogsProps {
   initialBlogs?: BlogInterface[],
   autoRefresh?: boolean
 }
 
-export default function BlogsComponent({initialBlogs = [], autoRefresh = true}: BlogsProps) {
-  const [blogPosts, setBlogPosts] = useState<BlogInterface[]>(initialBlogs);
-  const [activeTag, setActiveTag] = useState<string>('all');
-  const [isLoading, setIsLoading] = useState<boolean>(false);
-
-  // Fetch blogs from API
-  const fetchBlogs = async () => {
-    try {
-      setIsLoading(true);
-      const response = await fetch('/api/blogs', {
-        headers: {'Cache-Control': 'no-cache'}
-      });
-      const data = await response.json();
-
-      // Set the most recent 4 blog posts
-        if (data.success) {
-            setBlogPosts(data.blogs.slice(0, 4));
-        }
-    } catch (error) {
-      console.error('Failed to fetch blogs:', error);
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
-  // Initial fetch and periodic refresh
-  useEffect(() => {
-    // Only fetch if autoRefresh is enabled or initialBlogs is empty
-    if (autoRefresh || initialBlogs.length === 0) {
-      fetchBlogs().then(r => r);
-    }
-
-    // Set up periodic refresh
-    if (autoRefresh) {
-      const interval = setInterval(() => {
-        fetchBlogs().then(r => r);
-      }, 30000); // Refresh every 30 seconds
-
-      return () => clearInterval(interval);
-    }
-  }, [autoRefresh, initialBlogs.length]);
-
-  // Check for scheduled posts that might have been published
-  useEffect(() => {
-    const checkScheduledPosts = async () => {
-      try {
-        const response = await fetch('/api/cron/publish-scheduled');
-        const data = await response.json();
-
-        if (data.success && data.updatedCount > 0) {
-          console.log(`${data.updatedCount} scheduled posts published, refreshing blogs`);
-          fetchBlogs();
-        }
-      } catch (error) {
-        console.error('Failed to check scheduled posts:', error);
+export default function BlogsComponent({initialBlogs = []}: BlogsProps) {
+  const { data, error } = useSWR(
+      '/api/blogs',
+      url => fetch(url, { headers: {'Cache-Control': 'no-cache'} })
+          .then(res => res.json())
+          .then(data => data.success ? data.blogs.slice(0, 4) : []),
+      {
+        fallbackData: initialBlogs,
+        refreshInterval: 30000,
+        revalidateOnFocus: true
       }
-    };
+  );
 
-    if (autoRefresh) {
-      const interval = setInterval(checkScheduledPosts, 15000);
-      return () => clearInterval(interval);
+  const [blogPosts, setBlogPosts] = useState<BlogInterface[]>(data || initialBlogs);
+  const [activeTag, setActiveTag] = useState<string>('all');
+  const router = useRouter();
+
+  useEffect(() => {
+    if (error) {
+      console.error('Failed to fetch blogs:', error);
+    } else {
+      setBlogPosts(data || initialBlogs);
     }
-  }, [autoRefresh]);
+  }, [data, error, initialBlogs]);
 
   // Extract all unique tags from provided blogs
   const allTags = ['all', ...new Set(blogPosts.flatMap(blog => blog.tags || []))];
@@ -118,7 +81,7 @@ export default function BlogsComponent({initialBlogs = [], autoRefresh = true}: 
             </div>
         )}
 
-        {isLoading && blogPosts.length === 0 ? (
+        {blogPosts.length === 0 ? (
             <div className={styles.loadingState}>
               <p>Loading latest blogs...</p>
             </div>
@@ -126,7 +89,7 @@ export default function BlogsComponent({initialBlogs = [], autoRefresh = true}: 
             <div className={styles.blogsGrid}>
               {filteredBlogs.length > 0 ? (
                   filteredBlogs.map(blog => (
-                      <article key={blog.id} className={styles.blogCard}>
+                      <article key={blog.id} className={styles.blogCard} onClick={() => router.push(`/blogs/${blog.id}`)}>
                         <Link href={`/blogs/${blog.id}`} className={styles.blogLink}>
                           <div className={styles.blogImageContainer}>
                             {blog.coverImage && (
