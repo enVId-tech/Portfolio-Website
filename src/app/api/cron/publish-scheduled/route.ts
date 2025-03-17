@@ -1,13 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { MongoClient } from 'mongodb';
 
-// Handle environment variables first
-import dotenv from 'dotenv';
-import path from 'path';
-
-// Load environment variables from stack.env
-dotenv.config({ path: path.resolve(process.cwd(), 'stack.env') });
-
 export const dynamic = 'force-dynamic'; // No caching for cron endpoints
 
 export async function GET(request: NextRequest) {

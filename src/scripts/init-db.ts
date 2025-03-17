@@ -1,17 +1,4 @@
 import { initializeDatabase } from '@/utils/dbInit.ts';
-import dotenv from 'dotenv';
-import path from 'path';
-import fs from 'fs';
-
-// Load environment variables with better error handling
-const stackEnvPath = path.resolve(process.cwd(), 'stack.env');
-if (fs.existsSync(stackEnvPath)) {
-  console.log(`Loading environment from: ${stackEnvPath}`);
-  dotenv.config({ path: stackEnvPath });
-} else {
-  console.log('stack.env not found, using default environment variables');
-  dotenv.config();
-}
 
 async function main() {
   console.log('Initializing database...');

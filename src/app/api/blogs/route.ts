@@ -1,30 +1,27 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { MongoClient } from 'mongodb';
+import {connectToDatabase} from "@/utils/db.ts";
 
 // Get all blogs or filtered by tag
 export async function GET(request: NextRequest) {
   const url = new URL(request.url);
   const tagFilter = url.searchParams.get('tag');
-  const client = new MongoClient(process.env.MONGODB_URI as string);
 
   try {
-    await client.connect();
-    const db = client.db(process.env.CLIENT_DB);
+    const { db } = await connectToDatabase();
     const collection = db.collection('blogs');
 
     const query: Record<string, unknown> = {};
 
-    // Filter by tag if provided
     if (tagFilter) {
       query.tags = tagFilter;
     }
 
     const blogs = await collection.find(query).sort({ date: -1 }).toArray();
 
-    // For scheduled posts that have reached their time, update them to published
+    // Process scheduled posts
     const updatedBlogs = blogs.map(blog => {
       if (blog.scheduledPublish && new Date(blog.scheduledPublish) <= new Date() && blog.publishStatus === 'private') {
-        // Update this blogs to published status
         collection.updateOne(
             { id: blog.id },
             { $set: { publishStatus: 'published' } }
@@ -41,8 +38,6 @@ export async function GET(request: NextRequest) {
         { success: false, error: 'Failed to fetch blogs' },
         { status: 500 }
     );
-  } finally {
-    await client.close();
   }
 }
 

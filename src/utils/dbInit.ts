@@ -1,13 +1,10 @@
-import { MongoClient } from 'mongodb';
 import bcrypt from 'bcryptjs';
-
-const MONGODB_URI = process.env.MONGODB_URI || 'mongodb://localhost:27017';
-const DB_NAME = process.env.CLIENT_DB || 'blog';
+import {connectToDatabase} from "@/utils/db.ts";
 
 export async function initializeDatabase() {
     try {
-        const client = await MongoClient.connect(MONGODB_URI);
-        const db = client.db(DB_NAME);
+        // Connect to the database
+        const { client, db } = await connectToDatabase();
 
         // Check if users collection exists and has any users
         const usersCollection = db.collection('users');
