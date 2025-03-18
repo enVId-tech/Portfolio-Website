@@ -4,8 +4,20 @@ import styles from '@/styles/technology.module.scss';
 import { M_400, M_600 } from "@/utils/globalFonts";
 
 // Import tech icons
-import { FaReact, FaGitAlt, FaDocker } from 'react-icons/fa';
-import { SiTypescript, SiNextdotjs } from 'react-icons/si';
+import {FaReact, FaGitAlt, FaDocker, FaGithub} from 'react-icons/fa';
+import {
+    SiTypescript,
+    SiNextdotjs,
+    SiExpress,
+    SiTruenas,
+    SiElectron,
+    SiVsco,
+    SiWebstorm,
+    SiJavascript, SiCss3, SiHtml5
+} from 'react-icons/si';
+import {FaNodeJs} from "react-icons/fa6";
+import {BsFiletypeScss} from "react-icons/bs";
+import {VscVscode} from "react-icons/vsc";
 
 /**
  * Interface representing a technology.
@@ -52,6 +64,13 @@ export default function Technology({ children }: TechnologyProps): React.ReactEl
             usage: 90
         },
         {
+            name: "JavaScript",
+            icon: <SiJavascript size={42} color="#F7DF1E" />,
+            proficiency: 5,
+            proficiencyLabel: "Expert",
+            usage: 20
+        },
+        {
             name: "Next.js",
             icon: <SiNextdotjs size={42} color="#ffffff" />,
             proficiency: 4,
@@ -71,6 +90,76 @@ export default function Technology({ children }: TechnologyProps): React.ReactEl
             proficiency: 3,
             proficiencyLabel: "Intermediate",
             usage: 50
+        },
+        {
+            name: "TrueNAS SCALE",
+            icon: <SiTruenas size={42} color="#3178C6" />,
+            proficiency: 4,
+            proficiencyLabel: "Advanced",
+            usage: 60
+        },
+        {
+            name: "Node.js",
+            icon: <FaNodeJs size={42} color="#3C873A" />,
+            proficiency: 4,
+            proficiencyLabel: "Advanced",
+            usage: 90
+        },
+        {
+            name: "Express.js",
+            icon: <SiExpress size={42} color="#FFFFFF" />,
+            proficiency: 4,
+            proficiencyLabel: "Advanced",
+            usage: 80
+        },
+        {
+            name: "SCSS",
+            icon: <BsFiletypeScss size={42} color="#bf4080" />,
+            proficiency: 4,
+            proficiencyLabel: "Advanced",
+            usage: 70
+        },
+        {
+            name: "Electron",
+            icon: <SiElectron size={42} color="#3178C6" />,
+            proficiency: 3,
+            proficiencyLabel: "Intermediate",
+            usage: 40
+        },
+        {
+            name: "GitHub",
+            icon: <FaGithub size={48} color="#FFFFFF" />,
+            proficiency: 5,
+            proficiencyLabel: "Expert",
+            usage: 95
+        },
+        {
+            name: "VS Code",
+            icon: <VscVscode size={42} color="#3178C6" />,
+            proficiency: 5,
+            proficiencyLabel: "Expert",
+            usage: 95
+        },
+        {
+            name: "Webstorm",
+            icon: <SiWebstorm size={42} color="#FFFFFF" />,
+            proficiency: 4,
+            proficiencyLabel: "Advanced",
+            usage: 80
+        },
+        {
+            name: "CSS",
+            icon: <SiCss3 size={42} color="#1572B6" />,
+            proficiency: 4,
+            proficiencyLabel: "Advanced",
+            usage: 70
+        },
+        {
+            name: "HTML",
+            icon: <SiHtml5 size={42} color="#E34F26" />,
+            proficiency: 4,
+            proficiencyLabel: "Advanced",
+            usage: 70
         }
     ];
 

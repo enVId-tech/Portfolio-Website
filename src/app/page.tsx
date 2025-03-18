@@ -16,9 +16,9 @@ export default async function HomePage(): Promise<React.ReactElement> {
         { id: "header", label: "Home" },
         { id: "about", label: "About" },
         { id: "timeline", label: "Timeline" },
-        { id: "projects", label: "Projects" },
         { id: "blogs", label: "Blogs" },
-        { id: "technology", label: "Skills" }
+        { id: "technology", label: "Skills" },
+        { id: "projects", label: "Projects" },
     ];
 
     return (
