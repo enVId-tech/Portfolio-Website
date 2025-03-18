@@ -11,11 +11,10 @@ import {
     SiExpress,
     SiTruenas,
     SiElectron,
-    SiVsco,
     SiWebstorm,
-    SiJavascript, SiCss3, SiHtml5
+    SiJavascript, SiCss3, SiHtml5, SiMongodb
 } from 'react-icons/si';
-import {FaNodeJs} from "react-icons/fa6";
+import {FaNodeJs, FaNpm} from "react-icons/fa6";
 import {BsFiletypeScss} from "react-icons/bs";
 import {VscVscode} from "react-icons/vsc";
 
@@ -85,20 +84,6 @@ export default function Technology({ children }: TechnologyProps): React.ReactEl
             usage: 95
         },
         {
-            name: "Docker",
-            icon: <FaDocker size={48} color="#2496ED" />,
-            proficiency: 3,
-            proficiencyLabel: "Intermediate",
-            usage: 50
-        },
-        {
-            name: "TrueNAS SCALE",
-            icon: <SiTruenas size={42} color="#3178C6" />,
-            proficiency: 4,
-            proficiencyLabel: "Advanced",
-            usage: 60
-        },
-        {
             name: "Node.js",
             icon: <FaNodeJs size={42} color="#3C873A" />,
             proficiency: 4,
@@ -160,7 +145,35 @@ export default function Technology({ children }: TechnologyProps): React.ReactEl
             proficiency: 4,
             proficiencyLabel: "Advanced",
             usage: 70
-        }
+        },
+        {
+            name: "MongoDB",
+            icon: <SiMongodb size={42} color="#47A248" />,
+            proficiency: 3,
+            proficiencyLabel: "Intermediate",
+            usage: 50
+        },
+        {
+            name: "Node Package Manager",
+            icon: <FaNpm size={42} color="#CB3837" />,
+            proficiency: 4,
+            proficiencyLabel: "Advanced",
+            usage: 80
+        },
+        {
+            name: "Docker",
+            icon: <FaDocker size={48} color="#2496ED" />,
+            proficiency: 3,
+            proficiencyLabel: "Intermediate",
+            usage: 50
+        },
+        {
+            name: "TrueNAS SCALE",
+            icon: <SiTruenas size={42} color="#3178C6" />,
+            proficiency: 4,
+            proficiencyLabel: "Advanced",
+            usage: 60
+        },
     ];
 
     /**
