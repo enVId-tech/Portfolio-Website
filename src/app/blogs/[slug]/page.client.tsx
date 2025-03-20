@@ -276,7 +276,7 @@ export default function BlogPost({ slug: propSlug }: BlogPostProps) {
                                 <div className={styles.tags}>
                                     {post.tags.map(tag => (
                                         <span key={tag} className={styles.tag}>{tag}</span>
-                                    ))}
+                                        ))}
                                 </div>
                             </header>
 
@@ -495,7 +495,6 @@ export default function BlogPost({ slug: propSlug }: BlogPostProps) {
                         </div>
                     </div>
                     )}
-                )
             </main>
         </DotBackground>
     );

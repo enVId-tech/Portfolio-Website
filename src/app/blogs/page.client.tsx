@@ -42,11 +42,12 @@ export default function Blog() {
         }
     }, [filteredTag]);
 
+// Replace the useEffect in your Blog component
     useEffect(() => {
-        fetchBlogs().then(r => r);
-    }, [fetchBlogs]);
+        // Initial fetch
+        fetchBlogs();
 
-    useEffect(() => {
+        // Check for scheduled posts and refresh if needed
         const checkScheduledPosts = async () => {
             try {
                 const response = await fetch('/api/cron/publish-scheduled');
@@ -61,7 +62,13 @@ export default function Blog() {
             }
         };
 
-        const interval = setInterval(checkScheduledPosts, 10000);
+        // Set up a single interval that handles both checks
+        const interval = setInterval(() => {
+            fetchBlogs();
+            checkScheduledPosts();
+        }, 60000);
+
+        // Clean up
         return () => clearInterval(interval);
     }, [fetchBlogs]);
 
