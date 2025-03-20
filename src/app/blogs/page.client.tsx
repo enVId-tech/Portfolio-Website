@@ -40,7 +40,7 @@ export default function Blog() {
         } catch (error) {
             console.error('Failed to fetch blogs:', error);
         }
-    }, [filteredTag]);
+    }, [filteredTag, isAdmin]);
 
 // Replace the useEffect in your Blog component
     useEffect(() => {
