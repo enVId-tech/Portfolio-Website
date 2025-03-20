@@ -200,8 +200,6 @@ export default function Technology({ children }: TechnologyProps): React.ReactEl
                     icon: stringToReactElement(typeof tech.icon === "string" ? tech.icon : '')
                 }));
 
-                console.log(data.tech);
-
                 setTechData(data.tech);
             }
         } catch (err) {
