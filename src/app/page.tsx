@@ -35,7 +35,7 @@ export default async function HomePage(): Promise<React.ReactElement> {
                 <Header/>
                 <About />
                 <Timeline/>
-                <BlogsComponent/>
+                {/*<BlogsComponent/>*/}
                 <Technology/>
                 <Projects/>
                 <Footer/>
