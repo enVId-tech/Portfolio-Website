@@ -9,7 +9,7 @@ import Technology from "@/app/_components/technology";
 import Footer from "@/app/_components/footer";
 import ScrollToTop from "@/app/_components/scrollToTop";
 import SectionSelector from "@/app/_components/sectionSelector";
-import BlogsComponent from "@/app/_components/blogsComponent.tsx";
+// import BlogsComponent from "@/app/_components/blogsComponent.tsx";
 
 export default async function HomePage(): Promise<React.ReactElement> {
     const sections = [
