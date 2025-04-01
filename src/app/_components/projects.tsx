@@ -241,6 +241,7 @@ export default function Projects(): React.ReactElement {
 
     // Fetch GitHub repos with caching
     useEffect(() => {
+        // TODO: Put this strictly in MongoDB database
         const includedRepos: string[] = [
             "Portfolio-Website",
             "Nginx-404",
