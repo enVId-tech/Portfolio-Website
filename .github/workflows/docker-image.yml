@@ -20,7 +20,7 @@ jobs:
           password: ${{ secrets.DOCKER_HUB_TOKEN }}
 
       - name: Build the Docker image
-        run: docker build . --file Dockerfile --tag envidtech/oa-website:latest
+        run: docker build . --file Dockerfile --tag envidtech/portfolio-website:latest
 
       - name: Push to Docker Hub
-        run: docker push envidtech/oa-website:latest
+        run: docker push envidtech/portfolio-website:latest
