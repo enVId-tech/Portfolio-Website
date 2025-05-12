@@ -41,7 +41,7 @@ export async function PUT(req: NextRequest) {
     const collection = db.collection('githubRepos');
 
     // Prepare update data with both repository lists
-    const updateData: Record<string, any> = {};
+    const updateData: { includedRepos?: string[]; excludedRepos?: string[] } = {};
 
     if (Array.isArray(data.includedRepos)) {
       updateData.includedRepos = data.includedRepos;
