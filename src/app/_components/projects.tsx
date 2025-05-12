@@ -239,10 +239,12 @@ export default function Projects(): React.ReactElement {
         }
     }, []);
 
-    // Fetch GitHub repos with caching
-    useEffect(() => {
-        // TODO: Put this strictly in MongoDB database
-        const includedRepos: string[] = [
+    const fetchGithubRepos = useCallback(async () => {
+        setIsLoading(true);
+        setError(null);
+
+        // Default fallback github-repos list
+        let includedRepos: string[] = [
             "Portfolio-Website",
             "Nginx-404",
             "Terminal-Commands",
@@ -260,82 +262,111 @@ export default function Projects(): React.ReactElement {
             "OpenCV-Object-Detection",
             "Classroom-Website"
         ];
-        const excludedRepos = ["DockerTemplates", "enVId-tech"]
 
-        const fetchGithubRepos = async () => {
-            setIsLoading(true);
-            setError(null);
+        let excludedRepos: string[] = ["DockerTemplates", "enVId-tech"];
 
-            // Try to get from cache first
-            try {
-                const cachedData = localStorage.getItem(cacheKey);
-                if (cachedData) {
-                    const { data, timestamp } = JSON.parse(cachedData);
-                    // Use cache if less than 1 hour old
-                    if (Date.now() - timestamp < 3600000) {
-                        setGithubProjects(data);
-                        setIsLoading(false);
-                        return;
-                    }
+        // // Try to get from cache first
+        // try {
+        //     const cachedData = localStorage.getItem(cacheKey);
+        //     if (cachedData) {
+        //         const { data, timestamp, includedList, excludedList } = JSON.parse(cachedData);
+        //         // Use cache if less than 15 minutes old
+        //         if (Date.now() - timestamp < 900000) {
+        //             setGithubProjects(data);
+        //             includedRepos = includedList || includedRepos;
+        //             excludedRepos = excludedList || excludedRepos;
+        //             setIsLoading(false);
+        //             return;
+        //         }
+        //     }
+        // } catch (e) {
+        //     console.error("Cache retrieval error:", e);
+        // }
+
+
+        try {
+            // Fetch repo settings from MongoDB
+            const reposResponse = await fetch('/api/github-repos', {
+                headers: { 'Cache-Control': 'no-cache' }
+            });
+
+            if (!reposResponse.ok) {
+                throw new Error(`Failed to fetch repos list: ${reposResponse.status}`);
+            }
+
+            const reposData = await reposResponse.json();
+
+            if (reposData.success) {
+                // Use both lists from the API response
+                includedRepos = reposData.includedRepos || includedRepos;
+                excludedRepos = reposData.excludedRepos || excludedRepos;
+            }
+
+            // Fetch GitHub repositories
+            const response = await fetch('https://api.github.com/users/enVId-tech/repos?sort=updated&direction=desc');
+
+            if (!response.ok) {
+                throw new Error(`Failed to fetch: ${response.status}`);
+            }
+
+            const repos = await response.json();
+
+            // Filter repositories based on mode using the dynamic lists
+            const filteredRepos = filterMode === 'include'
+                ? repos.filter((repo: GitHubRepo) => includedRepos.includes(repo.name))
+                : repos.filter((repo: GitHubRepo) => !excludedRepos.includes(repo.name));
+
+            // Process in batches
+            const batchSize = 3;
+            const processedProjects = [];
+
+            for (let i = 0; i < filteredRepos.length; i += batchSize) {
+                const batch = filteredRepos.slice(i, i + batchSize);
+                const batchResults = await Promise.all(batch.map(processRepo));
+                processedProjects.push(...batchResults);
+
+                // Update state incrementally
+                if (i === 0) {
+                    setGithubProjects(batchResults);
+                } else {
+                    setGithubProjects(prev => [...prev, ...batchResults]);
                 }
+            }
+
+            // Cache the final result with both repo lists
+            try {
+                localStorage.setItem(
+                    cacheKey,
+                    JSON.stringify({
+                        data: processedProjects,
+                        timestamp: Date.now(),
+                        includedList: includedRepos,
+                        excludedList: excludedRepos
+                    })
+                );
             } catch (e) {
-                console.error("Cache retrieval error:", e);
+                console.error("Cache storage error:", e);
             }
 
-            try {
-                const response = await fetch('https://api.github.com/users/enVId-tech/repos?sort=updated&direction=desc');
-
-                if (!response.ok) {
-                    throw new Error(`Failed to fetch: ${response.status}`);
-                }
-
-                const repos: GitHubRepo[] = await response.json();
-
-                // Filter repositories based on mode
-                const filteredRepos = filterMode === 'include'
-                    ? repos.filter(repo => includedRepos.includes(repo.name))
-                    : repos.filter(repo => !excludedRepos.includes(repo.name));
-
-                // Process in batches to avoid overwhelming the browser
-                const batchSize = 3;
-                const processedProjects: Project[] = [];
-
-                for (let i = 0; i < filteredRepos.length; i += batchSize) {
-                    const batch = filteredRepos.slice(i, i + batchSize);
-                    const batchResults = await Promise.all(batch.map(processRepo));
-                    processedProjects.push(...batchResults);
-
-                    // Update state incrementally for better UX
-                    if (i === 0) {
-                        setGithubProjects(batchResults);
-                    } else {
-                        setGithubProjects(prev => [...prev, ...batchResults]);
-                    }
-                }
-
-                // Cache the final result
-                try {
-                    localStorage.setItem(
-                        cacheKey,
-                        JSON.stringify({
-                            data: processedProjects,
-                            timestamp: Date.now()
-                        })
-                    );
-                } catch (e) {
-                    console.error("Cache storage error:", e);
-                }
-
-            } catch (error) {
-                console.error('Error fetching GitHub repositories:', error);
-                setError('Failed to load GitHub projects');
-            } finally {
-                setIsLoading(false);
-            }
-        };
-
-        fetchGithubRepos().then(r => r);
+        } catch (error) {
+            console.error('Error fetching GitHub repositories:', error);
+            setError('Failed to load GitHub projects');
+        } finally {
+            setIsLoading(false);
+        }
     }, [filterMode, cacheKey, processRepo]);
+
+// Replace your existing useEffect with this one to set up periodic fetching
+    useEffect(() => {
+        // Initial fetch when component mounts
+        fetchGithubRepos();
+
+        // Set up interval for periodic fetching (once every 2 minutes)
+        const interval = setInterval(fetchGithubRepos, 120000);
+
+        // Clean up interval on component unmount
+        return () => clearInterval(interval);
+    }, [fetchGithubRepos]);
 
     // Combine manual and GitHub projects
     const allProjects = useMemo(() => {

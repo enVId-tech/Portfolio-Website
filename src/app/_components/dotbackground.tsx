@@ -2,47 +2,63 @@
 import React, { useEffect, useRef, useMemo } from 'react';
 import styles from '@/styles/dotbackground.module.scss';
 
+/**
+ * Represents a single dot in the background animation.
+ */
 interface Dot {
-    x: number;
-    y: number;
-    originalX: number;
-    originalY: number;
-    size: number;
-    color: string;
-    opacity: number;
-    vx: number;
-    vy: number;
+    x: number; // Current x-coordinate of the dot
+    y: number; // Current y-coordinate of the dot
+    originalX: number; // Original x-coordinate of the dot
+    originalY: number; // Original y-coordinate of the dot
+    size: number; // Size (radius) of the dot
+    color: string; // Color of the dot
+    opacity: number; // Opacity of the dot
+    vx: number; // Velocity in the x-direction
+    vy: number; // Velocity in the y-direction
 }
 
+/**
+ * Configuration options for the DotBackground component.
+ */
 interface DotBackgroundConfig {
-    spacingBetweenDots?: number;
-    maxDistance?: number;
-    dotSize?: number;
-    dotOpacity?: number;
-    dotColor?: string;
-    returnForce?: number;
-    friction?: number;
-    pushForce?: number;
-    edgePadding?: number;
+    spacingBetweenDots?: number; // Spacing between dots in pixels
+    maxDistance?: number; // Maximum distance for mouse interaction
+    dotSize?: number; // Size of the dots
+    dotOpacity?: number; // Opacity of the dots
+    dotColor?: string; // Color of the dots
+    returnForce?: number; // Force that returns dots to their original position
+    friction?: number; // Friction applied to dot movement
+    pushForce?: number; // Force applied when the mouse interacts with dots
+    edgePadding?: number; // Padding around the edges of the canvas
 }
 
+/**
+ * Props for the DotBackground component.
+ */
 type DotBackgroundProps = {
-    children?: React.ReactNode;
-    config?: DotBackgroundConfig;
+    children?: React.ReactNode; // Child elements to render inside the component
+    config?: DotBackgroundConfig; // Configuration options for the background
 }
 
+/**
+ * A React component that renders an animated dot background.
+ * The dots respond to mouse movement and return to their original positions.
+ *
+ * @param {DotBackgroundProps} props - The props for the component.
+ * @returns {React.ReactElement} The rendered DotBackground component.
+ */
 export default function DotBackground({
                                           children,
                                           config = {}
                                       }: DotBackgroundProps): React.ReactElement {
-    const canvasRef = useRef<HTMLCanvasElement>(null);
-    const contentRef = useRef<HTMLDivElement>(null);
-    const containerRef = useRef<HTMLDivElement>(null);
-    const dotsRef = useRef<Dot[]>([]);
-    const mouseRef = useRef({ x: 0, y: 0 });
-    const animationRef = useRef<number>(0);
+    const canvasRef = useRef<HTMLCanvasElement>(null); // Reference to the canvas element
+    const contentRef = useRef<HTMLDivElement>(null); // Reference to the content container
+    const containerRef = useRef<HTMLDivElement>(null); // Reference to the outer container
+    const dotsRef = useRef<Dot[]>([]); // Reference to the array of dots
+    const mouseRef = useRef({ x: 0, y: 0 }); // Reference to the mouse position
+    const animationRef = useRef<number>(0); // Reference to the animation frame ID
 
-    // Memoize config to prevent unnecessary re-renders
+    // Memoize the configuration to prevent unnecessary re-renders
     const effectiveConfig = useMemo(() => ({
         spacingBetweenDots: 80,
         maxDistance: 100,
@@ -65,9 +81,14 @@ export default function DotBackground({
         const ctx = canvas.getContext('2d', { alpha: true });
         if (!ctx) return;
 
-        // Throttle function for performance
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-function-type
-        const throttle = (fn: Function, delay: number) => {
+        /**
+         * Throttles a function to limit its execution rate.
+         *
+         * @param {Function} fn - The function to throttle.
+         * @param {number} delay - The delay in milliseconds.
+         * @returns {Function} The throttled function.
+         */
+        const throttle = (fn: { (e: MouseEvent): void; (): void; (arg0: unknown): void; }, delay: number) => {
             let lastCall = 0;
             return (...args: unknown[]) => {
                 const now = Date.now();
@@ -83,6 +104,9 @@ export default function DotBackground({
             height: document.body.scrollHeight
         };
 
+        /**
+         * Initializes the dots based on the current configuration and canvas size.
+         */
         const initDots = () => {
             const spacing = effectiveConfig.spacingBetweenDots;
             const documentWidth = Math.max(document.body.clientWidth, window.innerWidth);
@@ -127,6 +151,9 @@ export default function DotBackground({
             dotsRef.current = dots;
         };
 
+        /**
+         * Resizes the canvas to match the document dimensions and reinitializes dots.
+         */
         const resizeCanvas = () => {
             canvas.height = 0;
             canvas.style.height = '0px';
@@ -139,7 +166,7 @@ export default function DotBackground({
                 window.innerHeight
             );
 
-            // Resize if dimensions changed significantly (1px buffer for minor fluctuations)
+            // Resize if dimensions changed significantly
             if (
                 Math.abs(canvas.width - documentWidth) > 1 ||
                 Math.abs(canvas.height - documentHeight) > 1
@@ -152,11 +179,20 @@ export default function DotBackground({
                 initDots();
             }
         };
+
+        /**
+         * Handles mouse movement and updates the mouse position.
+         *
+         * @param {MouseEvent} e - The mouse event.
+         */
         const handleMouseMove = throttle((e: MouseEvent) => {
             mouseRef.current.x = e.clientX;
             mouseRef.current.y = e.clientY + window.scrollY;
         }, 16); // ~60fps
 
+        /**
+         * Animates the dots, applying forces and rendering them on the canvas.
+         */
         const animate = () => {
             ctx.clearRect(0, 0, canvas.width, canvas.height);
 
@@ -186,7 +222,7 @@ export default function DotBackground({
                 const dy = mouseY - dot.y;
                 const distanceSquared = dx * dx + dy * dy;
 
-                // Use squared distance for performance (avoid sqrt when possible)
+                // Use squared distance for performance
                 if (distanceSquared < maxDistance * maxDistance) {
                     const distance = Math.sqrt(distanceSquared);
                     const force = (maxDistance - distance) / maxDistance;
@@ -228,7 +264,6 @@ export default function DotBackground({
         const documentObserver = new ResizeObserver(throttledResize);
         documentObserver.observe(document.body);
 
-        // Add specific content observer to detect when projects load or filter changes
         const contentObserver = new ResizeObserver(throttledResize);
         contentObserver.observe(content);
 
