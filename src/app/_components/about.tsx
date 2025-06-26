@@ -30,7 +30,10 @@ export default function About({ children }: AboutProps): React.ReactElement {
                     <h3 className={`${styles.cardTitle} ${M_600}`}>Experience</h3>
                     <div className={`${styles.experienceText} ${M_400}`}>
                         <div className={styles.experienceItem}>
-                            <span className={styles.highlight}>4y</span> full-stack development
+                            <span className={styles.highlight}>5y</span> web development
+                        </div>
+                        <div className={styles.experienceItem}>
+                            <span className={styles.highlight}>3y</span> full-stack development
                         </div>
                         <div className={styles.experienceItem}>
                             <span className={styles.highlight}>3y</span> React.js

@@ -161,7 +161,7 @@ export default function Projects(): React.ReactElement {
     const manualProjects: Project[] = useMemo(() => [], []);
 
     // State hooks
-    const [filterMode, setFilterMode] = useState<RepoFilterMode>('include');
+    const [filterMode, setFilterMode] = useState<RepoFilterMode>('exclude');
     const [githubProjects, setGithubProjects] = useState<Project[]>([]);
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
@@ -244,24 +244,7 @@ export default function Projects(): React.ReactElement {
         setError(null);
 
         // Default fallback github-repos list
-        let includedRepos: string[] = [
-            "Portfolio-Website",
-            "Nginx-404",
-            "Terminal-Commands",
-            "New-Robotics-Website-Redesign",
-            "Docker-Web-Creator",
-            "Safety-Test",
-            "DB-Reader-Electron-App",
-            "PythonDBGenerator",
-            "Website-Login-Template",
-            "Calendar-App",
-            "Mecanum-Drive-Arduino",
-            "Youtube-File-Storage",
-            "CSV-Convert-From-DB",
-            "OA-Website",
-            "OpenCV-Object-Detection",
-            "Classroom-Website"
-        ];
+        let includedRepos: string[] = [];
 
         let excludedRepos: string[] = ["DockerTemplates", "enVId-tech"];
 

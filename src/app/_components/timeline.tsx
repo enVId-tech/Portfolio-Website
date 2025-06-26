@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect, useRef, useState, useCallback, useMemo } from 'react';
+import React, { useEffect, useRef, useState, useCallback } from 'react';
 import styles from '@/styles/timeline.module.scss';
 import { M_400, M_600 } from "@/utils/globalFonts";
 
@@ -43,6 +43,7 @@ const TimelineEvent = React.memo(({
 function Timeline({ children }: TimelineProps): React.ReactElement {
     const [activeIndex, setActiveIndex] = useState(0);
     const [isVisible, setIsVisible] = useState(false);
+    const [events, setEvents] = useState<TimelineEvent[]>([]);
     const eventRefs = useRef<(HTMLDivElement | null)[]>([]);
     const timelineRef = useRef<HTMLDivElement>(null);
     const activeDotRef = useRef<HTMLDivElement>(null);
@@ -50,34 +51,55 @@ function Timeline({ children }: TimelineProps): React.ReactElement {
     const scrollThrottleRef = useRef<boolean>(false);
     const positionsRef = useRef<{top: number, height: number}[]>([]);
     const timelineRectRef = useRef<DOMRect | null>(null);
+    
+    const updateEvents = useCallback(async () => {
+        try {
+            const response = await fetch('/api/timeline', {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            });
 
-    const events: TimelineEvent[] = useMemo(() => [
-        {
-            year: "2020",
-            title: "Started Programming Journey",
-            description: "Began learning web development fundamentals with HTML, CSS, and JavaScript."
-        },
-        {
-            year: "2021",
-            title: "First React Project",
-            description: "Built my first React application and deployed it to production."
-        },
-        {
-            year: "2022",
-            title: "Learned Next.js",
-            description: "Expanded my skills with server-side rendering and static site generation."
-        },
-        {
-            year: "2023",
-            title: "Mastered TypeScript",
-            description: "Adopted TypeScript in all my projects for better code quality and developer experience."
-        },
-        {
-            year: "2024",
-            title: "Full Stack Development",
-            description: "Working with modern full-stack applications using Next.js, React, and various backend technologies."
+            if (!response.ok) {
+                throw new Error('Failed to fetch timeline events');
+            }
+
+            const data = await response.json();
+
+            console.log('Fetched timeline data:', data);
+
+            if (data.success && Array.isArray(data.timelineItems)) {
+                setEvents(data.timelineItems.map((event: TimelineEvent) => ({
+                    year: event.year || "Unknown",
+                    title: event.title || "Untitled",
+                    description: event.description || "No description available."
+                })));
+            } else {
+                console.error('Invalid timeline data format:', data);
+                setEvents([
+                    {
+                        year: "Unknown",
+                        title: "Error",
+                        description: "Failed to load timeline events. Please try again later."
+                    }
+                ]);
+            }
+        } catch (error) {
+            console.error('Error fetching timeline events:', error);
+            setEvents([
+                {
+                    year: "Unknown",
+                    title: "Error",
+                    description: "Failed to load timeline events. Please try again later."
+                }
+            ]);
         }
-    ], []);
+    }, []);
+    // Fetch events on mount
+    useEffect(() => {
+        updateEvents();
+    }, [updateEvents]);
 
     // Calculate element positions and cache them
     const updateElementPositions = useCallback(() => {
