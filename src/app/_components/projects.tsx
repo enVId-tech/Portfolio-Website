@@ -82,7 +82,6 @@ const ProjectCard = React.memo(({ project }: { project: Project }) => (
     <div className={styles.projectCard}>
         {project.imageUrl && (
             <div className={styles.projectImageContainer}>
-                {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img
                     src={project.imageUrl}
                     alt={project.title}

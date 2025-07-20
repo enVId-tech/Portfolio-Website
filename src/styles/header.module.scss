@@ -1,23 +1,29 @@
 // Container for the header section
 .container {
-  width: 100%; // Full width
+  width: 100%;
+  max-width: 100vw; // Prevent horizontal overflow
   margin: 0;
-  padding: 0;
+  padding: 0 1rem; // Add horizontal padding to prevent edge overflow
+  box-sizing: border-box; // Include padding in width calculation
+  overflow-x: hidden; // Prevent horizontal scroll
 
   // Header text styling with responsive font size
   .header {
     color: white;
-    font-size: clamp(1.8rem, 7vw, 3.5vw); // Responsive font size with minimum
-    line-height: 1.2; // Improved line height for mobile
+    font-size: clamp(2.3rem, 12vw, 3.5vw); // Much larger on mobile, bigger viewport scaling
+    line-height: 1.1; // Tighter line height for bigger text
+    word-wrap: break-word; // Prevent text overflow
+    overflow-wrap: break-word; // Additional overflow protection
   }
 
   // Name text styling with underline animation
   .name {
     color: white;
-    font-size: clamp(1.8rem, 7vw, 3.5vw); // Responsive font size with minimum
+    font-size: clamp(2.3rem, 12vw, 3.5vw); // Match parent, much larger on mobile
     position: relative;
     padding: 0 6px;
-    display: inline-block; // Ensures the element wraps properly on mobile
+    display: inline-block;
+    word-wrap: break-word; // Prevent name overflow
 
     &::after {
       content: '';
@@ -48,48 +54,55 @@
 
   // Header name text styling with gradient
   .headerName {
-    font-size: clamp(1.6rem, 6vw, 3vw); // Responsive font size with minimum
+    font-size: clamp(2.5rem, 13vw, 5vw); // Much larger on mobile
     background: linear-gradient(to right, #22ffed, #24a2ff, #571fff);
     background-clip: text;
     -webkit-background-clip: text;
     color: transparent;
-    margin-top: 8px; // Reduced margin for mobile
+    margin-top: 8px;
     letter-spacing: 0.001rem;
-    line-height: 1.2; // Improved line height for mobile
+    line-height: 1.1; // Tighter line height for bigger text
+    word-wrap: break-word; // Prevent text overflow
+    overflow-wrap: break-word;
   }
 
   // Styling for header buttons container
   .headerButtons {
     display: flex;
-    flex-wrap: wrap; // Allow buttons to wrap on small screens
-    gap: 12px; // Reduced gap for mobile
-    margin-top: 16px; // Reduced margin for mobile
-    width: 100%; // Full width on mobile
+    flex-direction: column; // Stack buttons vertically on mobile
+    gap: 12px; // Increased gap for better separation between full-width buttons
+    margin-top: 16px;
+    width: 100%;
+    max-width: 100%; // Prevent container overflow
+    box-sizing: border-box;
 
     // Styling for individual buttons
     button {
       display: flex;
       align-items: center;
-      justify-content: center; // Center content on mobile
-      gap: 8px;
-      padding: 12px 16px; // Increased padding for better touch targets
+      justify-content: center; // Center content including text and icon
+      gap: 8px; // Increased gap between icon and text
+      padding: 14px 16px; // Increased padding for better touch targets
       background-color: rgba(255, 255, 255, 0.1);
       border: 1px solid rgba(255, 255, 255, 0.2);
       border-radius: 8px;
       color: white;
-      font-size: 15px; // Slightly smaller font size
+      font-size: 16px; // Larger font size for full-width buttons
       cursor: pointer;
       transition: all 0.2s ease-in-out;
-      flex: 1; // Let buttons grow to fill space
-      min-width: 120px; // Minimum width for buttons
+      width: 100%; // Full width of container
+      box-sizing: border-box;
+      white-space: nowrap; // Prevent text wrapping in buttons
+      overflow: hidden; // Hide overflow content
 
       // Styling for SVG icons inside buttons
       svg {
-        width: 18px; // Slightly smaller icons for mobile
+        width: 18px; // Slightly larger icons for full-width buttons
         height: 18px;
+        flex-shrink: 0; // Prevent icon shrinking
       }
 
-      &:hover, &:active { // Added active state for touch devices
+      &:hover, &:active {
         background-color: rgba(114, 72, 222, 0.5);
         transform: translateY(-2px);
       }
@@ -99,14 +112,18 @@
   // Styling for the description text
   .description {
     color: rgb(162, 162, 162);
-    max-width: 100%; // Full width on mobile
-    margin-top: 24px; // Reduced margin for mobile
-    line-height: 1.5; // Slightly reduced line height
-    font-size: clamp(1rem, 4vw, 1.3rem); // Responsive font size
+    max-width: 100%; // Always full container width
+    width: 100%; // Ensure it takes full width
+    margin-top: 24px;
+    line-height: 1.5;
+    font-size: clamp(1rem, 4vw, 1.3rem); // Slightly larger minimum for readability
     letter-spacing: 0.01rem;
-    padding-bottom: 14px; // Reduced padding for mobile
+    padding-bottom: 14px;
     border-bottom: 2px solid rgba(114, 72, 222, 0.3);
     position: relative;
+    word-wrap: break-word; // Prevent text overflow
+    overflow-wrap: break-word;
+    box-sizing: border-box;
 
     &::after {
       content: '';
@@ -121,77 +138,94 @@
 
   // Media query for tablets
   @media (min-width: 768px) {
-    margin-top: 5vh; // Slightly increased top margin for tablets
-    padding: 0 1.5rem; // Increased padding for tablets
+    margin-top: 5vh;
+    padding: 0 1.5rem; // Maintain padding
 
     .headerButtons {
-      width: min-content; // Reset to minimum content width
-      flex-wrap: nowrap; // Prevent wrapping
-      gap: 15px; // Original gap
-      margin-top: 18px; // Slightly increased margin
+      flex-direction: row; // Switch to horizontal layout on tablets
+      width: min-content;
+      flex-wrap: nowrap;
+      gap: 15px; // Restore original gap
+      margin-top: 18px;
 
       button {
-        flex: 0 0 auto; // Don't grow to fill space
-        min-width: auto; // Remove minimum width
+        flex: 0 0 auto;
+        width: auto; // Reset to auto width
+        min-width: auto;
+        max-width: none; // Remove max-width restriction
+        padding: 12px 16px; // Restore original padding
+        font-size: 15px; // Restore font size
 
         svg {
-          width: 19px; // Return to larger icon size
+          width: 19px;
           height: 19px;
         }
       }
     }
 
+    .headerName {
+      font-size: 3.5vw; // Original desktop size
+    }
+
     .description {
-      max-width: 80%; // Limit width on tablets
-      margin-top: 28px; // Increased margin for tablets
-      padding-bottom: 16px; // Original padding
+      max-width: 100%; // Always full container width regardless of screen size
+      width: 100%; // Ensure it takes full width
+      margin-top: 28px;
+      padding-bottom: 16px;
+      font-size: clamp(1rem, 2vw, 1.3rem); // Better scaling for tablets
 
       &::after {
-        width: 55px; // Slightly increased width for tablets
+        width: 55px;
       }
     }
   }
 
   // Media query for desktop
   @media (min-width: 992px) {
-    margin-top: 6vh; // Original top margin for desktop
-    padding: 0 2rem; // Original padding for desktop
+    margin-top: 6vh;
+    padding: 0 2rem;
+
+    .container {
+      max-width: 1200px; // Limit width on larger screens
+      margin: 0 auto; // Center the container
+    }
 
     .header {
-      font-size: 3.5vw; // Original font size for desktop
+      font-size: 5vw; // Original desktop size
     }
 
     .name {
-      font-size: 3.5vw; // Original font size for desktop
+      font-size: 5vw; // Original desktop size
     }
 
     .headerName {
-      font-size: 3vw; // Original font size for desktop
-      margin-top: 10px; // Original margin for desktop
+      font-size: 3vw; // Original desktop size
+      margin-top: 10px;
     }
 
     .headerButtons {
-      margin-top: 20px; // Original margin for desktop
+      margin-top: 20px;
+      gap: 15px; // Restore desktop gap
 
       button {
-        padding: 10px 16px; // Original padding for desktop
-        font-size: 16px; // Original font size for desktop
+        padding: 10px 16px; // Original desktop padding
+        font-size: 16px; // Original desktop font size
 
         svg {
-          width: 20px; // Original size for desktop
+          width: 20px; // Original desktop size
           height: 20px;
         }
       }
     }
 
     .description {
-      max-width: 600px; // Original max width for desktop
-      margin-top: 30px; // Original margin for desktop
-      font-size: 1.3rem; // Original font size for desktop
-      line-height: 1.6; // Original line height for desktop
+      max-width: 100%;
+      margin-top: 30px;
+      font-size: 1.3rem; // Fixed desktop font size
+      line-height: 1.6;
 
       &::after {
-        width: 60px; // Original width for desktop
+        width: 60px;
       }
     }
   }

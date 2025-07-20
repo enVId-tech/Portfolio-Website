@@ -41,7 +41,7 @@
   transition: all 0.3s ease;
   color: white;
   height: 100%;
-  margin-bottom: 0.5rem; // Added margin for better spacing on mobile
+  margin-bottom: 0; // Remove margin-bottom entirely - use grid gap instead
 
   // Hover and active states for touch devices
   &:hover, &:active {
@@ -127,14 +127,69 @@
   line-height: 1.5; // Improved line height for readability
 }
 
+// Very small screens (300px+) - Support for older/smaller phones
+@media (min-width: 300px) {
+  .container {
+    padding: 0; // Add back horizontal padding to prevent edge overlap
+    max-width: 100%; // Ensure full width usage
+  }
+
+  .aboutTitle {
+    font-size: clamp(1.2rem, 6vw, 1.5rem); // Smaller range for very small screens
+    margin-bottom: 1rem;
+    
+    &:after {
+      width: 30px; // Smaller underline
+    }
+  }
+
+  .cardGrid {
+    gap: 3rem; // Reduced gap for tighter spacing
+    grid-template-columns: 1fr; // Single column for very small screens
+  }
+
+  .card {
+    padding: 0.75rem; // Reduced padding
+    margin: 0.75rem;
+    border-radius: 6px; // Slightly smaller border radius
+  }
+
+  .cardTitle {
+    font-size: 1rem; // Smaller title for very small screens
+    margin-bottom: 0.5rem;
+  }
+
+  .skillsList li {
+    font-size: 0.85rem; // Smaller text for better fit
+    padding: 0.1rem 0 0.1rem 0.85rem; // Reduced padding
+  }
+
+  .experienceText {
+    gap: 0.4rem; // Tighter spacing
+  }
+
+  .experienceItem {
+    gap: 0.4rem; // Reduced gap between items
+  }
+
+  .compactText {
+    font-size: 0.85rem; // Smaller text for very small screens
+    line-height: 1.4; // Slightly tighter line height
+  }
+}
+
 // Small screens and up (480px+)
 @media (min-width: 480px) {
   .container {
-    padding: 0 1.25rem; // Slightly increased padding
+    padding: 0;
   }
 
   .aboutTitle {
     margin-bottom: 1.4rem; // Increased margin
+  }
+
+  .card {
+    margin-bottom: 0; // Remove margin-bottom to rely on grid gap
   }
 
   .cardTitle {
@@ -173,7 +228,7 @@
 
   .cardGrid {
     grid-template-columns: repeat(2, 1fr); // Two columns
-    gap: 1rem; // Maintain gap
+    gap: 3rem; // Maintain gap
   }
 
   .card {
