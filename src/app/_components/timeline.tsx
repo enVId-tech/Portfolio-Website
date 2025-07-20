@@ -2,11 +2,17 @@
 import React, { useEffect, useRef, useState, useCallback } from 'react';
 import styles from '@/styles/timeline.module.scss';
 import { M_400, M_600 } from "@/utils/globalFonts";
+import { cachedFetch } from '@/utils/cache';
 
 interface TimelineEvent {
     year: string;
     title: string;
     description: string;
+}
+
+interface TimelineApiResponse {
+    success: boolean;
+    timelineItems: TimelineEvent[];
 }
 
 type TimelineProps = {
@@ -54,18 +60,17 @@ function Timeline({ children }: TimelineProps): React.ReactElement {
     
     const updateEvents = useCallback(async () => {
         try {
-            const response = await fetch('/api/timeline', {
-                method: 'GET',
-                headers: {
-                    'Content-Type': 'application/json'
-                }
-            });
-
-            if (!response.ok) {
-                throw new Error('Failed to fetch timeline events');
-            }
-
-            const data = await response.json();
+            const data = await cachedFetch(
+                '/api/timeline',
+                'api-timeline',
+                {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                },
+                5 * 60 * 1000 // 5 minutes cache
+            ) as TimelineApiResponse;
 
             console.log('Fetched timeline data:', data);
 

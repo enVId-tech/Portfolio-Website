@@ -53,6 +53,7 @@ A modern, full-stack portfolio website built with Next.js 15, React 19, and Type
 ### Prerequisites
 - Node.js 18+ 
 - MongoDB instance (local or cloud)
+- GitHub Personal Access Token (for repository data)
 - Docker (optional, for containerized deployment)
 
 ### Installation
@@ -74,7 +75,15 @@ A modern, full-stack portfolio website built with Next.js 15, React 19, and Type
    MONGODB_URI=your_mongodb_connection_string
    CLIENT_DB=portfolio
    JWT_SECRET=your_jwt_secret_key
+   GITHUB_TOKEN=your_github_personal_access_token
    ```
+
+   **GitHub Token Setup:**
+   - Go to [GitHub Settings > Personal Access Tokens](https://github.com/settings/tokens)
+   - Click "Generate new token (classic)"
+   - Select scopes: `repo` (for public repos) or `repo` + additional permissions (for private repos)
+   - Copy the token and add it to your `.env.local` file
+   - **Note:** Without a token, GitHub API rate limits are much more restrictive (60 vs 5000 requests/hour)
 
 4. **Initialize Database**
    ```bash

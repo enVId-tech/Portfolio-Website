@@ -2,6 +2,7 @@
 import React, {useCallback, useEffect, useRef, useState} from 'react';
 import styles from '@/styles/technology.module.scss';
 import { M_400, M_600 } from "@/utils/globalFonts";
+import { cachedFetch } from '@/utils/cache';
 
 // Import tech icons
 import * as FA from 'react-icons/fa';
@@ -34,6 +35,11 @@ interface TechResponse {
     proficiency: number;
     proficiencyLabel: string;
     usage: number;
+}
+
+interface TechApiResponse {
+    success: boolean;
+    tech: TechResponse[];
 }
 
 // Map of supported icon libraries
@@ -188,10 +194,12 @@ export default function Technology({ children }: TechnologyProps): React.ReactEl
 
     const fetchTechData = useCallback(async () => {
         try {
-            const response = await fetch('/api/tech', {
-                headers: { 'Cache-Control': 'no-cache' }
-            });
-            const data = await response.json();
+            const data = await cachedFetch(
+                '/api/tech',
+                'api-tech',
+                { headers: { 'Cache-Control': 'no-cache' } },
+                5 * 60 * 1000 // 5 minutes cache
+            ) as TechApiResponse;
 
             if (data && data.success) {
                 // Convert string icons to React elements
