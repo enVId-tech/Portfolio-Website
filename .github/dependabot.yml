@@ -5,7 +5,26 @@
 
 version: 2
 updates:
-  - package-ecosystem: "" # See documentation for possible values
+  - package-ecosystem: "npm" # Use npm for Node.js/Next.js projects
     directory: "/" # Location of package manifests
     schedule:
       interval: "weekly"
+    # Automatically merge minor and patch updates
+    open-pull-requests-limit: 10
+    target-branch: "main"
+    assignees:
+      - "enVId-tech"
+    reviewers:
+      - "enVId-tech"
+    commit-message:
+      prefix: "deps"
+      prefix-development: "deps-dev"
+      include: "scope"
+    # Group updates to reduce PR noise
+    groups:
+      minor-and-patch:
+        patterns:
+          - "*"
+        update-types:
+          - "minor"
+          - "patch"
