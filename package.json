@@ -11,15 +11,15 @@
   "dependencies": {
     "bcryptjs": "^3.0.2",
     "date-fns": "^4.1.0",
-    "dotenv": "^17.2.1",
+    "dotenv": "^17.2.2",
     "jsonwebtoken": "^9.0.2",
-    "mongodb": "^6.18.0",
-    "next": "^15.5.0",
+    "mongodb": "^6.19.0",
+    "next": "^15.5.2",
     "next-auth": "^4.24.11",
     "react": "^19.1.1",
     "react-dom": "^19.1.1",
     "react-icons": "^5.5.0",
-    "sass": "^1.91.0",
+    "sass": "^1.92.1",
     "swr": "^2.3.6"
   },
   "devDependencies": {
@@ -29,7 +29,7 @@
     "@types/react": "^19",
     "@types/react-dom": "^19",
     "eslint": "^9",
-    "eslint-config-next": "15.5.0",
+    "eslint-config-next": "15.5.2",
     "typescript": "^5"
   }
 }
