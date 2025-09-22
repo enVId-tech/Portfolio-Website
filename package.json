@@ -13,13 +13,13 @@
     "date-fns": "^4.1.0",
     "dotenv": "^17.2.2",
     "jsonwebtoken": "^9.0.2",
-    "mongodb": "^6.19.0",
+    "mongodb": "^6.20.0",
     "next": "^15.5.3",
     "next-auth": "^4.24.11",
     "react": "^19.1.1",
     "react-dom": "^19.1.1",
     "react-icons": "^5.5.0",
-    "sass": "^1.92.1",
+    "sass": "^1.93.0",
     "swr": "^2.3.6"
   },
   "devDependencies": {
