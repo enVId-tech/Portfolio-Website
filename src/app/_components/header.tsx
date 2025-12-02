@@ -16,33 +16,49 @@ type HeaderProps = {
  */
 export default function Header({ children }: HeaderProps): React.ReactElement {
     return (
-        <div className={styles.container} id={"header"}>
+        <section className={styles.container} id={"header"} aria-label="Hero section">
             <header>
                 <h1 className={`${styles.header} ${M_600}`}>
                     Hi, I&#39;m <span className={`${styles.name} ${M_600}`}>Erick</span>
                 </h1>
                 <h2 className={`${styles.headerName} ${M_600}`}>
-                    Fullstack developer.
+                    Full-stack developer.
                 </h2>
-                <div className={`${styles.headerButtons}`}>
-                    <button className={`${M_400}`} onClick={() => window.open('https://github.com/enVId-tech', '_blank')}>
-                        <FaGithub size={20} />
+                <nav className={`${styles.headerButtons}`} aria-label="Social media links">
+                    <a 
+                        href="https://github.com/enVId-tech" 
+                        target="_blank" 
+                        rel="noopener noreferrer"
+                        className={`${M_400}`}
+                        aria-label="Visit Erick Tran's GitHub profile"
+                    >
+                        <FaGithub size={20} aria-hidden="true" />
                         GitHub
-                    </button>
-                    <button className={`${M_400}`} onClick={() => window.open("https://www.linkedin.com/in/ericktran-cs/", "_blank")}>
-                        <FaLinkedin size={20} />
+                    </a>
+                    <a 
+                        href="https://www.linkedin.com/in/ericktran-cs/" 
+                        target="_blank" 
+                        rel="noopener noreferrer"
+                        className={`${M_400}`}
+                        aria-label="Visit Erick Tran's LinkedIn profile"
+                    >
+                        <FaLinkedin size={20} aria-hidden="true" />
                         LinkedIn
-                    </button>
-                    <button className={`${M_400}`} onClick={() => window.open("https://mail.google.com/mail/?view=cm&fs=1&tf=1&to=erick.tran@etran.dev", "_blank")}>
-                        <AiOutlineMail size={20} />
+                    </a>
+                    <a 
+                        href="mailto:erick.tran@etran.dev" 
+                        className={`${M_400}`}
+                        aria-label="Send email to Erick Tran"
+                    >
+                        <AiOutlineMail size={20} aria-hidden="true" />
                         Email
-                    </button>
-                </div>
+                    </a>
+                </nav>
                 <p className={`${styles.description} ${M_400}`}>
-                    Hi, I am Erick. I have 3 years of experience in full-stack website development, including 3 using ReactJS, 3 using Node.js with Express, and 2 using Next JS. Always learning new things all the time, and ready to make solutions.
+                    Hi, I am Erick. I have 3 years of experience in full-stack website development, including 3 using ReactJS, 3 using Node.js with Express, and 2 using Next.js. Always learning new things all the time, and ready to make solutions.
                 </p>
             </header>
             { children }
-        </div>
+        </section>
     );
 }

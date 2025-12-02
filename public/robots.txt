@@ -1,0 +1,11 @@
+User-agent: *
+Allow: /
+
+# Block sensitive paths
+Disallow: /api/auth/
+Disallow: /api/cron/
+Disallow: /_next/static/
+Disallow: /_next/image
+
+# Sitemap location
+Sitemap: https://etran.dev/sitemap.xml

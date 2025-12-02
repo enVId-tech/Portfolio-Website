@@ -1,0 +1,31 @@
+{
+  "name": "Erick Tran - Full Stack Developer Portfolio",
+  "short_name": "Erick Tran",
+  "description": "Portfolio of Erick Tran, a skilled full stack developer specializing in React, Next.js, Node.js, and modern web technologies.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#000000",
+  "theme_color": "#1a1a1a",
+  "orientation": "portrait-primary",
+  "categories": ["portfolio", "developer", "technology"],
+  "lang": "en-US",
+  "icons": [
+    {
+      "src": "/favicon/android-chrome-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "maskable any"
+    },
+    {
+      "src": "/favicon/android-chrome-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable any"
+    },
+    {
+      "src": "/favicon/apple-touch-icon.png",
+      "sizes": "180x180",
+      "type": "image/png"
+    }
+  ]
+}

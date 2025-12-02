@@ -76,8 +76,8 @@
     max-width: 100%; // Prevent container overflow
     box-sizing: border-box;
 
-    // Styling for individual buttons
-    button {
+    // Styling for individual buttons/links
+    button, a {
       display: flex;
       align-items: center;
       justify-content: center; // Center content including text and icon
@@ -94,6 +94,7 @@
       box-sizing: border-box;
       white-space: nowrap; // Prevent text wrapping in buttons
       overflow: hidden; // Hide overflow content
+      text-decoration: none; // Remove underline for links
 
       // Styling for SVG icons inside buttons
       svg {

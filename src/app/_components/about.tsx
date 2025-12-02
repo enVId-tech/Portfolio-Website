@@ -12,7 +12,7 @@ type AboutProps = {
  */
 export default function About({ children }: AboutProps): React.ReactElement {
     return (
-        <div className={styles.container} id={"about"}>
+        <section className={styles.container} id={"about"} aria-label="About Erick Tran">
             <h2 className={`${styles.aboutTitle} ${M_600}`}>About Me</h2>
 
             <div className={styles.cardGrid}>
@@ -52,6 +52,6 @@ export default function About({ children }: AboutProps): React.ReactElement {
                 </div>
             </div>
             { children }
-        </div>
+        </section>
     );
 }
