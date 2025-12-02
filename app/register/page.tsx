@@ -2,7 +2,7 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import DotBackground from "@/app/_components/dotbackground";
+import DotBackground from "@/_components/dotbackground";
 import styles from '@/styles/register.module.scss';
 import { M_400, M_600 } from "@/utils/globalFonts";
 

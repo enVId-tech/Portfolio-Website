@@ -1,17 +1,16 @@
-"use server"
 import React from "react";
-import DotBackground from "@/app/_components/dotbackground";
-import Header from "@/app/_components/header";
-import About from "@/app/_components/about";
-import Timeline from "@/app/_components/timeline";
-import Projects from "@/app/_components/projects";
-import Technology from "@/app/_components/technology";
-import Footer from "@/app/_components/footer";
-import ScrollToTop from "@/app/_components/scrollToTop";
-import SectionSelector from "@/app/_components/sectionSelector";
+import DotBackground from "@/_components/dotbackground";
+import Header from "@/_components/header";
+import About from "@/_components/about";
+import Timeline from "@/_components/timeline";
+import Projects from "@/_components/projects";
+import Technology from "@/_components/technology";
+import Footer from "@/_components/footer";
+import ScrollToTop from "@/_components/scrollToTop";
+import SectionSelector from "@/_components/sectionSelector";
 import { PersonSchema, WebsiteSchema, ProfessionalServiceSchema } from "@/utils/schemas";
 import { Metadata } from "next";
-// import BlogsComponent from "@/app/_components/blogsComponent.tsx";
+// import BlogsComponent from "@/_components/blogsComponent.tsx";
 
 export const metadata: Metadata = {
     title: "Home",

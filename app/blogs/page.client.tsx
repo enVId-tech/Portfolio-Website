@@ -3,7 +3,7 @@ import { useState, useEffect, useCallback } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import styles from '@/styles/blog.module.scss';
-import DotBackground from "@/app/_components/dotbackground";
+import DotBackground from "@/_components/dotbackground";
 import { useAuth } from "@/context/AuthContext";
 import { M_600 } from "@/utils/globalFonts";
 import { BlogInterface } from '@/models/Blog';

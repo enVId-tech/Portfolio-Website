@@ -3,7 +3,7 @@
 import React, { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import styles from '@/styles/notFound.module.scss';
-import DotBackground from "@/app/_components/dotbackground";
+import DotBackground from "@/_components/dotbackground";
 
 export default function NotFound(): React.ReactElement {
   const router = useRouter();

@@ -1,7 +1,7 @@
 "use client";
 import React from 'react';
 import {AuthProvider} from "@/context/AuthContext.tsx";
-import Loading from '@/app/_components/loading';
+import Loading from '@/_components/loading';
 
 interface State {
   children: React.ReactNode;

@@ -5,7 +5,7 @@ import Link from 'next/link';
 import styles from '@/styles/blogpost.module.scss';
 import { M_400, M_600 } from "@/utils/globalFonts";
 import { useAuth } from "@/context/AuthContext";
-import DotBackground from "@/app/_components/dotbackground";
+import DotBackground from "@/_components/dotbackground";
 import {nanoid} from "nanoid";
 
 export default function NewBlogPost() {
