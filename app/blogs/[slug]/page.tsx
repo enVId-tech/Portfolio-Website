@@ -1,5 +1,5 @@
 import { Metadata } from 'next';
-import BlogPostClientPage from './page.client.js';
+import BlogPostClientPage from './page.client.tsx';
 
 // This generates dynamic metadata for each blog post
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {

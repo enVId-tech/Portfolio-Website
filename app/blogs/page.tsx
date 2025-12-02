@@ -1,5 +1,5 @@
 import { Metadata } from 'next';
-import BlogClientPage from './page.client.js';
+import BlogClientPage from './page.client.tsx';
 
 export const metadata: Metadata = {
   title: 'Blog - Erick Tran',
