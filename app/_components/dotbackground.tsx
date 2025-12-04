@@ -183,15 +183,21 @@ function DotCanvas({ config, contentRef }: DotCanvasProps): React.ReactElement {
             const scrollY = window.scrollY;
             const newStep = Math.floor(scrollY / stepSize);
             
-            if (newStep !== canvasOffsetRef.current) {
-                canvasOffsetRef.current = newStep;
-                canvas.style.top = `${(newStep * stepSize) - extraHeight}px`;
-            }
-
-            if (content) {
-                if (scrollY > content.offsetHeight - window.innerHeight) {
-                    window.scrollTo(0, content.offsetHeight - window.innerHeight);
-                }
+            // Calculate maximum allowed scroll position
+            const contentHeight = content ? content.offsetHeight : document.documentElement.scrollHeight;
+            const viewportHeight = window.innerHeight;
+            const buffer = 100; // Extra buffer to prevent gaps, in px
+            const maxScrollY = Math.max(0, contentHeight - viewportHeight - buffer);
+            
+            // Calculate maximum step to prevent canvas from going past content
+            const maxStep = Math.floor(maxScrollY / stepSize);
+            
+            // Clamp the step to valid range (minimum 0, maximum based on content)
+            const clampedStep = Math.max(0, Math.min(newStep, maxStep));
+            
+            if (clampedStep !== canvasOffsetRef.current) {
+                canvasOffsetRef.current = clampedStep;
+                canvas.style.top = `${(clampedStep * stepSize) - extraHeight}px`;
             }
         };
 

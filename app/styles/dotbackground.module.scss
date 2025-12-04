@@ -21,6 +21,7 @@
   width: 100vw;
   z-index: 1;
   pointer-events: none; // Allow clicks to pass through to content
+  background-color: rgb(24, 24, 24); // Match container background
 }
 
 // Placeholder element for SSR to prevent hydration mismatch
@@ -33,6 +34,7 @@
   height: 100vh;
   z-index: 1;
   pointer-events: none;
+  background-color: rgb(24, 24, 24); // Match container background
 }
 
 // Content container positioned above the canvas - responsive width
