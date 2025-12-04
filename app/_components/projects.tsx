@@ -3,8 +3,6 @@ import React, { useState, useMemo, useEffect, useCallback } from 'react';
 import styles from '@/styles/projects.module.scss';
 import { M_400, M_600 } from "@/utils/globalFonts";
 import { FaGithub, FaExternalLinkAlt } from 'react-icons/fa';
-import { githubService } from '@/utils/githubService';
-import { cachedFetch } from '@/utils/cache';
 
 // Types - moved to the top for better code organization
 /**
@@ -29,42 +27,9 @@ interface Project {
 }
 
 /**
- * Represents a GitHub repository.
- */
-interface GitHubRepo {
-    id: number;
-    name: string;
-    description: string | null;
-    html_url: string;
-    homepage: string | null;
-    languages_url: string;
-    default_branch: string;
-}
-
-/**
- * Represents the API response for GitHub repository settings.
- */
-interface GitHubReposApiResponse {
-    success: boolean;
-    includedRepos?: string[];
-    excludedRepos?: string[];
-}
-
-/**
  * Type for repository filter mode.
  */
 type RepoFilterMode = 'include' | 'exclude';
-
-// Framework detection mapping - moved outside component to prevent recreation
-const frameworkDetection = {
-    'React': ['react', 'react-dom'],
-    'Next.js': ['next'],
-    'Vue': ['vue'],
-    'Angular': ['@angular/core'],
-    'Svelte': ['svelte'],
-    'Express': ['express'],
-    'ElectronJS': ['electron'],
-};
 
 // Individual project card component - extracted and memoized
 /**
@@ -162,142 +127,45 @@ export default function Projects(): React.ReactElement {
     const [error, setError] = useState<string | null>(null);
     const [activeFilter, setActiveFilter] = useState<string>("All");
 
-    // Process raw GitHub repo data into project format
-    const processRepo = useCallback(async (repo: GitHubRepo): Promise<Project> => {
-        try {
-            // Get languages using GitHub service
-            const languageData = await githubService.getRepositoryLanguages(repo.name);
-
-            // Calculate total bytes
-            const totalBytes = Object.values(languageData).reduce((sum: number, bytes: number) => sum + bytes, 0);
-
-            // Get primary languages (>= 15%)
-            const primaryLanguages = Object.entries(languageData)
-                .filter(([, bytes]: [string, number]) => (bytes / totalBytes) >= 0.15)
-                .map(([language]) => language);
-
-            const frameworks: string[] = [];
-
-            // Only try to fetch package.json for JavaScript/TypeScript projects
-            if (languageData['JavaScript'] || languageData['TypeScript']) {
-                try {
-                    const packageJson = await githubService.getPackageJson(repo.name, repo.default_branch || 'main');
-                    
-                    if (packageJson) {
-                        const allDependencies = {
-                            ...(packageJson.dependencies || {}),
-                            ...(packageJson.devDependencies || {})
-                        };
-
-                        // Detect frameworks from dependencies
-                        Object.entries(frameworkDetection).forEach(([framework, packages]) => {
-                            if (packages.some(pkg => allDependencies[pkg] !== undefined)) {
-                                frameworks.push(framework);
-                            }
-                        });
-                    }
-                } catch (error) {
-                    console.error(`Error fetching package.json for ${repo.name}:`, error);
-                }
-            }
-
-            // Combine languages and frameworks into technologies
-            const technologies = [
-                ...primaryLanguages.map(lang => ({ name: lang })),
-                ...frameworks.map(fw => ({ name: fw }))
-            ];
-
-            return {
-                title: repo.name,
-                description: repo.description || "No description available",
-                githubUrl: repo.html_url,
-                demoUrl: repo.homepage || undefined,
-                technologies: technologies.length > 0 ? technologies : [{ name: "Unknown" }],
-                isFromGitHub: true
-            };
-        } catch (error) {
-            console.error(`Error processing repository ${repo.name}:`, error);
-            return {
-                title: repo.name,
-                description: repo.description || "No description available",
-                githubUrl: repo.html_url,
-                demoUrl: repo.homepage || undefined,
-                technologies: [{ name: "Unknown" }],
-                isFromGitHub: true
-            };
-        }
-    }, []);
-
     const fetchGithubRepos = useCallback(async () => {
         setIsLoading(true);
         setError(null);
 
-        // Default fallback repository lists
-        let includedRepos: string[] = [];
-        let excludedRepos: string[] = ["DockerTemplates", "enVId-tech"];
-
         try {
-            // Fetch repository settings from MongoDB (cached)
-            const reposData = await cachedFetch(
-                '/api/github-repos',
-                'api-github-repos',
-                { headers: { 'Cache-Control': 'no-cache' } },
-                5 * 60 * 1000 // 5 minutes cache
-            ) as GitHubReposApiResponse;
+            // Fetch projects from server-side cache
+            // The server handles all GitHub API calls and caching
+            const response = await fetch(`/api/projects?filterMode=${filterMode}`, {
+                cache: 'no-store' // Let the server handle caching
+            });
 
-            if (reposData.success) {
-                includedRepos = reposData.includedRepos || includedRepos;
-                excludedRepos = reposData.excludedRepos || excludedRepos;
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
             }
 
-            // Check if GitHub API is available before making requests
-            if (!githubService.isApiAvailable()) {
-                const timeUntilReset = githubService.getTimeUntilReset();
-                const resetTime = timeUntilReset ? new Date(Date.now() + timeUntilReset) : null;
-                throw new Error(
-                    `GitHub API rate limit exceeded. ${resetTime ? 
-                        `Resets at: ${resetTime.toLocaleTimeString()}` : 
-                        'Please try again later.'}`
-                );
+            const data = await response.json();
+
+            if (!data.success) {
+                throw new Error(data.error || 'Failed to load projects');
             }
 
-            // Fetch GitHub repositories using the service
-            const repos = await githubService.getRepositories();
+            // Set the projects from the server cache
+            setGithubProjects(data.projects || []);
 
-            // Filter repositories based on mode
-            const filteredRepos = filterMode === 'include'
-                ? repos.filter((repo: GitHubRepo) => includedRepos.includes(repo.name))
-                : repos.filter((repo: GitHubRepo) => !excludedRepos.includes(repo.name));
-
-            // Process repositories in smaller batches to avoid overwhelming the API
-            const batchSize = 2; // Reduced from 3 to be more conservative
-            const processedProjects = [];
-
-            for (let i = 0; i < filteredRepos.length; i += batchSize) {
-                const batch = filteredRepos.slice(i, i + batchSize);
-                
-                try {
-                    const batchResults = await Promise.all(batch.map(processRepo));
-                    processedProjects.push(...batchResults);
-
-                    // Update state incrementally for better UX
-                    if (i === 0) {
-                        setGithubProjects(batchResults);
-                    } else {
-                        setGithubProjects(prev => [...prev, ...batchResults]);
-                    }
-
-                    // Add small delay between batches to be respectful to APIs
-                    if (i + batchSize < filteredRepos.length) {
-                        await new Promise(resolve => setTimeout(resolve, 200));
-                    }
-                } catch (batchError) {
-                    console.error(`Error processing batch ${i}-${i + batchSize}:`, batchError);
-                    // Continue with next batch instead of failing completely
-                }
+            // Log cache status for debugging
+            if (data.cached) {
+                console.log('Projects loaded from server cache', {
+                    stale: data.stale,
+                    timestamp: new Date(data.timestamp).toLocaleString(),
+                    expiresAt: data.expiresAt ? new Date(data.expiresAt).toLocaleString() : 'N/A'
+                });
+            } else {
+                console.log('Projects fetched fresh from GitHub API');
             }
 
-            setGithubProjects(processedProjects);
+            // Show warning if serving stale data
+            if (data.stale && data.warning) {
+                console.warn('Serving stale cache:', data.warning);
+            }
 
         } catch (error) {
             console.error('Error fetching GitHub repositories:', error);
@@ -311,16 +179,16 @@ export default function Projects(): React.ReactElement {
         } finally {
             setIsLoading(false);
         }
-    }, [filterMode, processRepo]);
+    }, [filterMode]);
 
 // Set up intelligent fetching with caching
     useEffect(() => {
         // Initial fetch when component mounts
         fetchGithubRepos();
 
-        // Set up interval for periodic cache refresh (once every 10 minutes)
-        // The cache will handle whether to actually fetch fresh data
-        const interval = setInterval(fetchGithubRepos, 10 * 60 * 1000);
+        // Set up interval for periodic refresh (once every 20 minutes)
+        // The server cache refreshes every 15 minutes, so we check slightly after
+        const interval = setInterval(fetchGithubRepos, 20 * 60 * 1000);
 
         // Clean up interval on component unmount
         return () => clearInterval(interval);

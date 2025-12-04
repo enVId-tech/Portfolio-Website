@@ -3,6 +3,10 @@
     {
       "path": "/api/cron/publish-scheduled",
       "schedule": "* * * * *"
+    },
+    {
+      "path": "/api/cron/refresh-projects",
+      "schedule": "*/15 * * * *"
     }
   ]
 }
