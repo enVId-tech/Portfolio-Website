@@ -22,7 +22,7 @@ export default function Header({ children }: HeaderProps): React.ReactElement {
                     Hi, I&#39;m <span className={`${styles.name} ${M_600}`}>Erick</span>
                 </h1>
                 <h2 className={`${styles.headerName} ${M_600}`}>
-                    Full-stack developer.
+                    Full stack developer.
                 </h2>
                 <nav className={`${styles.headerButtons}`} aria-label="Social media links">
                     <a 

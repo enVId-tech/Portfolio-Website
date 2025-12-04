@@ -10,8 +10,8 @@
   // Header text styling with responsive font size
   .header {
     color: white;
-    font-size: clamp(2.3rem, 12vw, 3.5vw); // Much larger on mobile, bigger viewport scaling
-    line-height: 1.1; // Tighter line height for bigger text
+    font-size: clamp(3.1rem, 14vw, 3.5vw); // Larger on mobile
+    line-height: 1.3; // Tighter line height for bigger text
     word-wrap: break-word; // Prevent text overflow
     overflow-wrap: break-word; // Additional overflow protection
   }
@@ -19,7 +19,7 @@
   // Name text styling with underline animation
   .name {
     color: white;
-    font-size: clamp(2.3rem, 12vw, 3.5vw); // Match parent, much larger on mobile
+    font-size: clamp(3.1rem, 14vw, 3.5vw); // Larger on mobile
     position: relative;
     padding: 0 6px;
     display: inline-block;
@@ -54,7 +54,7 @@
 
   // Header name text styling with gradient
   .headerName {
-    font-size: clamp(2.5rem, 13vw, 5vw); // Much larger on mobile
+    font-size: clamp(3.1rem, 15vw, 5vw); // Larger on mobile
     background: linear-gradient(to right, #22ffed, #24a2ff, #571fff);
     background-clip: text;
     -webkit-background-clip: text;

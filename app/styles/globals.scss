@@ -6,9 +6,20 @@ body {
   height: 100%;
   margin: 0;
   padding: 0;
+  background-color: rgb(24, 24, 24);
+  overscroll-behavior: none;
 }
 
 html {
   width: 100%;
+  height: 100%;
   overflow-x: hidden;
+  background-color: rgb(24, 24, 24);
+  overscroll-behavior: none;
+}
+
+// Ensure no white space appears anywhere
+html, body, #__next {
+  min-height: 100%;
+  background-color: rgb(24, 24, 24);
 }
