@@ -6,8 +6,6 @@ import { NextResponse } from 'next/server';
  * or a scheduled task to ensure the cache stays fresh.
  * 
  * Schedule recommendation: Every 15 minutes
- * 
- * Example cron expression: */15 * * * *
  */
 export async function GET(request: Request) {
     try {
