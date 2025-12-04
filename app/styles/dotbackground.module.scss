@@ -6,19 +6,21 @@
   width: 100%;
   min-height: 100vh;
   background-color: rgb(24, 24, 24);
-  overflow: visible;
+  overflow: hidden; // Prevent canvas from causing overflow/whitespace
   display: flex;
   justify-content: center;
 }
 
 // Canvas element for the dot background animation - covers the entire viewport
+// Uses position: absolute relative to container, moves in discrete steps with scroll
+// Note: height is set by JavaScript to avoid hydration mismatch
 .canvas {
   position: absolute;
   top: 0;
   left: 0;
-  width: 100%;
-  height: 100%;
+  width: 100vw;
   z-index: 1;
+  pointer-events: none; // Allow clicks to pass through to content
 }
 
 // Content container positioned above the canvas - responsive width

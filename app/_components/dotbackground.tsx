@@ -1,5 +1,5 @@
 'use client';
-import React, { useEffect, useRef, useMemo, useCallback } from 'react';
+import React, { useEffect, useRef, useMemo, useCallback, useState } from 'react';
 import styles from '@/styles/dotbackground.module.scss';
 
 // Use typed arrays for better memory layout and performance
@@ -23,6 +23,7 @@ interface DotBackgroundConfig {
     friction?: number;
     pushForce?: number;
     edgePadding?: number;
+    extraRowsAboveBelow?: number; // Number of extra dot rows to render above/below viewport
 }
 
 type DotBackgroundProps = {
@@ -31,9 +32,9 @@ type DotBackgroundProps = {
 };
 
 export default function DotBackground({
-                                          children,
-                                          config = {}
-                                      }: DotBackgroundProps): React.ReactElement {
+    children,
+    config = {}
+}: DotBackgroundProps): React.ReactElement {
     const canvasRef = useRef<HTMLCanvasElement>(null);
     const contentRef = useRef<HTMLDivElement>(null);
     const containerRef = useRef<HTMLDivElement>(null);
@@ -42,6 +43,14 @@ export default function DotBackground({
     const animationRef = useRef<number>(0);
     const isAnimatingRef = useRef(false);
     const lastFrameTimeRef = useRef(0);
+    const cachedDotsRef = useRef<DotsData | null>(null);
+    const cachedMouseRef = useRef({ x: -9999, y: -9999 });
+    const previousMouseActiveRef = useRef(false);
+    const canvasOffsetRef = useRef(0); // Track the current canvas Y offset (in steps)
+    
+    // Key state to force canvas remount after hydration
+    const [canvasKey, setCanvasKey] = useState(0);
+    const [isClient, setIsClient] = useState(false);
 
     const effectiveConfig = useMemo(() => ({
         spacingBetweenDots: 80,
@@ -53,8 +62,12 @@ export default function DotBackground({
         friction: 0.4,
         pushForce: 2,
         edgePadding: 20,
+        extraRowsAboveBelow: 3, // Render 3 extra rows above and below viewport
         ...config
     }), [config]);
+
+    // Calculate the step size (spacing + dotSize for the threshold)
+    const stepSize = useMemo(() => effectiveConfig.spacingBetweenDots, [effectiveConfig.spacingBetweenDots]);
 
     // Pre-compute the fill style to avoid string operations in render loop
     const fillStyle = useMemo(() => {
@@ -63,16 +76,16 @@ export default function DotBackground({
     }, [effectiveConfig]);
 
     // Memoize squared max distance to avoid multiplication in hot path
-    const maxDistanceSquared = useMemo(() => 
-        effectiveConfig.maxDistance * effectiveConfig.maxDistance, 
+    const maxDistanceSquared = useMemo(() =>
+        effectiveConfig.maxDistance * effectiveConfig.maxDistance,
         [effectiveConfig.maxDistance]
     );
 
-    const initDots = useCallback((documentWidth: number, documentHeight: number) => {
+    const initDots = useCallback((documentWidth: number, canvasHeight: number) => {
         const spacing = effectiveConfig.spacingBetweenDots;
         const extraBuffer = effectiveConfig.maxDistance * 2;
         const cols = Math.ceil((documentWidth + extraBuffer) / spacing);
-        const rows = Math.ceil((documentHeight + extraBuffer) / spacing);
+        const rows = Math.ceil((canvasHeight + extraBuffer) / spacing);
         const count = cols * rows;
 
         // Use typed arrays for better performance
@@ -106,7 +119,15 @@ export default function DotBackground({
         dotsRef.current = dots;
     }, [effectiveConfig.spacingBetweenDots, effectiveConfig.maxDistance]);
 
+    // Ensure client-side rendering to avoid hydration mismatches
     useEffect(() => {
+        setIsClient(true);
+    }, []);
+
+    useEffect(() => {
+        // Only run this effect on the client after hydration
+        if (!isClient) return;
+
         const canvas = canvasRef.current;
         const container = containerRef.current;
         const content = contentRef.current;
@@ -116,39 +137,80 @@ export default function DotBackground({
         const ctx = canvas.getContext('2d', { alpha: true, desynchronized: true });
         if (!ctx) return;
 
-        const lastDimensions = {
-            width: window.innerWidth,
-            height: document.body.scrollHeight
-        };
+        const { extraRowsAboveBelow, spacingBetweenDots } = effectiveConfig;
+        // Calculate extra height for dots above and below viewport
+        const extraHeight = extraRowsAboveBelow * spacingBetweenDots;
 
         const resizeCanvas = () => {
-            const documentWidth = Math.min(document.body.clientWidth, window.innerWidth);
-            const documentHeight = Math.max(
-                document.body.scrollHeight,
-                document.documentElement.scrollHeight,
-                document.body.offsetHeight,
-                window.innerHeight
-            );
+            // Always use window dimensions for the background canvas to ensure full coverage
+            const documentWidth = window.innerWidth;
+            
+            // Use max of innerHeight and clientHeight to ensure we get a valid height
+            const viewportHeight = Math.max(window.innerHeight || 0, document.documentElement.clientHeight || 0);
+            
+            // Canvas height = viewport + extra rows above + extra rows below
+            const canvasHeight = viewportHeight + (extraHeight * 2);
 
-            if (
-                Math.abs(lastDimensions.width - documentWidth) > 10 ||
-                Math.abs(lastDimensions.height - documentHeight) > 10
-            ) {
-                lastDimensions.width = documentWidth;
-                lastDimensions.height = documentHeight;
+            canvas.width = documentWidth;
+            canvas.height = canvasHeight;
+            canvas.style.width = `${documentWidth}px`;
+            canvas.style.height = `${canvasHeight}px`;
 
-                canvas.width = documentWidth;
-                canvas.height = documentHeight;
-                canvas.style.width = `${documentWidth}px`;
-                canvas.style.height = `${documentHeight}px`;
+            // Initialize canvas position with absolute positioning (relative to container)
+            // The canvas only moves in discrete JUMPS, not smooth scrolling
+            const scrollY = window.scrollY;
+            const currentStep = Math.floor(scrollY / stepSize);
+            canvasOffsetRef.current = currentStep;
+            
+            // Position canvas at discrete step positions
+            // top = (step * stepSize) - extraHeight
+            // At step 0: top = -extraHeight (extra rows above viewport)
+            // At step 1: top = stepSize - extraHeight
+            // This makes canvas "jump" by exactly stepSize when crossing boundaries
+            canvas.style.top = `${(currentStep * stepSize) - extraHeight}px`;
 
-                initDots(documentWidth, documentHeight);
+            // If dots are stretched out, fix the canvasHeight and make sure it is viewport height and not document height
+            initDots(documentWidth, canvasHeight);
+            // Reset cache on resize
+            cachedDotsRef.current = null;
+        };
+
+        // Update canvas position based on scroll - DISCRETE STEPS ONLY
+        // Canvas stays completely still within a step, then JUMPS when boundary is crossed
+        const updateCanvasPosition = () => {
+            const scrollY = window.scrollY;
+            const newStep = Math.floor(scrollY / stepSize);
+            
+            // Only move canvas when we cross a step boundary
+            if (newStep !== canvasOffsetRef.current) {
+                canvasOffsetRef.current = newStep;
+                // Jump to new position - canvas moves down by stepSize
+                canvas.style.top = `${(newStep * stepSize) - extraHeight}px`;
             }
+
+            // If the canvas exceeds the page bounds, stop the user from scrolling further
+            if (content) {
+                // const contentHeight = content.offsetHeight;
+                // const maxScrollY = contentHeight - window.innerHeight;
+            
+                // if (scrollY > maxScrollY) {
+                //     window.position(0, maxScrollY)
+                // }
+
+                if (scrollY > content.offsetHeight - window.innerHeight) {
+                    window.scrollTo(0, content.offsetHeight - window.innerHeight);
+                }
+            }
+            // If within the same step, canvas doesn't move at all
         };
 
         const handleMouseMove = (e: MouseEvent) => {
             mouseRef.current.x = e.clientX;
-            mouseRef.current.y = e.clientY + window.scrollY;
+            // Adjust mouse Y to account for canvas offset (convert page coords to canvas coords)
+            // Canvas top = (step * stepSize) - extraHeight
+            // Mouse in canvas coords = mousePageY - canvasTop
+            const canvasTop = (canvasOffsetRef.current * stepSize) - extraHeight;
+            mouseRef.current.y = e.clientY + window.scrollY - canvasTop;
             mouseRef.current.active = true;
         };
 
@@ -159,36 +221,75 @@ export default function DotBackground({
         };
 
         const animate = (timestamp: number) => {
-            // Target 30 FPS for better performance (every ~33ms)
-            if (timestamp - lastFrameTimeRef.current < 33) {
-                animationRef.current = requestAnimationFrame(animate);
-                return;
-            }
-            lastFrameTimeRef.current = timestamp;
-
             const dots = dotsRef.current;
             if (!dots) {
                 animationRef.current = requestAnimationFrame(animate);
                 return;
             }
 
-            const { maxDistance, pushForce, returnForce, friction, dotSize } = effectiveConfig;
-            const scrollY = window.scrollY;
-            const windowHeight = window.innerHeight;
-            const windowWidth = window.innerWidth;
-            
-            // Expand visible area slightly for smoother edges
-            const visibleTop = scrollY - maxDistance;
-            const visibleBottom = scrollY + windowHeight + maxDistance;
-            const visibleLeft = -maxDistance;
-            const visibleRight = windowWidth + maxDistance;
-            
-            const mouseX = mouseRef.current.x;
-            const mouseY = mouseRef.current.y;
             const mouseActive = mouseRef.current.active;
 
-            // Clear only the visible portion for better performance
-            ctx.clearRect(0, visibleTop, windowWidth, windowHeight + maxDistance * 2);
+            // Handle state caching and restoration
+            if (mouseActive !== previousMouseActiveRef.current) {
+                if (mouseActive) {
+                    // Becoming active, restore cached state
+                    if (cachedDotsRef.current) {
+                        dots.x.set(cachedDotsRef.current.x);
+                        dots.y.set(cachedDotsRef.current.y);
+                        dots.vx.set(cachedDotsRef.current.vx);
+                        dots.vy.set(cachedDotsRef.current.vy);
+                    }
+                    mouseRef.current.x = cachedMouseRef.current.x;
+                    mouseRef.current.y = cachedMouseRef.current.y;
+                } else {
+                    // Becoming inactive, cache current state
+                    cachedDotsRef.current = {
+                        x: new Float32Array(dots.x),
+                        y: new Float32Array(dots.y),
+                        originalX: dots.originalX,
+                        originalY: dots.originalY,
+                        vx: new Float32Array(dots.vx),
+                        vy: new Float32Array(dots.vy),
+                        count: dots.count
+                    };
+                    cachedMouseRef.current = { x: mouseRef.current.x, y: mouseRef.current.y };
+                }
+                previousMouseActiveRef.current = mouseActive;
+            }
+
+            // Adjust FPS based on mouse activity
+            const targetFPS = mouseActive ? 30 : 5;
+            const frameInterval = 1000 / targetFPS;
+            if (timestamp - lastFrameTimeRef.current < frameInterval) {
+                animationRef.current = requestAnimationFrame(animate);
+                return;
+            }
+            lastFrameTimeRef.current = timestamp;
+
+            const { maxDistance, pushForce, returnForce, friction, dotSize } = effectiveConfig;
+            
+            // Calculate canvas-relative visible area
+            // The canvas is positioned at (currentStep * stepSize - extraHeight)
+            // So visible area in canvas coordinates is from extraHeight to extraHeight + windowHeight
+            // plus some buffer for smoother edges
+            const canvasHeight = canvas.height;
+            const windowHeight = window.innerHeight;
+            const windowWidth = window.innerWidth;
+
+            // For canvas-local coordinates, we render dots from 0 to canvasHeight
+            // The visible portion in canvas coords when scrollY is at a step boundary
+            // is approximately from extraHeight to extraHeight + windowHeight
+            // But we want to render the full canvas for smooth scrolling within a step
+            const visibleTop = -maxDistance;
+            const visibleBottom = canvasHeight + maxDistance;
+            const visibleLeft = -maxDistance;
+            const visibleRight = windowWidth + maxDistance;
+
+            const mouseX = mouseRef.current.x;
+            const mouseY = mouseRef.current.y;
+
+            // Clear the entire canvas
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
 
             ctx.beginPath();
 
@@ -201,7 +302,7 @@ export default function DotBackground({
                 const dotX = x[i];
 
                 // Early visibility culling
-                if (dotY < visibleTop || dotY > visibleBottom || 
+                if (dotY < visibleTop || dotY > visibleBottom ||
                     dotX < visibleLeft || dotX > visibleRight) {
                     continue;
                 }
@@ -225,11 +326,9 @@ export default function DotBackground({
 
                 // Spring physics - return to original position
                 vx[i] += (originalX[i] - dotX) * returnForce;
-                vy[i] += (originalY[i] - dotY) * returnForce;
-
-                // Apply friction
-                vx[i] *= friction;
                 vy[i] *= friction;
+                vy[i] += (originalY[i] - dotY) * returnForce;
+                vx[i] *= friction;
 
                 // Update position
                 x[i] += vx[i];
@@ -249,40 +348,43 @@ export default function DotBackground({
         // Use passive event listeners for better scroll performance
         window.addEventListener('mousemove', handleMouseMove, { passive: true });
         document.addEventListener('mouseleave', handleMouseLeave, { passive: true });
+        window.addEventListener('scroll', updateCanvasPosition, { passive: true });
 
-        // Debounced resize handler
-        let resizeTimeout: ReturnType<typeof setTimeout>;
-        const handleResize = () => {
-            clearTimeout(resizeTimeout);
-            resizeTimeout = setTimeout(resizeCanvas, 150);
-        };
-        window.addEventListener('resize', handleResize, { passive: true });
-
-        // Use a single ResizeObserver for body
-        const resizeObserver = new ResizeObserver(() => {
-            clearTimeout(resizeTimeout);
-            resizeTimeout = setTimeout(resizeCanvas, 150);
-        });
-        resizeObserver.observe(document.body);
-
+        // Initialize canvas
         resizeCanvas();
+
+        // Start animation
         isAnimatingRef.current = true;
         animationRef.current = requestAnimationFrame(animate);
+
+        // Handle window resize
+        const handleResize = () => {
+            resizeCanvas();
+        };
+        window.addEventListener('resize', handleResize);
 
         return () => {
             window.removeEventListener('mousemove', handleMouseMove);
             document.removeEventListener('mouseleave', handleMouseLeave);
+            window.removeEventListener('scroll', updateCanvasPosition);
             window.removeEventListener('resize', handleResize);
-            resizeObserver.disconnect();
-            clearTimeout(resizeTimeout);
             cancelAnimationFrame(animationRef.current);
             isAnimatingRef.current = false;
         };
-    }, [effectiveConfig, fillStyle, maxDistanceSquared, initDots]);
+    }, [effectiveConfig, fillStyle, maxDistanceSquared, initDots, stepSize, canvasKey, isClient]);
+
+    // Force canvas remount after initial hydration to fix sizing issues
+    useEffect(() => {
+        // This runs only on client after hydration
+        const timer = setTimeout(() => {
+            setCanvasKey(prev => prev + 1);
+        }, 100);
+        return () => clearTimeout(timer);
+    }, []);
 
     return (
         <div className={styles.container} ref={containerRef}>
-            <canvas ref={canvasRef} className={styles.canvas} />
+            {isClient && <canvas key={canvasKey} ref={canvasRef} className={styles.canvas} />}
             <div className={styles.content} ref={contentRef}>
                 {children}
             </div>
