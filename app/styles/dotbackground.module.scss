@@ -13,12 +13,12 @@
 
 // Canvas element for the dot background animation - covers the entire viewport
 // Uses position: absolute relative to container, moves in discrete steps with scroll
+// Note: height is set by JavaScript to avoid hydration mismatch
 .canvas {
   position: absolute;
   top: 0;
   left: 0;
   width: 100vw;
-  height: 100vh;
   z-index: 1;
   pointer-events: none; // Allow clicks to pass through to content
 }

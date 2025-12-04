@@ -1,5 +1,5 @@
 'use client';
-import React, { useEffect, useRef, useMemo, useCallback } from 'react';
+import React, { useEffect, useRef, useMemo, useCallback, useState } from 'react';
 import styles from '@/styles/dotbackground.module.scss';
 
 // Use typed arrays for better memory layout and performance
@@ -47,6 +47,10 @@ export default function DotBackground({
     const cachedMouseRef = useRef({ x: -9999, y: -9999 });
     const previousMouseActiveRef = useRef(false);
     const canvasOffsetRef = useRef(0); // Track the current canvas Y offset (in steps)
+    
+    // Key state to force canvas remount after hydration
+    const [canvasKey, setCanvasKey] = useState(0);
+    const [isClient, setIsClient] = useState(false);
 
     const effectiveConfig = useMemo(() => ({
         spacingBetweenDots: 80,
@@ -115,7 +119,15 @@ export default function DotBackground({
         dotsRef.current = dots;
     }, [effectiveConfig.spacingBetweenDots, effectiveConfig.maxDistance]);
 
+    // Ensure client-side rendering to avoid hydration mismatches
     useEffect(() => {
+        setIsClient(true);
+    }, []);
+
+    useEffect(() => {
+        // Only run this effect on the client after hydration
+        if (!isClient) return;
+
         const canvas = canvasRef.current;
         const container = containerRef.current;
         const content = contentRef.current;
@@ -130,9 +142,14 @@ export default function DotBackground({
         const extraHeight = extraRowsAboveBelow * spacingBetweenDots;
 
         const resizeCanvas = () => {
-            const documentWidth = Math.min(document.body.clientWidth, window.innerWidth);
+            // Always use window dimensions for the background canvas to ensure full coverage
+            const documentWidth = window.innerWidth;
+            
+            // Use max of innerHeight and clientHeight to ensure we get a valid height
+            const viewportHeight = Math.max(window.innerHeight || 0, document.documentElement.clientHeight || 0);
+            
             // Canvas height = viewport + extra rows above + extra rows below
-            const canvasHeight = window.innerHeight + (extraHeight * 2);
+            const canvasHeight = viewportHeight + (extraHeight * 2);
 
             canvas.width = documentWidth;
             canvas.height = canvasHeight;
@@ -169,6 +186,20 @@ export default function DotBackground({
                 canvasOffsetRef.current = newStep;
                 // Jump to new position - canvas moves down by stepSize
                 canvas.style.top = `${(newStep * stepSize) - extraHeight}px`;
+            }
+
+            // If the canvas exceeds the page bounds, stop the user from scrolling further
+            if (content) {
+                // const contentHeight = content.offsetHeight;
+                // const maxScrollY = contentHeight - window.innerHeight;
+            
+                // if (scrollY > maxScrollY) {
+                //     window.position(0, maxScrollY)
+                // }
+
+                if (scrollY > content.offsetHeight - window.innerHeight) {
+                    window.scrollTo(0, content.offsetHeight - window.innerHeight);
+                }
             }
             // If within the same step, canvas doesn't move at all
         };
@@ -319,41 +350,41 @@ export default function DotBackground({
         document.addEventListener('mouseleave', handleMouseLeave, { passive: true });
         window.addEventListener('scroll', updateCanvasPosition, { passive: true });
 
-        // Debounced resize handler
-        let resizeTimeout: ReturnType<typeof setTimeout>;
-        const handleResize = () => {
-            clearTimeout(resizeTimeout);
-            resizeTimeout = setTimeout(resizeCanvas, 150);
-        };
-
-        window.addEventListener('resize', handleResize);
-
-        // Use a single ResizeObserver for body
-        const resizeObserver = new ResizeObserver(() => {
-            clearTimeout(resizeTimeout);
-            resizeTimeout = setTimeout(resizeCanvas, 150);
-        });
-        resizeObserver.observe(document.body);
-
+        // Initialize canvas
         resizeCanvas();
+
+        // Start animation
         isAnimatingRef.current = true;
         animationRef.current = requestAnimationFrame(animate);
+
+        // Handle window resize
+        const handleResize = () => {
+            resizeCanvas();
+        };
+        window.addEventListener('resize', handleResize);
 
         return () => {
             window.removeEventListener('mousemove', handleMouseMove);
             document.removeEventListener('mouseleave', handleMouseLeave);
             window.removeEventListener('scroll', updateCanvasPosition);
             window.removeEventListener('resize', handleResize);
-            resizeObserver.disconnect();
-            clearTimeout(resizeTimeout);
             cancelAnimationFrame(animationRef.current);
             isAnimatingRef.current = false;
         };
-    }, [effectiveConfig, fillStyle, maxDistanceSquared, initDots, stepSize]);
+    }, [effectiveConfig, fillStyle, maxDistanceSquared, initDots, stepSize, canvasKey, isClient]);
+
+    // Force canvas remount after initial hydration to fix sizing issues
+    useEffect(() => {
+        // This runs only on client after hydration
+        const timer = setTimeout(() => {
+            setCanvasKey(prev => prev + 1);
+        }, 100);
+        return () => clearTimeout(timer);
+    }, []);
 
     return (
         <div className={styles.container} ref={containerRef}>
-            <canvas ref={canvasRef} className={styles.canvas} />
+            {isClient && <canvas key={canvasKey} ref={canvasRef} className={styles.canvas} />}
             <div className={styles.content} ref={contentRef}>
                 {children}
             </div>

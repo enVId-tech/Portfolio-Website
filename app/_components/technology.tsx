@@ -100,7 +100,10 @@ export function stringToReactElement(str: string): React.ReactElement | null {
         return createIconElement(cleanStr);
     }
 
-    console.error('Invalid React element string format:', str);
+    // Only log error if the string is not empty (empty strings are expected when icon is not a string)
+    if (str && str.trim() !== '') {
+        console.error('Invalid React element string format:', str);
+    }
     return null;
 }
 
