@@ -23,6 +23,7 @@ interface DotBackgroundConfig {
     friction?: number;
     pushForce?: number;
     edgePadding?: number;
+    extraRowsAboveBelow?: number; // Number of extra dot rows to render above/below viewport
 }
 
 type DotBackgroundProps = {
@@ -45,6 +46,7 @@ export default function DotBackground({
     const cachedDotsRef = useRef<DotsData | null>(null);
     const cachedMouseRef = useRef({ x: -9999, y: -9999 });
     const previousMouseActiveRef = useRef(false);
+    const canvasOffsetRef = useRef(0); // Track the current canvas Y offset (in steps)
 
     const effectiveConfig = useMemo(() => ({
         spacingBetweenDots: 80,
@@ -56,8 +58,12 @@ export default function DotBackground({
         friction: 0.4,
         pushForce: 2,
         edgePadding: 20,
+        extraRowsAboveBelow: 3, // Render 3 extra rows above and below viewport
         ...config
     }), [config]);
+
+    // Calculate the step size (spacing + dotSize for the threshold)
+    const stepSize = useMemo(() => effectiveConfig.spacingBetweenDots, [effectiveConfig.spacingBetweenDots]);
 
     // Pre-compute the fill style to avoid string operations in render loop
     const fillStyle = useMemo(() => {
@@ -71,11 +77,11 @@ export default function DotBackground({
         [effectiveConfig.maxDistance]
     );
 
-    const initDots = useCallback((documentWidth: number, documentHeight: number) => {
+    const initDots = useCallback((documentWidth: number, canvasHeight: number) => {
         const spacing = effectiveConfig.spacingBetweenDots;
         const extraBuffer = effectiveConfig.maxDistance * 2;
         const cols = Math.ceil((documentWidth + extraBuffer) / spacing);
-        const rows = Math.ceil((documentHeight + extraBuffer) / spacing);
+        const rows = Math.ceil((canvasHeight + extraBuffer) / spacing);
         const count = cols * rows;
 
         // Use typed arrays for better performance
@@ -119,23 +125,61 @@ export default function DotBackground({
         const ctx = canvas.getContext('2d', { alpha: true, desynchronized: true });
         if (!ctx) return;
 
+        const { extraRowsAboveBelow, spacingBetweenDots } = effectiveConfig;
+        // Calculate extra height for dots above and below viewport
+        const extraHeight = extraRowsAboveBelow * spacingBetweenDots;
+
         const resizeCanvas = () => {
             const documentWidth = Math.min(document.body.clientWidth, window.innerWidth);
-            const documentHeight = window.innerHeight
+            // Canvas height = viewport + extra rows above + extra rows below
+            const canvasHeight = window.innerHeight + (extraHeight * 2);
 
             canvas.width = documentWidth;
-            canvas.height = documentHeight;
+            canvas.height = canvasHeight;
             canvas.style.width = `${documentWidth}px`;
-            canvas.style.height = `${documentHeight}px`;
+            canvas.style.height = `${canvasHeight}px`;
 
-            initDots(documentWidth, documentHeight);
+            // Initialize canvas position with absolute positioning (relative to container)
+            // The canvas only moves in discrete JUMPS, not smooth scrolling
+            const scrollY = window.scrollY;
+            const currentStep = Math.floor(scrollY / stepSize);
+            canvasOffsetRef.current = currentStep;
+            
+            // Position canvas at discrete step positions
+            // top = (step * stepSize) - extraHeight
+            // At step 0: top = -extraHeight (extra rows above viewport)
+            // At step 1: top = stepSize - extraHeight
+            // This makes canvas "jump" by exactly stepSize when crossing boundaries
+            canvas.style.top = `${(currentStep * stepSize) - extraHeight}px`;
+
+            // If dots are stretched out, fix the canvasHeight and make sure it is viewport height and not document height
+            initDots(documentWidth, canvasHeight);
             // Reset cache on resize
             cachedDotsRef.current = null;
         };
 
+        // Update canvas position based on scroll - DISCRETE STEPS ONLY
+        // Canvas stays completely still within a step, then JUMPS when boundary is crossed
+        const updateCanvasPosition = () => {
+            const scrollY = window.scrollY;
+            const newStep = Math.floor(scrollY / stepSize);
+            
+            // Only move canvas when we cross a step boundary
+            if (newStep !== canvasOffsetRef.current) {
+                canvasOffsetRef.current = newStep;
+                // Jump to new position - canvas moves down by stepSize
+                canvas.style.top = `${(newStep * stepSize) - extraHeight}px`;
+            }
+            // If within the same step, canvas doesn't move at all
+        };
+
         const handleMouseMove = (e: MouseEvent) => {
             mouseRef.current.x = e.clientX;
-            mouseRef.current.y = e.clientY + window.scrollY;
+            // Adjust mouse Y to account for canvas offset (convert page coords to canvas coords)
+            // Canvas top = (step * stepSize) - extraHeight
+            // Mouse in canvas coords = mousePageY - canvasTop
+            const canvasTop = (canvasOffsetRef.current * stepSize) - extraHeight;
+            mouseRef.current.y = e.clientY + window.scrollY - canvasTop;
             mouseRef.current.active = true;
         };
 
@@ -192,21 +236,29 @@ export default function DotBackground({
             lastFrameTimeRef.current = timestamp;
 
             const { maxDistance, pushForce, returnForce, friction, dotSize } = effectiveConfig;
-            const scrollY = window.scrollY;
+            
+            // Calculate canvas-relative visible area
+            // The canvas is positioned at (currentStep * stepSize - extraHeight)
+            // So visible area in canvas coordinates is from extraHeight to extraHeight + windowHeight
+            // plus some buffer for smoother edges
+            const canvasHeight = canvas.height;
             const windowHeight = window.innerHeight;
             const windowWidth = window.innerWidth;
 
-            // Expand visible area slightly for smoother edges
-            const visibleTop = scrollY - maxDistance;
-            const visibleBottom = scrollY + windowHeight + maxDistance;
+            // For canvas-local coordinates, we render dots from 0 to canvasHeight
+            // The visible portion in canvas coords when scrollY is at a step boundary
+            // is approximately from extraHeight to extraHeight + windowHeight
+            // But we want to render the full canvas for smooth scrolling within a step
+            const visibleTop = -maxDistance;
+            const visibleBottom = canvasHeight + maxDistance;
             const visibleLeft = -maxDistance;
             const visibleRight = windowWidth + maxDistance;
 
             const mouseX = mouseRef.current.x;
             const mouseY = mouseRef.current.y;
 
-            // Clear only the visible portion for better performance
-            ctx.clearRect(0, visibleTop, windowWidth, windowHeight + maxDistance * 2);
+            // Clear the entire canvas
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
 
             ctx.beginPath();
 
@@ -265,6 +317,7 @@ export default function DotBackground({
         // Use passive event listeners for better scroll performance
         window.addEventListener('mousemove', handleMouseMove, { passive: true });
         document.addEventListener('mouseleave', handleMouseLeave, { passive: true });
+        window.addEventListener('scroll', updateCanvasPosition, { passive: true });
 
         // Debounced resize handler
         let resizeTimeout: ReturnType<typeof setTimeout>;
@@ -289,13 +342,14 @@ export default function DotBackground({
         return () => {
             window.removeEventListener('mousemove', handleMouseMove);
             document.removeEventListener('mouseleave', handleMouseLeave);
+            window.removeEventListener('scroll', updateCanvasPosition);
             window.removeEventListener('resize', handleResize);
             resizeObserver.disconnect();
             clearTimeout(resizeTimeout);
             cancelAnimationFrame(animationRef.current);
             isAnimatingRef.current = false;
         };
-    }, [effectiveConfig, fillStyle, maxDistanceSquared, initDots]);
+    }, [effectiveConfig, fillStyle, maxDistanceSquared, initDots, stepSize]);
 
     return (
         <div className={styles.container} ref={containerRef}>
