@@ -31,9 +31,9 @@ type DotBackgroundProps = {
 };
 
 export default function DotBackground({
-                                          children,
-                                          config = {}
-                                      }: DotBackgroundProps): React.ReactElement {
+    children,
+    config = {}
+}: DotBackgroundProps): React.ReactElement {
     const canvasRef = useRef<HTMLCanvasElement>(null);
     const contentRef = useRef<HTMLDivElement>(null);
     const containerRef = useRef<HTMLDivElement>(null);
@@ -42,6 +42,9 @@ export default function DotBackground({
     const animationRef = useRef<number>(0);
     const isAnimatingRef = useRef(false);
     const lastFrameTimeRef = useRef(0);
+    const cachedDotsRef = useRef<DotsData | null>(null);
+    const cachedMouseRef = useRef({ x: -9999, y: -9999 });
+    const previousMouseActiveRef = useRef(false);
 
     const effectiveConfig = useMemo(() => ({
         spacingBetweenDots: 80,
@@ -63,8 +66,8 @@ export default function DotBackground({
     }, [effectiveConfig]);
 
     // Memoize squared max distance to avoid multiplication in hot path
-    const maxDistanceSquared = useMemo(() => 
-        effectiveConfig.maxDistance * effectiveConfig.maxDistance, 
+    const maxDistanceSquared = useMemo(() =>
+        effectiveConfig.maxDistance * effectiveConfig.maxDistance,
         [effectiveConfig.maxDistance]
     );
 
@@ -116,34 +119,18 @@ export default function DotBackground({
         const ctx = canvas.getContext('2d', { alpha: true, desynchronized: true });
         if (!ctx) return;
 
-        const lastDimensions = {
-            width: window.innerWidth,
-            height: document.body.scrollHeight
-        };
-
         const resizeCanvas = () => {
             const documentWidth = Math.min(document.body.clientWidth, window.innerWidth);
-            const documentHeight = Math.max(
-                document.body.scrollHeight,
-                document.documentElement.scrollHeight,
-                document.body.offsetHeight,
-                window.innerHeight
-            );
+            const documentHeight = window.innerHeight
 
-            if (
-                Math.abs(lastDimensions.width - documentWidth) > 10 ||
-                Math.abs(lastDimensions.height - documentHeight) > 10
-            ) {
-                lastDimensions.width = documentWidth;
-                lastDimensions.height = documentHeight;
+            canvas.width = documentWidth;
+            canvas.height = documentHeight;
+            canvas.style.width = `${documentWidth}px`;
+            canvas.style.height = `${documentHeight}px`;
 
-                canvas.width = documentWidth;
-                canvas.height = documentHeight;
-                canvas.style.width = `${documentWidth}px`;
-                canvas.style.height = `${documentHeight}px`;
-
-                initDots(documentWidth, documentHeight);
-            }
+            initDots(documentWidth, documentHeight);
+            // Reset cache on resize
+            cachedDotsRef.current = null;
         };
 
         const handleMouseMove = (e: MouseEvent) => {
@@ -159,33 +146,64 @@ export default function DotBackground({
         };
 
         const animate = (timestamp: number) => {
-            // Target 30 FPS for better performance (every ~33ms)
-            if (timestamp - lastFrameTimeRef.current < 33) {
-                animationRef.current = requestAnimationFrame(animate);
-                return;
-            }
-            lastFrameTimeRef.current = timestamp;
-
             const dots = dotsRef.current;
             if (!dots) {
                 animationRef.current = requestAnimationFrame(animate);
                 return;
             }
 
+            const mouseActive = mouseRef.current.active;
+
+            // Handle state caching and restoration
+            if (mouseActive !== previousMouseActiveRef.current) {
+                if (mouseActive) {
+                    // Becoming active, restore cached state
+                    if (cachedDotsRef.current) {
+                        dots.x.set(cachedDotsRef.current.x);
+                        dots.y.set(cachedDotsRef.current.y);
+                        dots.vx.set(cachedDotsRef.current.vx);
+                        dots.vy.set(cachedDotsRef.current.vy);
+                    }
+                    mouseRef.current.x = cachedMouseRef.current.x;
+                    mouseRef.current.y = cachedMouseRef.current.y;
+                } else {
+                    // Becoming inactive, cache current state
+                    cachedDotsRef.current = {
+                        x: new Float32Array(dots.x),
+                        y: new Float32Array(dots.y),
+                        originalX: dots.originalX,
+                        originalY: dots.originalY,
+                        vx: new Float32Array(dots.vx),
+                        vy: new Float32Array(dots.vy),
+                        count: dots.count
+                    };
+                    cachedMouseRef.current = { x: mouseRef.current.x, y: mouseRef.current.y };
+                }
+                previousMouseActiveRef.current = mouseActive;
+            }
+
+            // Adjust FPS based on mouse activity
+            const targetFPS = mouseActive ? 30 : 5;
+            const frameInterval = 1000 / targetFPS;
+            if (timestamp - lastFrameTimeRef.current < frameInterval) {
+                animationRef.current = requestAnimationFrame(animate);
+                return;
+            }
+            lastFrameTimeRef.current = timestamp;
+
             const { maxDistance, pushForce, returnForce, friction, dotSize } = effectiveConfig;
             const scrollY = window.scrollY;
             const windowHeight = window.innerHeight;
             const windowWidth = window.innerWidth;
-            
+
             // Expand visible area slightly for smoother edges
             const visibleTop = scrollY - maxDistance;
             const visibleBottom = scrollY + windowHeight + maxDistance;
             const visibleLeft = -maxDistance;
             const visibleRight = windowWidth + maxDistance;
-            
+
             const mouseX = mouseRef.current.x;
             const mouseY = mouseRef.current.y;
-            const mouseActive = mouseRef.current.active;
 
             // Clear only the visible portion for better performance
             ctx.clearRect(0, visibleTop, windowWidth, windowHeight + maxDistance * 2);
@@ -201,7 +219,7 @@ export default function DotBackground({
                 const dotX = x[i];
 
                 // Early visibility culling
-                if (dotY < visibleTop || dotY > visibleBottom || 
+                if (dotY < visibleTop || dotY > visibleBottom ||
                     dotX < visibleLeft || dotX > visibleRight) {
                     continue;
                 }
@@ -225,11 +243,9 @@ export default function DotBackground({
 
                 // Spring physics - return to original position
                 vx[i] += (originalX[i] - dotX) * returnForce;
-                vy[i] += (originalY[i] - dotY) * returnForce;
-
-                // Apply friction
-                vx[i] *= friction;
                 vy[i] *= friction;
+                vy[i] += (originalY[i] - dotY) * returnForce;
+                vx[i] *= friction;
 
                 // Update position
                 x[i] += vx[i];
@@ -256,7 +272,8 @@ export default function DotBackground({
             clearTimeout(resizeTimeout);
             resizeTimeout = setTimeout(resizeCanvas, 150);
         };
-        window.addEventListener('resize', handleResize, { passive: true });
+
+        window.addEventListener('resize', handleResize);
 
         // Use a single ResizeObserver for body
         const resizeObserver = new ResizeObserver(() => {
