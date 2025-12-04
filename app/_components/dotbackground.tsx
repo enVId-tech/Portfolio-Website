@@ -383,8 +383,12 @@ export default function DotBackground({
     }, []);
 
     return (
-        <div className={styles.container} ref={containerRef}>
-            {isClient && <canvas key={canvasKey} ref={canvasRef} className={styles.canvas} />}
+        <div className={styles.container} ref={containerRef} suppressHydrationWarning>
+            {isClient ? (
+                <canvas key={canvasKey} ref={canvasRef} className={styles.canvas} />
+            ) : (
+                <div className={styles.canvasPlaceholder} aria-hidden="true" />
+            )}
             <div className={styles.content} ref={contentRef}>
                 {children}
             </div>

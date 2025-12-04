@@ -23,6 +23,18 @@
   pointer-events: none; // Allow clicks to pass through to content
 }
 
+// Placeholder element for SSR to prevent hydration mismatch
+// This renders on the server and gets replaced with canvas on client
+.canvasPlaceholder {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 1;
+  pointer-events: none;
+}
+
 // Content container positioned above the canvas - responsive width
 .content {
   position: relative;
