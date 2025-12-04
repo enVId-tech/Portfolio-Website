@@ -3,12 +3,16 @@
   "short_name": "Erick Tran",
   "description": "Portfolio of Erick Tran, a skilled full stack developer specializing in React, Next.js, Node.js, and modern web technologies.",
   "start_url": "/",
+  "id": "/",
   "display": "standalone",
   "background_color": "#000000",
   "theme_color": "#1a1a1a",
   "orientation": "portrait-primary",
-  "categories": ["portfolio", "developer", "technology"],
+  "scope": "/",
+  "categories": ["portfolio", "developer", "technology", "business"],
   "lang": "en-US",
+  "dir": "ltr",
+  "prefer_related_applications": false,
   "icons": [
     {
       "src": "/favicon/android-chrome-192x192.png",

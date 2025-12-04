@@ -22,7 +22,12 @@ export const metadata = {
         'Frontend Developer',
         'Backend Developer',
         'Portfolio',
-        'Software Engineer'
+        'Software Engineer',
+        'Web Applications',
+        'MongoDB',
+        'Express.js',
+        'MERN Stack',
+        'etran.dev'
     ],
     authors: [{ name: 'Erick Tran', url: 'https://etran.dev' }],
     creator: 'Erick Tran',
@@ -35,6 +40,29 @@ export const metadata = {
     metadataBase: new URL('https://etran.dev'),
     alternates: {
         canonical: '/',
+    },
+    openGraph: {
+        type: 'website',
+        locale: 'en_US',
+        url: 'https://etran.dev',
+        siteName: 'Erick Tran Portfolio',
+        title: 'Erick Tran - Full Stack Developer',
+        description: 'Full Stack Developer with 3+ years of experience in React, Next.js, Node.js, and modern web technologies. View my portfolio of innovative web applications.',
+        images: [
+            {
+                url: '/og-image.jpg',
+                width: 1200,
+                height: 630,
+                alt: 'Erick Tran - Full Stack Developer Portfolio',
+            },
+        ],
+    },
+    twitter: {
+        card: 'summary_large_image',
+        title: 'Erick Tran - Full Stack Developer',
+        description: 'Full Stack Developer specializing in React, Next.js, Node.js & TypeScript. Explore my portfolio of web applications.',
+        images: ['/og-image.jpg'],
+        creator: '@ericktran',
     },
     robots: {
         index: true,
@@ -50,6 +78,7 @@ export const metadata = {
     verification: {
         google: 'your-google-verification-code',
     },
+    category: 'technology',
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
