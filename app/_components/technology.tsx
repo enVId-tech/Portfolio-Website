@@ -206,12 +206,14 @@ export default function Technology({ children }: TechnologyProps): React.ReactEl
 
             if (data && data.success) {
                 // Convert string icons to React elements
-                data.tech = data.tech.map((tech: TechResponse) => ({
+                const processedTech = data.tech.map((tech: TechResponse) => ({
                     ...tech,
-                    icon: stringToReactElement(typeof tech.icon === "string" ? tech.icon : '')
+                    icon: typeof tech.icon === "string" 
+                        ? stringToReactElement(tech.icon) 
+                        : tech.icon
                 }));
 
-                setTechData(data.tech);
+                setTechData(processedTech);
             }
         } catch (err) {
             console.error('Failed to fetch tech data:', err);
