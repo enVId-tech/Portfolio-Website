@@ -1,16 +1,40 @@
-import React from "react";
+import React, { Suspense } from "react";
+import dynamic from "next/dynamic";
 import DotBackground from "@/_components/dotbackground";
 import Header from "@/_components/header";
-import About from "@/_components/about";
-import Timeline from "@/_components/timeline";
-import Projects from "@/_components/projects";
-import Technology from "@/_components/technology";
-import Footer from "@/_components/footer";
-import ScrollToTop from "@/_components/scrollToTop";
-import SectionSelector from "@/_components/sectionSelector";
+import SimpleLoading from "@/_components/simpleLoading";
 import { PersonSchema, WebsiteSchema, ProfessionalServiceSchema } from "@/utils/schemas";
 import { Metadata } from "next";
-// import BlogsComponent from "@/_components/blogsComponent.tsx";
+
+// Lazy load non-critical components with loading fallback
+const About = dynamic(() => import("@/_components/about"), {
+    loading: () => <SimpleLoading />,
+    ssr: true,
+});
+const Timeline = dynamic(() => import("@/_components/timeline"), {
+    loading: () => <SimpleLoading />,
+    ssr: true,
+});
+const Technology = dynamic(() => import("@/_components/technology"), {
+    loading: () => <SimpleLoading />,
+    ssr: true,
+});
+const Projects = dynamic(() => import("@/_components/projects"), {
+    loading: () => <SimpleLoading />,
+    ssr: true,
+});
+const Footer = dynamic(() => import("@/_components/footer"), {
+    loading: () => <SimpleLoading />,
+    ssr: true,
+});
+const ScrollToTop = dynamic(() => import("@/_components/scrollToTop"), {
+    loading: () => null,
+    ssr: false,
+});
+const SectionSelector = dynamic(() => import("@/_components/sectionSelector"), {
+    loading: () => null,
+    ssr: false,
+});
 
 export const metadata: Metadata = {
     title: "Home",
@@ -42,8 +66,12 @@ export default async function HomePage(): Promise<React.ReactElement> {
                     __html: JSON.stringify([PersonSchema, WebsiteSchema, ProfessionalServiceSchema])
                 }}
             />
+            />
             
-            <SectionSelector sections={sections} />
+            <Suspense fallback={null}>
+                <SectionSelector sections={sections} />
+            </Suspense>
+            
             <DotBackground config={{
                 spacingBetweenDots: 40,
                 dotSize: 1.2,
@@ -53,13 +81,30 @@ export default async function HomePage(): Promise<React.ReactElement> {
                 friction: 0.8, // WARNING: Do NOT use values greater than 0.8.
             }}>
                 <Header/>
-                <About />
-                <Timeline/>
-                {/*<BlogsComponent/>*/}
-                <Technology/>
-                <Projects/>
-                <Footer/>
-                <ScrollToTop/>
+                
+                <Suspense fallback={<SimpleLoading />}>
+                    <About />
+                </Suspense>
+                
+                <Suspense fallback={<SimpleLoading />}>
+                    <Timeline/>
+                </Suspense>
+                
+                <Suspense fallback={<SimpleLoading />}>
+                    <Technology/>
+                </Suspense>
+                
+                <Suspense fallback={<SimpleLoading />}>
+                    <Projects/>
+                </Suspense>
+                
+                <Suspense fallback={<SimpleLoading />}>
+                    <Footer/>
+                </Suspense>
+                
+                <Suspense fallback={null}>
+                    <ScrollToTop/>
+                </Suspense>
             </DotBackground>
         </>
     )

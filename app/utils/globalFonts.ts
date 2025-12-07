@@ -32,6 +32,9 @@ const Montserrat_400: NextFont = Montserrat({
     weight: "400",
     style: 'normal',
     subsets: ['latin'],
+    display: 'swap',
+    preload: true,
+    fallback: ['system-ui', 'arial'],
 });
 
 // const Montserrat_500: NextFont = Montserrat({
@@ -44,6 +47,9 @@ const Montserrat_600: NextFont = Montserrat({
     weight: "600",
     style: 'normal',
     subsets: ['latin'],
+    display: 'swap',
+    preload: true,
+    fallback: ['system-ui', 'arial'],
 })
 
 // const Montserrat_700: NextFont = Montserrat({

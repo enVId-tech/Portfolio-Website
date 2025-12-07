@@ -99,8 +99,17 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     return (
         <html lang="en">
             <head>
+                {/* DNS Prefetch and Preconnect for performance */}
+                <link rel="dns-prefetch" href="https://fonts.googleapis.com" />
+                <link rel="dns-prefetch" href="https://fonts.gstatic.com" />
+                <link rel="preconnect" href="https://fonts.googleapis.com" crossOrigin="anonymous" />
+                <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+                
+                {/* Manifest and Icons */}
                 <link rel="manifest" href="/manifest.json" />
                 <link rel="apple-touch-icon" href="/favicon/apple-touch-icon.png" />
+                
+                {/* Theme and Viewport */}
                 <meta name="theme-color" content="#1a1a1a" />
                 <meta name="viewport" content="width=device-width, initial-scale=1" />
             </head>

@@ -7,9 +7,11 @@ Allow: /
 # Block sensitive paths
 Disallow: /api/auth/
 Disallow: /api/cron/
-Disallow: /_next/static/
-Disallow: /_next/image
 Disallow: /register
+
+# Allow crawling of Next.js static assets and optimized images
+Allow: /_next/static/
+Allow: /_next/image
 
 # Sitemap location
 Sitemap: https://etran.dev/sitemap.xml

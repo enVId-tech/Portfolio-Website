@@ -4,6 +4,8 @@ import {M_400, M_600} from "@/utils/globalFonts";
 import { FaGithub, FaLinkedin } from "react-icons/fa";
 import { AiOutlineMail } from "react-icons/ai";
 
+// Preload critical icons for better performance
+export const dynamic = 'force-static';
 
 type HeaderProps = {
     children?: React.ReactNode;
