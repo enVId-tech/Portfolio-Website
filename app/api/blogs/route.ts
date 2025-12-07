@@ -2,6 +2,9 @@ import { NextRequest, NextResponse } from 'next/server';
 import { MongoClient } from 'mongodb';
 import {connectToDatabase} from "@/utils/db.ts";
 
+// Aggressive caching: revalidate every 15 minutes for blog listings
+export const revalidate = 900;
+
 // Get all blogs or filtered by tag
 export async function GET(request: NextRequest) {
   const url = new URL(request.url);
@@ -31,7 +34,11 @@ export async function GET(request: NextRequest) {
       return blog;
     });
 
-    return NextResponse.json({ success: true, blogs: updatedBlogs });
+    return NextResponse.json({ success: true, blogs: updatedBlogs }, {
+      headers: {
+        'Cache-Control': 'public, s-maxage=900, stale-while-revalidate=600',
+      },
+    });
   } catch (error) {
     console.error('Error fetching blogs:', error);
     return NextResponse.json(

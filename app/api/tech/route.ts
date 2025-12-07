@@ -1,6 +1,9 @@
 import {connectToDatabase} from "@/utils/db.ts";
 import {NextResponse} from "next/server";
 
+// Aggressive caching: revalidate every 20 minutes
+export const revalidate = 1200;
+
 export async function GET() {
     try {
         const { db } = await connectToDatabase();
@@ -18,7 +21,11 @@ export async function GET() {
             return techWithoutId;
         });
 
-        return NextResponse.json({ success: true, tech: cleanedTech, _id: id });
+        return NextResponse.json({ success: true, tech: cleanedTech, _id: id }, {
+            headers: {
+                'Cache-Control': 'public, s-maxage=1200, stale-while-revalidate=600',
+            },
+        });
     } catch (err: unknown) {
         console.error('Error fetching tech:', err);
         return NextResponse.json(

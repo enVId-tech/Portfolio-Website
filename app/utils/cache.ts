@@ -15,17 +15,23 @@ interface CacheConfig {
 
 class CacheManager {
   private cache = new Map<string, CacheItem<unknown>>();
-  private defaultTTL = 15 * 60 * 1000; // 15 minutes default
+  private defaultTTL = 20 * 60 * 1000; // 20 minutes default - aggressive caching
   private isDevelopment = process.env.NODE_ENV === 'development';
   
-  // Cache configurations for different data types
+  // Cache configurations for different data types - all set to 10-20 minute intervals
   private readonly configs: Record<string, CacheConfig> = {
-    'github-repos': { ttl: 30 * 60 * 1000 }, // 30 minutes for GitHub repos
-    'github-languages': { ttl: 60 * 60 * 1000 }, // 1 hour for language data
-    'timeline': { ttl: 60 * 60 * 1000 }, // 1 hour for timeline
-    'technology': { ttl: 60 * 60 * 1000 }, // 1 hour for tech stack
-    'blogs': { ttl: 10 * 60 * 1000 }, // 10 minutes for blogs
-    'blog-single': { ttl: 5 * 60 * 1000 }, // 5 minutes for single blog posts
+    'github-repos': { ttl: 20 * 60 * 1000 }, // 20 minutes for GitHub repos
+    'github-languages': { ttl: 20 * 60 * 1000 }, // 20 minutes for language data
+    'timeline': { ttl: 20 * 60 * 1000 }, // 20 minutes for timeline
+    'technology': { ttl: 20 * 60 * 1000 }, // 20 minutes for tech stack
+    'tech': { ttl: 20 * 60 * 1000 }, // 20 minutes for tech (api route)
+    'api-tech': { ttl: 20 * 60 * 1000 }, // 20 minutes for tech API
+    'api-timeline': { ttl: 20 * 60 * 1000 }, // 20 minutes for timeline API
+    'api-projects': { ttl: 20 * 60 * 1000 }, // 20 minutes for projects API
+    'api-github': { ttl: 20 * 60 * 1000 }, // 20 minutes for GitHub API
+    'blogs': { ttl: 15 * 60 * 1000 }, // 15 minutes for blogs listing
+    'blog-single': { ttl: 10 * 60 * 1000 }, // 10 minutes for single blog posts
+    'api-blogs': { ttl: 15 * 60 * 1000 }, // 15 minutes for blogs API
   };
 
   /**

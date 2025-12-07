@@ -1,6 +1,9 @@
 import { NextResponse } from 'next/server';
 import { githubService } from '@/utils/githubService';
 
+// Aggressive caching: revalidate every 20 minutes
+export const revalidate = 1200;
+
 // Server-side cache for processed projects
 interface ProcessedProject {
     title: string;
@@ -21,8 +24,8 @@ interface CachedProjectsData {
 // In-memory cache on the server (persists across requests in the same server instance)
 let serverCache: CachedProjectsData | null = null;
 
-// Cache duration: 15 minutes
-const CACHE_DURATION = 15 * 60 * 1000;
+// Cache duration: 20 minutes - aggressive caching
+const CACHE_DURATION = 20 * 60 * 1000;
 
 // Framework detection mapping
 const frameworkDetection = {

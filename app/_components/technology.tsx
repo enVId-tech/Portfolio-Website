@@ -200,8 +200,8 @@ export default function Technology({ children }: TechnologyProps): React.ReactEl
             const data = await cachedFetch(
                 '/api/tech',
                 'api-tech',
-                { headers: { 'Cache-Control': 'no-cache' } },
-                5 * 60 * 1000 // 5 minutes cache
+                { headers: { 'Cache-Control': 'public, max-age=1200' } },
+                20 * 60 * 1000 // 20 minutes cache - aggressive caching
             ) as TechApiResponse;
 
             if (data && data.success) {
@@ -224,8 +224,8 @@ export default function Technology({ children }: TechnologyProps): React.ReactEl
         // Initial fetch when component mounts
         fetchTechData();
 
-        // Set up interval for periodic fetching (once per minute)
-        const interval = setInterval(fetchTechData, 60000);
+        // Set up interval for periodic fetching (every 10 minutes for aggressive caching)
+        const interval = setInterval(fetchTechData, 10 * 60 * 1000);
 
         // Clean up interval on component unmount
         return () => clearInterval(interval);

@@ -66,10 +66,11 @@ function Timeline({ children }: TimelineProps): React.ReactElement {
                 {
                     method: 'GET',
                     headers: {
-                        'Content-Type': 'application/json'
+                        'Content-Type': 'application/json',
+                        'Cache-Control': 'public, max-age=1200'
                     }
                 },
-                5 * 60 * 1000 // 5 minutes cache
+                20 * 60 * 1000 // 20 minutes cache - aggressive caching
             ) as TimelineApiResponse;
 
             console.log('Fetched timeline data:', data);

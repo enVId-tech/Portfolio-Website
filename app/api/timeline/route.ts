@@ -1,6 +1,9 @@
 import { NextResponse } from 'next/server';
 import { connectToDatabase } from '@/utils/db';
 
+// Aggressive caching: revalidate every 20 minutes
+export const revalidate = 1200;
+
 // Get all repositories (both included and excluded)
 export async function GET() {
   try {
@@ -21,6 +24,10 @@ export async function GET() {
     return NextResponse.json({
       success: true,
       timelineItems
+    }, {
+      headers: {
+        'Cache-Control': 'public, s-maxage=1200, stale-while-revalidate=600',
+      },
     });
   } catch (error) {
     console.error('Error fetching github-repos:', error);

@@ -1,6 +1,9 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { MongoClient, ObjectId } from 'mongodb';
 
+// Aggressive caching: revalidate every 10 minutes for individual blog posts
+export const revalidate = 600;
+
 // Type to represent blogs data
 interface BlogData {
   id?: string;
@@ -39,7 +42,11 @@ export async function GET(
       );
     }
 
-    return NextResponse.json({ success: true, blog });
+    return NextResponse.json({ success: true, blog }, {
+      headers: {
+        'Cache-Control': 'public, s-maxage=600, stale-while-revalidate=300',
+      },
+    });
   } catch (error) {
     console.error('Error fetching blogs:', error);
     return NextResponse.json(
