@@ -306,6 +306,51 @@ class GitHubService {
   getRemainingRequests(): number {
     return this.rateLimitInfo?.remaining ?? 5000; // Default for unauthenticated requests
   }
+
+  /**
+   * Clean up cached data for repositories that are not in the valid repos list
+   * This removes language and package.json cache entries for repos that are no longer being tracked
+   */
+  cleanupUnusedRepoCache(validRepoNames: string[]): { deletedCount: number; keys: string[] } {
+    const deletedKeys: string[] = [];
+    let deletedCount = 0;
+    
+    // Get all cache keys
+    const allKeys = cache.getKeys();
+    
+    // Find repository-specific cache keys (languages and package.json)
+    const repoSpecificKeys = allKeys.filter(key => 
+      key.startsWith('github-languages-') || key.startsWith('github-package-')
+    );
+    
+    // Check each key to see if it belongs to a valid repo
+    repoSpecificKeys.forEach(key => {
+      let repoName: string | undefined;
+      
+      if (key.startsWith('github-languages-')) {
+        repoName = key.replace('github-languages-', '');
+      } else if (key.startsWith('github-package-')) {
+        // Format: github-package-{repoName}-{branch}
+        const parts = key.replace('github-package-', '').split('-');
+        // Repo name is everything except the last part (branch)
+        repoName = parts.slice(0, -1).join('-');
+      }
+      
+      // If repo name is not in the valid list, delete the cache entry
+      if (repoName && !validRepoNames.includes(repoName)) {
+        if (cache.delete(key)) {
+          deletedKeys.push(key);
+          deletedCount++;
+        }
+        // Also delete from persistent cache
+        persistentCache.delete(key);
+      }
+    });
+    
+    console.log(`Cleaned up ${deletedCount} cache entries for unused repos:`, deletedKeys);
+    
+    return { deletedCount, keys: deletedKeys };
+  }
 }
 
 // Export singleton instance

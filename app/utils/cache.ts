@@ -82,6 +82,55 @@ class CacheManager {
   }
 
   /**
+   * Delete cache entries matching a pattern
+   */
+  deleteByPattern(pattern: RegExp): number {
+    let deletedCount = 0;
+    const keysToDelete: string[] = [];
+    
+    this.cache.forEach((_, key) => {
+      if (pattern.test(key)) {
+        keysToDelete.push(key);
+      }
+    });
+    
+    keysToDelete.forEach(key => {
+      this.cache.delete(key);
+      deletedCount++;
+    });
+    
+    return deletedCount;
+  }
+
+  /**
+   * Delete cache entries with a specific prefix
+   */
+  deleteByPrefix(prefix: string): number {
+    let deletedCount = 0;
+    const keysToDelete: string[] = [];
+    
+    this.cache.forEach((_, key) => {
+      if (key.startsWith(prefix)) {
+        keysToDelete.push(key);
+      }
+    });
+    
+    keysToDelete.forEach(key => {
+      this.cache.delete(key);
+      deletedCount++;
+    });
+    
+    return deletedCount;
+  }
+
+  /**
+   * Get all cache keys
+   */
+  getKeys(): string[] {
+    return Array.from(this.cache.keys());
+  }
+
+  /**
    * Clear all cache entries
    */
   clear(): void {
@@ -137,8 +186,11 @@ export const cache = new CacheManager();
 // Browser localStorage cache for persistence across sessions
 export class PersistentCache {
   private prefix = 'portfolio-cache-';
+  private isClient = typeof window !== 'undefined';
 
   get<T>(key: string): T | null {
+    if (!this.isClient) return null;
+    
     try {
       const item = localStorage.getItem(this.prefix + key);
       if (!item) return null;
@@ -159,6 +211,8 @@ export class PersistentCache {
   }
 
   set<T>(key: string, data: T, ttl: number = 15 * 60 * 1000): void {
+    if (!this.isClient) return;
+    
     try {
       const item = {
         data,
@@ -177,10 +231,60 @@ export class PersistentCache {
   }
 
   delete(key: string): void {
+    if (!this.isClient) return;
     localStorage.removeItem(this.prefix + key);
   }
 
+  /**
+   * Delete cache entries matching a pattern
+   */
+  deleteByPattern(pattern: RegExp): number {
+    if (!this.isClient) return 0;
+    
+    let deletedCount = 0;
+    Object.keys(localStorage)
+      .filter(key => key.startsWith(this.prefix))
+      .forEach(key => {
+        const cacheKey = key.substring(this.prefix.length);
+        if (pattern.test(cacheKey)) {
+          localStorage.removeItem(key);
+          deletedCount++;
+        }
+      });
+    
+    return deletedCount;
+  }
+
+  /**
+   * Delete cache entries with a specific prefix
+   */
+  deleteByPrefix(prefix: string): number {
+    if (!this.isClient) return 0;
+    
+    let deletedCount = 0;
+    Object.keys(localStorage)
+      .filter(key => key.startsWith(this.prefix + prefix))
+      .forEach(key => {
+        localStorage.removeItem(key);
+        deletedCount++;
+      });
+    
+    return deletedCount;
+  }
+
+  /**
+   * Get all cache keys
+   */
+  getKeys(): string[] {
+    if (!this.isClient) return [];
+    
+    return Object.keys(localStorage)
+      .filter(key => key.startsWith(this.prefix))
+      .map(key => key.substring(this.prefix.length));
+  }
+
   clear(): void {
+    if (!this.isClient) return;
     Object.keys(localStorage)
       .filter(key => key.startsWith(this.prefix))
       .forEach(key => localStorage.removeItem(key));

@@ -29,7 +29,7 @@ interface Project {
 /**
  * Type for repository filter mode.
  */
-type RepoFilterMode = 'include' | 'exclude';
+type RepoFilterMode = 'include' | 'exclude' | 'all';
 
 // Individual project card component - extracted and memoized
 /**
@@ -121,7 +121,7 @@ export default function Projects(): React.ReactElement {
     const manualProjects: Project[] = useMemo(() => [], []);
 
     // State hooks
-    const [filterMode, setFilterMode] = useState<RepoFilterMode>('exclude');
+    const [filterMode, setFilterMode] = useState<RepoFilterMode>('include');
     const [githubProjects, setGithubProjects] = useState<Project[]>([]);
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
@@ -150,6 +150,8 @@ export default function Projects(): React.ReactElement {
 
             // Set the projects from the server cache
             setGithubProjects(data.projects || []);
+
+            console.log('GitHub projects fetched:', data.projects);
 
             // Log cache status for debugging
             if (data.cached) {
@@ -227,21 +229,43 @@ export default function Projects(): React.ReactElement {
         setActiveFilter(tech);
     }, []);
 
-    // Toggle filter mode with useCallback
-    const toggleFilterMode = useCallback(() => {
-        setFilterMode(prevMode => prevMode === 'exclude' ? 'include' : 'exclude');
+    // Set filter mode handlers
+    const handleSetIncludeMode = useCallback(() => {
+        setFilterMode('include');
+    }, []);
+
+    const handleSetExcludeMode = useCallback(() => {
+        setFilterMode('exclude');
+    }, []);
+
+    const handleSetAllMode = useCallback(() => {
+        setFilterMode('all');
     }, []);
 
     return (
         <div className={styles.container} id={"projects"}>
             <h2 className={`${styles.projectsTitle} ${M_600}`}>
                 My Projects
-                <button
-                    onClick={toggleFilterMode}
-                    className={styles.filterModeButton}
-                >
-                    Mode: {filterMode === 'exclude' ? 'Excluding' : 'Including'} specific repos
-                </button>
+                <div className={styles.filterModeButtons}>
+                    <button
+                        onClick={handleSetIncludeMode}
+                        className={`${styles.filterModeButton} ${filterMode === 'include' ? styles.active : ''}`}
+                    >
+                        Included
+                    </button>
+                    <button
+                        onClick={handleSetExcludeMode}
+                        className={`${styles.filterModeButton} ${filterMode === 'exclude' ? styles.active : ''}`}
+                    >
+                        Excluded
+                    </button>
+                    <button
+                        onClick={handleSetAllMode}
+                        className={`${styles.filterModeButton} ${filterMode === 'all' ? styles.active : ''}`}
+                    >
+                        All
+                    </button>
+                </div>
             </h2>
 
             <div className={styles.filterContainer}>

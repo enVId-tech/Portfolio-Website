@@ -1,4 +1,3 @@
-"use client";
 import React from "react";
 import styles from "@/styles/header.module.scss";
 import {M_400, M_600} from "@/utils/globalFonts";

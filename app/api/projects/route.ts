@@ -69,7 +69,7 @@ async function processRepo(repo: GitHubRepo): Promise<ProcessedProject> {
         if (languageData['JavaScript'] || languageData['TypeScript']) {
             try {
                 const packageJson = await githubService.getPackageJson(repo.name, repo.default_branch || 'main');
-                
+
                 if (packageJson) {
                     const allDependencies = {
                         ...(packageJson.dependencies || {}),
@@ -115,41 +115,37 @@ async function processRepo(repo: GitHubRepo): Promise<ProcessedProject> {
     }
 }
 
-async function fetchAndCacheProjects(filterMode: 'include' | 'exclude', includedRepos: string[], excludedRepos: string[]): Promise<ProcessedProject[]> {
-    console.log('Fetching projects from GitHub API...');
-    
+async function fetchAndCacheAllProjects(): Promise<ProcessedProject[]> {
+    console.log('Fetching all projects from GitHub API...');
+
     // Check if GitHub API is available
     if (!githubService.isApiAvailable()) {
         const timeUntilReset = githubService.getTimeUntilReset();
         const resetTime = timeUntilReset ? new Date(Date.now() + timeUntilReset) : null;
         throw new Error(
-            `GitHub API rate limit exceeded. ${resetTime ? 
-                `Resets at: ${resetTime.toLocaleTimeString()}` : 
+            `GitHub API rate limit exceeded. ${resetTime ?
+                `Resets at: ${resetTime.toLocaleTimeString()}` :
                 'Please try again later.'}`
         );
     }
 
-    // Fetch GitHub repositories
+    // Fetch all GitHub repositories
     const repos = await githubService.getRepositories();
+    console.log(`Fetched ${repos.length} repositories from GitHub`);
 
-    // Filter repositories based on mode
-    const filteredRepos = filterMode === 'include'
-        ? repos.filter((repo: GitHubRepo) => includedRepos.includes(repo.name))
-        : repos.filter((repo: GitHubRepo) => !excludedRepos.includes(repo.name));
-
-    // Process repositories in batches
+    // Process all repositories in batches
     const batchSize = 2;
     const processedProjects: ProcessedProject[] = [];
 
-    for (let i = 0; i < filteredRepos.length; i += batchSize) {
-        const batch = filteredRepos.slice(i, i + batchSize);
-        
+    for (let i = 0; i < repos.length; i += batchSize) {
+        const batch = repos.slice(i, i + batchSize);
+
         try {
             const batchResults = await Promise.all(batch.map(processRepo));
             processedProjects.push(...batchResults);
 
             // Small delay between batches
-            if (i + batchSize < filteredRepos.length) {
+            if (i + batchSize < repos.length) {
                 await new Promise(resolve => setTimeout(resolve, 200));
             }
         } catch (batchError) {
@@ -163,8 +159,12 @@ async function fetchAndCacheProjects(filterMode: 'include' | 'exclude', included
 export async function GET(request: Request) {
     try {
         const { searchParams } = new URL(request.url);
-        const filterMode = (searchParams.get('filterMode') as 'include' | 'exclude') || 'exclude';
+        const filterMode = (searchParams.get('filterMode') as 'include' | 'exclude' | 'all') || 'include';
         const forceRefresh = searchParams.get('forceRefresh') === 'true';
+
+        console.log('=== Projects API Request ===');
+        console.log('Filter Mode:', filterMode);
+        console.log('Force Refresh:', forceRefresh);
 
         // Default repository lists
         let includedRepos: string[] = [];
@@ -176,7 +176,9 @@ export async function GET(request: Request) {
                 cache: 'no-store'
             });
             const reposData = await reposResponse.json();
-            
+
+            console.log('Fetched repo settings:', reposData);
+
             if (reposData.success) {
                 includedRepos = reposData.includedRepos || includedRepos;
                 excludedRepos = reposData.excludedRepos || excludedRepos;
@@ -185,64 +187,88 @@ export async function GET(request: Request) {
             console.error('Error fetching repo settings:', error);
         }
 
-        // Generate cache key based on filter settings
-        const cacheKey = `${filterMode}-${includedRepos.join(',')}-${excludedRepos.join(',')}`;
+        // Check if we have valid cached data (cache all projects regardless of filter mode)
+        let allProjects: ProcessedProject[];
+        
+        if (!forceRefresh && serverCache && serverCache.expiresAt > Date.now()) {
+            console.log('Using cached projects');
+            allProjects = serverCache.projects;
+        } else {
+            console.log('Fetching fresh projects from GitHub');
+            // Fetch and cache ALL projects
+            allProjects = await fetchAndCacheAllProjects();
 
-        // Check if we have valid cached data
-        if (!forceRefresh && serverCache && 
-            serverCache.expiresAt > Date.now() && 
-            cacheKey === `${filterMode}-${includedRepos.join(',')}-${excludedRepos.join(',')}`) {
-            
-            console.log('Serving projects from server cache');
-            return NextResponse.json({
-                success: true,
-                projects: serverCache.projects,
-                cached: true,
-                timestamp: serverCache.timestamp,
-                expiresAt: serverCache.expiresAt
-            });
+            // Update server cache with all projects
+            const now = Date.now();
+            serverCache = {
+                projects: allProjects,
+                timestamp: now,
+                expiresAt: now + CACHE_DURATION
+            };
+
+            console.log(`Cached ${allProjects.length} projects on server`);
         }
 
-        // Fetch fresh data
-        const projects = await fetchAndCacheProjects(filterMode, includedRepos, excludedRepos);
-
-        // Update server cache
-        const now = Date.now();
-        serverCache = {
-            projects,
-            timestamp: now,
-            expiresAt: now + CACHE_DURATION
-        };
-
-        console.log(`Cached ${projects.length} projects on server`);
+        // Apply filtering based on current database values
+        const filteredProjects = filterMode === 'all'
+            ? allProjects
+            : filterMode === 'include'
+                ? allProjects.filter(project => includedRepos.includes(project.title))
+                : allProjects.filter(project => !excludedRepos.includes(project.title));
 
         return NextResponse.json({
             success: true,
-            projects,
-            cached: false,
-            timestamp: now,
-            expiresAt: serverCache.expiresAt
+            projects: filteredProjects,
+            cached: !forceRefresh && serverCache !== null,
+            timestamp: serverCache?.timestamp || Date.now(),
+            expiresAt: serverCache?.expiresAt || Date.now() + CACHE_DURATION
         });
 
     } catch (error) {
         console.error('Error fetching projects:', error);
-        
-        // If we have stale cache data, return it with a warning
+
+        // If we have stale cache data, apply filtering and return it with a warning
         if (serverCache) {
+            // Fetch current repo settings for filtering
+            let includedRepos: string[] = [];
+            let excludedRepos: string[] = ["DockerTemplates", "enVId-tech"];
+            
+            try {
+                const reposResponse = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000'}/api/github-repos`, {
+                    cache: 'no-store'
+                });
+                const reposData = await reposResponse.json();
+                if (reposData.success) {
+                    includedRepos = reposData.includedRepos || includedRepos;
+                    excludedRepos = reposData.excludedRepos || excludedRepos;
+                }
+            } catch {
+                // Use defaults if fetching repo settings fails
+            }
+            
+            const { searchParams } = new URL(request.url);
+            const filterMode = (searchParams.get('filterMode') as 'include' | 'exclude' | 'all') || 'include';
+            
+            const filteredProjects = filterMode === 'all'
+                ? serverCache.projects
+                : filterMode === 'include'
+                    ? serverCache.projects.filter(project => includedRepos.includes(project.title))
+                    : serverCache.projects.filter(project => !excludedRepos.includes(project.title));
+            
             return NextResponse.json({
                 success: true,
-                projects: serverCache.projects,
+                projects: filteredProjects,
                 cached: true,
                 stale: true,
                 timestamp: serverCache.timestamp,
                 warning: error instanceof Error ? error.message : 'Error fetching fresh data, serving stale cache'
             });
         }
-        
+
         return NextResponse.json(
-            { 
-                success: false, 
-                error: error instanceof Error ? error.message : 'Failed to fetch projects' 
+            {
+                success: false,
+                error: error instanceof Error ? error.message : 'Failed to fetch projects'
             },
             { status: 500 }
         );

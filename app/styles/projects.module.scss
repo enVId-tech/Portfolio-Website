@@ -198,10 +198,17 @@
   flex-shrink: 0; // Prevent badge from shrinking
 }
 
+// Container for filter mode buttons
+.filterModeButtons {
+  display: inline-flex;
+  gap: 0.4rem;
+  margin-left: 0.5rem;
+  vertical-align: middle;
+}
+
 // Styling for the filter mode button
 .filterModeButton {
   font-size: 0.75rem; // Reduced font size for mobile
-  margin-left: 0.5rem; // Reduced margin for mobile
   background-color: rgba(87, 31, 255, 0.2); // Background color
   color: white; // Text color
   border: 1px solid rgba(114, 72, 222, 0.5); // Border color
@@ -212,6 +219,12 @@
 
   &:hover, &:active { // Added active state for touch devices
     background-color: rgba(87, 31, 255, 0.4); // Background color on hover/active
+  }
+
+  &.active {
+    background-color: rgba(87, 31, 255, 0.6); // Darker background for active state
+    border-color: rgba(114, 72, 222, 0.8); // Stronger border for active state
+    font-weight: 600; // Bold text for active button
   }
 }
 
@@ -325,9 +338,13 @@
     margin-left: 8px; // Restore original margin
   }
 
+  .filterModeButtons {
+    gap: 0.5rem; // Slightly larger gap for larger screens
+    margin-left: 1rem; // Restore original margin
+  }
+
   .filterModeButton {
     font-size: 0.8rem; // Restore original font size
-    margin-left: 1rem; // Restore original margin
     padding: 0.3rem 0.6rem; // Restore original padding
   }
 }

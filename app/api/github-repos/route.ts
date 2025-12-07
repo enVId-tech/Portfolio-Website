@@ -14,15 +14,15 @@ export async function GET() {
           {
             success: true,
             includedRepos: [],
-            excludedRepos: ["DockerTemplates", "enVId-tech"] // Default excluded
+            excludedRepos: ["enVId-tech"] // Default excluded
           }
       );
     }
 
     return NextResponse.json({
       success: true,
-      includedRepos: repoSettings[0].included || [],
-      excludedRepos: repoSettings[1].excluded || ["DockerTemplates", "enVId-tech"]
+      includedRepos: repoSettings[0].includedRepos || [],
+      excludedRepos: repoSettings[1].excludedRepos || ["enVId-tech"]
     });
   } catch (error) {
     console.error('Error fetching github-repos:', error);
