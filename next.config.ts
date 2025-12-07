@@ -1,5 +1,7 @@
 import type { NextConfig } from "next";
 
+const isDev = process.env.NODE_ENV === 'development';
+
 const nextConfig: NextConfig = {
     images: {
         remotePatterns: [
@@ -9,15 +11,46 @@ const nextConfig: NextConfig = {
             },
         ],
         formats: ['image/webp', 'image/avif'],
-        minimumCacheTTL: 60,
+        minimumCacheTTL: isDev ? 0 : 60,
     },
-    compress: true,
+    compress: !isDev,
     poweredByHeader: false,
     experimental: {
-        optimizeCss: true,
+        optimizeCss: !isDev,
         optimizePackageImports: ['react-icons'],
     },
     async headers() {
+        if (isDev) {
+            // No cache headers in development
+            return [
+                {
+                    source: '/(.*)',
+                    headers: [
+                        {
+                            key: 'Cache-Control',
+                            value: 'no-store, no-cache, must-revalidate, proxy-revalidate',
+                        },
+                        {
+                            key: 'X-Content-Type-Options',
+                            value: 'nosniff',
+                        },
+                        {
+                            key: 'X-Frame-Options',
+                            value: 'DENY',
+                        },
+                        {
+                            key: 'X-XSS-Protection',
+                            value: '1; mode=block',
+                        },
+                        {
+                            key: 'Referrer-Policy',
+                            value: 'strict-origin-when-cross-origin',
+                        },
+                    ],
+                },
+            ];
+        }
+        
         return [
             {
                 source: '/(.*)',

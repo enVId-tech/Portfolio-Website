@@ -16,6 +16,7 @@ interface CacheConfig {
 class CacheManager {
   private cache = new Map<string, CacheItem<unknown>>();
   private defaultTTL = 15 * 60 * 1000; // 15 minutes default
+  private isDevelopment = process.env.NODE_ENV === 'development';
   
   // Cache configurations for different data types
   private readonly configs: Record<string, CacheConfig> = {
@@ -31,6 +32,9 @@ class CacheManager {
    * Get data from cache if valid, otherwise return null
    */
   get<T>(key: string): T | null {
+    // Disable cache in development mode
+    if (this.isDevelopment) return null;
+    
     const item = this.cache.get(key);
     
     if (!item) return null;
@@ -48,6 +52,9 @@ class CacheManager {
    * Set data in cache with appropriate TTL
    */
   set<T>(key: string, data: T, customTTL?: number): void {
+    // Skip caching in development mode
+    if (this.isDevelopment) return;
+    
     // Determine TTL based on key prefix or use custom/default
     const prefix = key.split('-')[0];
     const config = this.configs[prefix];
