@@ -1,5 +1,6 @@
 import React, { Suspense } from 'react';
 import '@/styles/globals.scss';
+import '@/utils/consoleOverride';
 import { M_600 } from "@/utils/globalFonts.ts";
 import {AuthProvider} from "@/context/AuthContext.tsx";
 import ClientLayout from './client-layout';
