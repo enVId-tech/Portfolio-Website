@@ -76,7 +76,7 @@ const ProjectCard = React.memo(({ project }: { project: Project }) => (
                     </a>
                 )}
                 {project.demoUrl && (
-                    <a href={project.demoUrl} target="_blank" rel="noopener noreferrer" className={`${styles.projectLink} ${M_400}`}>
+                    <a href={project.demoUrl} target="_blank" rel="noopener noreferrer" className={`${styles.projectLink} ${styles.demoLink} ${M_400}`}>
                         <FaExternalLinkAlt /> Live Demo
                     </a>
                 )}
@@ -126,6 +126,12 @@ export default function Projects(): React.ReactElement {
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
     const [activeFilter, setActiveFilter] = useState<string>("All");
+    const [isClient, setIsClient] = useState(false);
+
+    // Ensure client-side rendering for buttons to avoid hydration mismatch
+    useEffect(() => {
+        setIsClient(true);
+    }, []);
 
     const fetchGithubRepos = useCallback(async () => {
         setIsLoading(true);
@@ -246,26 +252,28 @@ export default function Projects(): React.ReactElement {
         <div className={styles.container} id={"projects"}>
             <h2 className={`${styles.projectsTitle} ${M_600}`}>
                 My Projects
-                <div className={styles.filterModeButtons}>
-                    <button
-                        onClick={handleSetIncludeMode}
-                        className={`${styles.filterModeButton} ${filterMode === 'include' ? styles.active : ''}`}
-                    >
-                        Included
-                    </button>
-                    <button
-                        onClick={handleSetExcludeMode}
-                        className={`${styles.filterModeButton} ${filterMode === 'exclude' ? styles.active : ''}`}
-                    >
-                        Excluded
-                    </button>
-                    <button
-                        onClick={handleSetAllMode}
-                        className={`${styles.filterModeButton} ${filterMode === 'all' ? styles.active : ''}`}
-                    >
-                        All
-                    </button>
-                </div>
+                {isClient && (
+                    <div className={styles.filterModeButtons}>
+                        <button
+                            onClick={handleSetIncludeMode}
+                            className={`${styles.filterModeButton} ${filterMode === 'include' ? styles.active : ''}`}
+                        >
+                            Included
+                        </button>
+                        <button
+                            onClick={handleSetExcludeMode}
+                            className={`${styles.filterModeButton} ${filterMode === 'exclude' ? styles.active : ''}`}
+                        >
+                            Excluded
+                        </button>
+                        <button
+                            onClick={handleSetAllMode}
+                            className={`${styles.filterModeButton} ${filterMode === 'all' ? styles.active : ''}`}
+                        >
+                            All
+                        </button>
+                    </div>
+                )}
             </h2>
 
             <div className={styles.filterContainer}>

@@ -13,6 +13,10 @@
   -webkit-background-clip: text; // Webkit-specific background clip
   color: transparent; // Transparent text color
   margin-bottom: 1.5rem; // Reduced bottom margin for mobile
+  display: flex; // Use flexbox
+  flex-wrap: wrap; // Allow wrapping
+  align-items: center; // Center items vertically
+  gap: 0.5rem; // Gap between title and buttons
 }
 
 // Container for the filter buttons
@@ -94,7 +98,7 @@
 
 // Container for the project content
 .projectContent {
-  padding: 1.25rem; // Slightly reduced padding for mobile
+  padding: 1rem; // More compact padding for mobile
   display: flex; // Flexbox layout
   flex-direction: column; // Column direction
   flex-grow: 1; // Grow to fill available space
@@ -102,8 +106,8 @@
 
 // Title styling for individual projects
 .projectTitle {
-  font-size: 1.3rem; // Reduced font size for mobile
-  margin-bottom: 0.5rem; // Bottom margin
+  font-size: 1.2rem; // Smaller font size for mobile
+  margin-bottom: 0.4rem; // Reduced bottom margin
   color: white; // Text color
   overflow: hidden; // Hide overflow
   text-overflow: ellipsis; // Show ellipsis for overflowed text
@@ -115,13 +119,13 @@
 // Description styling for individual projects
 .projectDescription {
   color: rgb(162, 162, 162); // Text color
-  margin-bottom: 1.25rem; // Slightly reduced margin for mobile
-  line-height: 1.5; // Line height
+  margin-bottom: 1rem; // Reduced margin for mobile
+  line-height: 1.4; // Tighter line height for mobile
   flex-grow: 1; // Grow to fill available space
-  font-size: 0.95rem; // Slightly reduced font size for better mobile readability
+  font-size: 0.9rem; // Smaller font size for mobile
   overflow: hidden; // Hide overflow
   display: -webkit-box;
-  -webkit-line-clamp: 3; // Show max 3 lines
+  -webkit-line-clamp: 2; // Show max 2 lines on mobile
   -webkit-box-orient: vertical;
   text-overflow: ellipsis; // Show ellipsis for overflowed text
 }
@@ -130,8 +134,8 @@
 .techList {
   display: flex; // Flexbox layout
   flex-wrap: wrap; // Allow wrapping of items
-  gap: 6px; // Reduced gap for mobile
-  margin-bottom: 1.25rem; // Reduced margin for mobile
+  gap: 5px; // Smaller gap for mobile
+  margin-bottom: 1rem; // Reduced margin for mobile
 }
 
 // Styling for individual technology badges
@@ -148,9 +152,14 @@
 .projectLinks {
   display: flex; // Flexbox layout
   flex-wrap: wrap; // Allow wrapping on small screens
-  gap: 10px; // Reduce gap for better wrapping
+  gap: 8px; // Smaller gap for mobile
   margin-top: auto; // Push links to the bottom
   width: 100%; // Ensure full width
+}
+
+// Hide Live Demo button on mobile
+.demoLink {
+  display: none; // Hide on mobile by default
 }
 
 // Styling for individual project links
@@ -201,9 +210,10 @@
 // Container for filter mode buttons
 .filterModeButtons {
   display: inline-flex;
-  gap: 0.4rem;
-  margin-left: 0.5rem;
+  gap: 0.3rem;
+  margin-left: 0;
   vertical-align: middle;
+  flex-wrap: wrap;
 }
 
 // Styling for the filter mode button
@@ -241,12 +251,33 @@
     gap: 10px; // Restore original gap
   }
 
-  .projectLinks {
-    flex-wrap: nowrap; // Prevent wrapping
+  .projectContent {
+    padding: 1.25rem; // Restore original padding
   }
 
-  .projectLink {
-    max-width: calc(50% - 5px); // Set max width to half minus half of gap
+  .projectDescription {
+    font-size: 0.95rem; // Restore original font size
+    line-height: 1.5; // Restore original line height
+    margin-bottom: 1.25rem; // Restore original margin
+    -webkit-line-clamp: 3; // Show 3 lines on larger screens
+  }
+
+  .projectTitle {
+    font-size: 1.3rem; // Restore original font size
+    margin-bottom: 0.5rem; // Restore original margin
+  }
+
+  .techList {
+    gap: 6px; // Restore original gap
+    margin-bottom: 1.25rem; // Restore original margin
+  }
+
+  .projectLinks {
+    gap: 10px; // Restore original gap
+  }
+
+  .demoLink {
+    display: flex; // Show Live Demo on larger screens
   }
 }
 
