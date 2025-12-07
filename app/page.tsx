@@ -27,14 +27,8 @@ const Footer = dynamic(() => import("@/_components/footer"), {
     loading: () => <SimpleLoading />,
     ssr: true,
 });
-const ScrollToTop = dynamic(() => import("@/_components/scrollToTop"), {
-    loading: () => null,
-    ssr: false,
-});
-const SectionSelector = dynamic(() => import("@/_components/sectionSelector"), {
-    loading: () => null,
-    ssr: false,
-});
+const ScrollToTop = dynamic(() => import("@/_components/scrollToTop"));
+const SectionSelector = dynamic(() => import("@/_components/sectionSelector"));
 
 export const metadata: Metadata = {
     title: "Home",
@@ -65,7 +59,6 @@ export default async function HomePage(): Promise<React.ReactElement> {
                 dangerouslySetInnerHTML={{
                     __html: JSON.stringify([PersonSchema, WebsiteSchema, ProfessionalServiceSchema])
                 }}
-            />
             />
             
             <Suspense fallback={null}>

@@ -20,7 +20,6 @@ const nextConfig: NextConfig = {
     // Performance optimizations
     compress: !isDev,
     poweredByHeader: false,
-    swcMinify: true,
     
     // Experimental features for performance
     experimental: {
@@ -35,45 +34,8 @@ const nextConfig: NextConfig = {
         webpackBuildWorker: true,
     },
     
-    // Webpack optimization
-    webpack: (config, { isServer }) => {
-        if (!isServer) {
-            config.optimization = {
-                ...config.optimization,
-                splitChunks: {
-                    chunks: 'all',
-                    cacheGroups: {
-                        default: false,
-                        vendors: false,
-                        // Vendor chunk for node_modules
-                        vendor: {
-                            name: 'vendor',
-                            chunks: 'all',
-                            test: /node_modules/,
-                            priority: 20,
-                        },
-                        // Common chunk for shared components
-                        common: {
-                            name: 'common',
-                            minChunks: 2,
-                            chunks: 'all',
-                            priority: 10,
-                            reuseExistingChunk: true,
-                            enforce: true,
-                        },
-                        // Separate chunk for react-icons
-                        icons: {
-                            name: 'icons',
-                            test: /[\\/]node_modules[\\/]react-icons[\\/]/,
-                            chunks: 'all',
-                            priority: 30,
-                        },
-                    },
-                },
-            };
-        }
-        return config;
-    },
+    // Turbopack configuration for Next.js 16+
+    turbopack: {},
     async headers() {
         if (isDev) {
             // No cache headers in development
