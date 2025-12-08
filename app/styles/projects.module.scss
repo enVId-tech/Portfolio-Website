@@ -42,12 +42,14 @@
   &:hover, &:active { // Added active state for touch devices
     background-color: rgba(114, 72, 222, 0.3); // Background color on hover/active
     transform: translateY(-2px); // Move up on hover/active
+    transition: all 0.2s ease-in-out;
   }
 
   &.active {
     background: linear-gradient(to right, rgba(34, 255, 237, 0.3), rgba(36, 162, 255, 0.3), rgba(87, 31, 255, 0.3)); // Gradient background for active state
     border: 1px solid rgba(114, 72, 222, 0.5); // Border color for active state
     transform: translateY(-2px); // Move up for active state
+    transition: all 0.2s ease-in-out;
   }
 }
 
@@ -219,22 +221,22 @@
 // Styling for the filter mode button
 .filterModeButton {
   font-size: 0.75rem; // Reduced font size for mobile
-  background-color: rgba(87, 31, 255, 0.2); // Background color
+  background-color: #24292e; // Background color
   color: white; // Text color
-  border: 1px solid rgba(114, 72, 222, 0.5); // Border color
+  border: 1px solid rgba(255, 255, 255, 0.2); // Border color
   border-radius: 4px; // Rounded corners
   padding: 0.3rem 0.5rem; // Slightly reduced padding for mobile
   cursor: pointer; // Pointer cursor on hover
   transition: all 0.2s ease; // Smooth transition for all properties
 
   &:hover, &:active { // Added active state for touch devices
-    background-color: rgba(87, 31, 255, 0.4); // Background color on hover/active
+    background-color: #24292e; // Background color on hover/active
   }
 
   &.active {
     background-color: rgba(87, 31, 255, 0.6); // Darker background for active state
     border-color: rgba(114, 72, 222, 0.8); // Stronger border for active state
-    font-weight: 600; // Bold text for active button
+    transition: all 0.2s ease;
   }
 }
 
@@ -294,10 +296,6 @@
   .projectLinks {
     gap: 12px; // Slightly larger gap
   }
-
-  .projectLink {
-    max-width: calc(50% - 6px); // Adjust for new gap
-  }
 }
 
 @media (min-width: 768px) {
@@ -355,7 +353,6 @@
     padding: 8px 16px; // Restore original padding
     font-size: 0.9rem; // Restore original font size
     justify-content: flex-start; // Left align content
-    max-width: calc(50% - 6px);
 
     svg {
       width: 16px; // Restore original width
