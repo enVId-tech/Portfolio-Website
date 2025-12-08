@@ -140,6 +140,24 @@ const nextConfig: NextConfig = {
                 ],
             },
             {
+                source: '/api/projects',
+                headers: [
+                    {
+                        key: 'Cache-Control',
+                        value: 'public, s-maxage=600, stale-while-revalidate=900', // 10 min cache, 15 min stale
+                    },
+                ],
+            },
+            {
+                source: '/api/github-repos',
+                headers: [
+                    {
+                        key: 'Cache-Control',
+                        value: 'public, s-maxage=600, stale-while-revalidate=900', // 10 min cache
+                    },
+                ],
+            },
+            {
                 source: '/api/blogs/:path*',
                 headers: [
                     {

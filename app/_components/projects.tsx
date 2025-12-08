@@ -194,9 +194,10 @@ export default function Projects(): React.ReactElement {
         // Initial fetch when component mounts
         fetchGithubRepos();
 
-        // Set up interval for periodic refresh (once every 20 minutes)
-        // The server cache refreshes every 15 minutes, so we check slightly after
-        const interval = setInterval(fetchGithubRepos, 20 * 60 * 1000);
+        // Set up interval for periodic refresh (once every 12 minutes)
+        // The server cache refreshes every 10 minutes via cron, so we check slightly after
+        // This ensures we always have fresh data even during long browsing sessions
+        const interval = setInterval(fetchGithubRepos, 12 * 60 * 1000);
 
         // Clean up interval on component unmount
         return () => clearInterval(interval);
