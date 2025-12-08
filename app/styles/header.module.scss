@@ -120,7 +120,6 @@
     font-size: clamp(1rem, 4vw, 1.3rem); // Slightly larger minimum for readability
     letter-spacing: 0.01rem;
     padding-bottom: 14px;
-    border-bottom: 2px solid rgba(114, 72, 222, 0.3);
     position: relative;
     word-wrap: break-word; // Prevent text overflow
     overflow-wrap: break-word;
@@ -131,7 +130,6 @@
       position: absolute;
       bottom: -2px;
       left: 0;
-      width: 50px; // Slightly reduced width for mobile
       height: 2px;
       background: linear-gradient(to right, #22ffed, #24a2ff, #571fff);
     }

@@ -254,7 +254,7 @@ export default function Projects(): React.ReactElement {
             <h2 className={`${styles.projectsTitle} ${M_600}`}>
                 My Projects
                 {isClient && (
-                    <div className={styles.filterModeButtons}>
+                    <div className={`${styles.filterModeButtons} ${M_400}`}>
                         <button
                             onClick={handleSetIncludeMode}
                             className={`${styles.filterModeButton} ${filterMode === 'include' ? styles.active : ''}`}
