@@ -4,13 +4,6 @@ import styles from '@/styles/technology.module.scss';
 import { M_400, M_600 } from "@/utils/globalFonts";
 import { cachedFetch } from '@/utils/cache';
 
-// Import tech icons
-import * as FA from 'react-icons/fa';
-import * as SI from 'react-icons/si';
-import * as FA6 from "react-icons/fa6";
-import * as BS from "react-icons/bs";
-import * as VSC from "react-icons/vsc";
-
 /**
  * Interface representing a technology.
  */
@@ -42,25 +35,58 @@ interface TechApiResponse {
     tech: TechResponse[];
 }
 
-// Map of supported icon libraries
-const ICON_LIBRARIES = {
-    SI,
-    FA,
-    FA6,
-    BS,
-    VSC
-};
+// Cache for dynamically loaded icon libraries
+const iconLibraryCache: { [key: string]: any } = {};
 
-type IconLibraryKey = keyof typeof ICON_LIBRARIES;
+/**
+ * Dynamically loads an icon library only when needed
+ * @param libraryName - Name of the library to load (SI, FA, FA6, BS, VSC)
+ * @returns Promise resolving to the icon library
+ */
+async function loadIconLibrary(libraryName: string): Promise<any> {
+    // Return from cache if already loaded
+    if (iconLibraryCache[libraryName]) {
+        return iconLibraryCache[libraryName];
+    }
+
+    // Dynamically import the library based on its name
+    let library;
+    switch (libraryName) {
+        case 'SI':
+            library = await import('react-icons/si');
+            break;
+        case 'FA':
+            library = await import('react-icons/fa');
+            break;
+        case 'FA6':
+            library = await import('react-icons/fa6');
+            break;
+        case 'BS':
+            library = await import('react-icons/bs');
+            break;
+        case 'VSC':
+            library = await import('react-icons/vsc');
+            break;
+        default:
+            throw new Error(`Unsupported icon library: ${libraryName}`);
+    }
+
+    // Cache the loaded library
+    iconLibraryCache[libraryName] = library;
+    return library;
+}
+
+type IconLibraryKey = 'SI' | 'FA' | 'FA6' | 'BS' | 'VSC';
 
 /**
  * Converts a string representation of a React element into an actual React element.
  * Supports multiple icon libraries: SI, FA, FA6, BS, and VSC from react-icons.
+ * Icons are dynamically imported only when needed.
  *
  * @param str - String representation of a React element
- * @returns React element
+ * @returns Promise resolving to React element or null
  */
-export function stringToReactElement(str: string): React.ReactElement | null {
+export async function stringToReactElement(str: string): Promise<React.ReactElement | null> {
     // Remove surrounding quotes if present
     const cleanStr = str.replace(/^["']|["']$/g, '');
 
@@ -72,10 +98,10 @@ export function stringToReactElement(str: string): React.ReactElement | null {
 
         // If we have both library and component parts
         if (possibleIcon) {
-            return createIconElement(libraryOrComponent, possibleIcon, propsString, children);
+            return await createIconElement(libraryOrComponent, possibleIcon, propsString, children);
         } else {
             // Handle single component name
-            return createIconElement(libraryOrComponent, undefined, propsString, children);
+            return await createIconElement(libraryOrComponent, undefined, propsString, children);
         }
     }
 
@@ -84,7 +110,7 @@ export function stringToReactElement(str: string): React.ReactElement | null {
 
     if (dotFormatMatch) {
         const [, library, component, propsString = ''] = dotFormatMatch;
-        return createIconElement(library, component, propsString);
+        return await createIconElement(library, component, propsString);
     }
 
     // Finally, try to parse as component name and props without tags
@@ -92,12 +118,12 @@ export function stringToReactElement(str: string): React.ReactElement | null {
 
     if (shorthandMatch) {
         const [, component, propsString] = shorthandMatch;
-        return createIconElement(component, undefined, propsString);
+        return await createIconElement(component, undefined, propsString);
     }
 
     // If all else fails, it might be just a component name with no props
     if (/^[^<>\s.]+$/.test(cleanStr)) {
-        return createIconElement(cleanStr);
+        return await createIconElement(cleanStr);
     }
 
     // Only log error if the string is not empty (empty strings are expected when icon is not a string)
@@ -108,23 +134,30 @@ export function stringToReactElement(str: string): React.ReactElement | null {
 }
 
 /**
- * Helper function to create the React element from parsed parts
+ * Helper function to create the React element from parsed parts.
+ * Dynamically loads icon libraries as needed.
  */
-function createIconElement(
+async function createIconElement(
     libraryOrComponent: string,
     iconName?: string,
     propsString: string = '',
     children: string = ''
-): React.ReactElement | null {
+): Promise<React.ReactElement | null> {
     let component;
 
     if (iconName) {
-        if (libraryOrComponent in ICON_LIBRARIES) {
-            const iconLibrary = ICON_LIBRARIES[libraryOrComponent as IconLibraryKey];
-            component = iconLibrary[iconName as keyof typeof iconLibrary];
+        // Library and icon name are explicitly provided
+        if (['SI', 'FA', 'FA6', 'BS', 'VSC'].includes(libraryOrComponent)) {
+            try {
+                const iconLibrary = await loadIconLibrary(libraryOrComponent);
+                component = iconLibrary[iconName as keyof typeof iconLibrary];
 
-            if (!component) {
-                console.error(`Icon ${iconName} not found in ${libraryOrComponent} library`);
+                if (!component) {
+                    console.error(`Icon ${iconName} not found in ${libraryOrComponent} library`);
+                    return null;
+                }
+            } catch (error) {
+                console.error(`Failed to load icon library ${libraryOrComponent}:`, error);
                 return null;
             }
         } else {
@@ -136,11 +169,16 @@ function createIconElement(
         const dotParts = libraryOrComponent.split('.');
         if (dotParts.length === 2) {
             const [libName, compName] = dotParts;
-            if (libName in ICON_LIBRARIES) {
-                const iconLibrary = ICON_LIBRARIES[libName as IconLibraryKey];
-                component = iconLibrary[compName as keyof typeof iconLibrary];
-                if (!component) {
-                    console.error(`Icon ${compName} not found in ${libName} library`);
+            if (['SI', 'FA', 'FA6', 'BS', 'VSC'].includes(libName)) {
+                try {
+                    const iconLibrary = await loadIconLibrary(libName);
+                    component = iconLibrary[compName as keyof typeof iconLibrary];
+                    if (!component) {
+                        console.error(`Icon ${compName} not found in ${libName} library`);
+                        return null;
+                    }
+                } catch (error) {
+                    console.error(`Failed to load icon library ${libName}:`, error);
                     return null;
                 }
             } else {
@@ -149,10 +187,17 @@ function createIconElement(
             }
         } else {
             // Try to find the component in any library
-            for (const [, lib] of Object.entries(ICON_LIBRARIES)) {
-                if (libraryOrComponent in lib) {
-                    component = lib[libraryOrComponent as keyof typeof lib];
-                    break;
+            const libraryNames: IconLibraryKey[] = ['SI', 'FA', 'FA6', 'BS', 'VSC'];
+            
+            for (const libName of libraryNames) {
+                try {
+                    const lib = await loadIconLibrary(libName);
+                    if (libraryOrComponent in lib) {
+                        component = lib[libraryOrComponent as keyof typeof lib];
+                        break;
+                    }
+                } catch (error) {
+                    console.error(`Error checking library ${libName}:`, error);
                 }
             }
 
@@ -205,13 +250,15 @@ export default function Technology({ children }: TechnologyProps): React.ReactEl
             ) as TechApiResponse;
 
             if (data && data.success) {
-                // Convert string icons to React elements
-                const processedTech = data.tech.map((tech: TechResponse) => ({
-                    ...tech,
-                    icon: typeof tech.icon === "string" 
-                        ? stringToReactElement(tech.icon) 
-                        : tech.icon
-                }));
+                // Convert string icons to React elements using dynamic imports
+                const processedTech = await Promise.all(
+                    data.tech.map(async (tech: TechResponse) => ({
+                        ...tech,
+                        icon: typeof tech.icon === "string" 
+                            ? await stringToReactElement(tech.icon) 
+                            : tech.icon
+                    }))
+                );
 
                 setTechData(processedTech);
             }
