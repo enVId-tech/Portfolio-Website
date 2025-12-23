@@ -104,7 +104,13 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                 <link rel="dns-prefetch" href="https://fonts.gstatic.com" />
                 <link rel="preconnect" href="https://fonts.googleapis.com" crossOrigin="anonymous" />
                 <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
-                
+                {/* Google Analytics (gtag.js) - set NEXT_PUBLIC_GA_ID in env */}
+                {process.env.NEXT_PUBLIC_GA_ID && (
+                    <>
+                        <script async src={`https://www.googletagmanager.com/gtag/js?id=${process.env.NEXT_PUBLIC_GA_ID}`} />
+                        <script dangerouslySetInnerHTML={{ __html: `window.dataLayer = window.dataLayer || []; function gtag(){dataLayer.push(arguments);} gtag('js', new Date()); gtag('config', '${process.env.NEXT_PUBLIC_GA_ID}', { page_path: window.location.pathname });` }} />
+                    </>
+                )}
                 {/* Manifest and Icons */}
                 <link rel="manifest" href="/manifest.json" />
                 <link rel="apple-touch-icon" href="/favicon/apple-touch-icon.png" />
