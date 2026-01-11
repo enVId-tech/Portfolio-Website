@@ -289,8 +289,14 @@
   }
 
   .projectsGrid {
-    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); // Two columns for medium screens
-    gap: 1.75rem; // Increased gap
+    width: 100%;
+    justify-content: center;
+    gap: 1.5rem; // Slightly larger gap
+    grid-template-columns: repeat(auto-fill, minmax(calc(50% - 1.5rem), 1fr)); // Two columns on small tablets
+  }
+
+  .projectCard {
+    margin: 0;
   }
 
   .projectLinks {
