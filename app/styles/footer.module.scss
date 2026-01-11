@@ -16,14 +16,15 @@
   display: flex; // Flexbox layout
   flex-direction: column; // Column direction for mobile
   align-items: center; // Center align items
-  gap: 1.2rem; // Reduced gap for mobile
+  gap: 1rem; // Reduced gap for mobile
 }
 
 // Styling for the social links container - adjusted for mobile
 .socialLinks {
   display: flex; // Flexbox layout
-  gap: 1.8rem; // Increased gap for better touch targets on mobile
+  gap: 1rem; // Increased gap for better touch targets on mobile
   margin-bottom: 0.5rem; // Add space below social links on mobile
+  justify-content: center; // Center items in their flex container
 
   // Styling for individual links - improved touch areas
   a {
@@ -53,14 +54,23 @@
   width: 100%; // Full width on mobile
 }
 
+.link {
+  color: rgba(255, 255, 255, 0.8);
+  text-decoration: underline;
+
+  &:hover, &:active {
+    color: rgb(114, 72, 222);
+  }
+}
+
 // Scroll to top button styling - larger for mobile touch
 .scrollTopButton {
   background: rgba(114, 72, 222, 0.2);
   border: 1px solid rgba(114, 72, 222, 0.5);
   color: white;
-  width: 45px; // Larger width for touch
+  width: 45px;
   height: 45px; // Larger height for touch
-  border-radius: 50%;
+  border-radius: 10000px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -96,7 +106,7 @@
     flex-direction: row; // Row direction
     justify-content: space-between; // Space between items
     padding: 0 1.5rem;
-    gap: 1.5rem; // Restore original gap
+    gap: 1rem; // Restore original gap
   }
 
   .icon {
@@ -105,11 +115,13 @@
 
   .socialLinks {
     margin-bottom: 0; // Remove margin
-    gap: 1.5rem; // Return to original gap
+    gap: 1rem; // Return to original gap
+    max-width: 100px;
+    flex-wrap: wrap;
   }
 
   .scrollTopButton {
-    width: 40px; // Return to original size
+    width: 50px; // Return to original size
     height: 40px; // Return to original size
     margin-top: 0; // Remove extra margin
   }

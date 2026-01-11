@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import styles from '@/styles/footer.module.scss';
 import { M_400 } from "@/utils/globalFonts";
-import { FaGithub, FaEnvelope, FaArrowUp } from 'react-icons/fa';
+import { FaGithub, FaEnvelope, FaArrowUp, FaLinkedin } from 'react-icons/fa';
 
 type FooterProps = {
     children?: React.ReactNode;
@@ -40,16 +40,16 @@ export default function Footer({ children }: FooterProps): React.ReactElement {
                     <a href="https://github.com/enVId-tech" target="_blank" rel="noopener noreferrer" aria-label="GitHub">
                         <FaGithub className={styles.icon} />
                     </a>
-                    {/*<a href="https://www.linkedin.com/" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn">*/}
-                    {/*    <FaLinkedin className={styles.icon} />*/}
-                    {/*</a>*/}
+                    <a href="https://www.linkedin.com/in/ericktran-cs/" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn">
+                       <FaLinkedin className={styles.icon} />
+                    </a>
                     <a href="https://mail.google.com/mail/?view=cm&fs=1&tf=1&to=erick.tran@etran.dev" target="_blank" aria-label="Email">
                         <FaEnvelope className={styles.icon} />
                     </a>
                 </div>
 
                 <div className={`${styles.copyright} ${M_400}`}>
-                    © {year} Erick Tran. All rights reserved.
+                    © 2024-{year} Erick Tran. All rights reserved. <br/>Licensed under <a className={styles.link} href="https://github.com/enVId-tech/Portfolio-Website/blob/main/LICENSE" target="_blank" rel="noopener noreferrer">GNU General Public License v3</a>.
                 </div>
 
                 <button className={styles.scrollTopButton} onClick={scrollToTop} aria-label="Scroll to top">
