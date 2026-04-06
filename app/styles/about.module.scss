@@ -1,19 +1,16 @@
-// Container for the about section
 .container {
   width: 100%;
   max-width: 1100px;
   margin: 0 auto;
-  padding: 0 1rem; // Add padding for mobile screens
+  padding: 0 1rem;
 }
 
-// Title styling for the about section
 .aboutTitle {
-  font-size: clamp(1.5rem, 5vw, 1.8rem); // Responsive font size
+  font-size: clamp(1.5rem, 5vw, 1.8rem);
   margin-bottom: 1.2rem;
   color: white;
   position: relative;
 
-  // Underline effect for the title
   &:after {
     content: '';
     position: absolute;
@@ -25,14 +22,12 @@
   }
 }
 
-// Grid layout for the cards
 .cardGrid {
   display: grid;
   gap: 1rem;
-  justify-content: center; // Centers the entire grid within the container
+  justify-content: center;
 }
 
-// Styling for individual cards
 .card {
   background-color: rgba(20, 20, 40, 0.3);
   border-radius: 8px;
@@ -40,9 +35,7 @@
   border: 1px solid rgba(200, 200, 255, 0.2);
   transition: all 0.3s ease;
   color: white;
-  height: 280px; // Fixed height for all cards
 
-  // Hover and active states for touch devices
   &:hover,
   &:active {
     transform: translateY(-2px);
@@ -50,9 +43,8 @@
   }
 }
 
-// Title styling for the cards
 .cardTitle {
-  font-size: 1.1rem; // Slightly reduced for mobile
+  font-size: 1.1rem;
   color: rgba(200, 200, 255, 0.9);
   margin: 0;
   padding: 0;
@@ -62,7 +54,6 @@
   text-align: center;
 }
 
-// Styling for the skills list
 .skillsList {
   list-style-type: none;
   padding: 0;
@@ -72,10 +63,9 @@
   li {
     position: relative;
     padding: 0.1rem 0 0.1rem 1rem;
-    font-size: 0.9rem; // Slightly smaller for mobile
-    line-height: 1.5; // Improved line height for better readability on mobile
+    font-size: 0.9rem;
+    line-height: 1.5;
 
-    // Bullet point for the list items
     &:before {
       content: "•";
       color: rgba(200, 200, 255, 0.7);
@@ -85,18 +75,15 @@
   }
 }
 
-// Highlighted text styling
 .highlight {
   color: rgba(200, 200, 255, 0.9);
   font-weight: 600;
 }
 
-// Separator styling (hidden by default)
 .separator {
   display: none;
 }
 
-// Styling for the experience text container
 .experienceText {
   display: flex;
   flex-direction: column;
@@ -105,88 +92,81 @@
   width: 100%;
 }
 
-// Styling for individual experience items
 .experienceItem {
   display: flex;
   align-items: center;
   gap: 0.5rem;
-  flex-wrap: wrap; // Allow wrapping on small screens
+  flex-wrap: wrap;
 }
 
-// Compact text styling
 .compactText {
-  font-size: 0.9rem; // Slightly smaller for mobile
-  line-height: 1.5; // Improved line height for readability
+  font-size: 0.9rem;
+  line-height: 1.5;
 }
 
-// Smallest screens (adjusts to device width)
 @media (min-width: 300px) {
   .container {
-    padding: 0; // Add back horizontal padding to prevent edge overlap
-    max-width: 100%; // Ensure full width usage
+    padding: 0;
+    max-width: 100%;
   }
 
   .aboutTitle {
-    font-size: clamp(1.2rem, 6vw, 1.5rem); // Smaller range for very small screens
+    font-size: clamp(1.2rem, 6vw, 1.5rem);
     margin-bottom: 1rem;
 
     &:after {
-      width: 30px; // Smaller underline
+      width: 30px;
     }
   }
 
   .cardGrid {
     gap: 1rem;
-    // Fills entire row and adjusts to device width
     grid-template-columns: 1fr;
   }
 
   .card {
-    padding: 0.75rem; // Reduced padding
-    border-radius: 6px; // Slightly smaller border radius
+    padding: 0.75rem;
+    border-radius: 6px;
   }
 
   .cardTitle {
-    font-size: 1rem; // Smaller title for very small screens
+    font-size: 1rem;
     margin-bottom: 0.5rem;
   }
 
   .skillsList li {
-    font-size: 0.85rem; // Smaller text for better fit
-    padding: 0.1rem 0 0.1rem 0.85rem; // Reduced padding
+    font-size: 0.85rem;
+    padding: 0.1rem 0 0.1rem 0.85rem;
   }
 
   .experienceText {
-    gap: 0.4rem; // Tighter spacing
+    gap: 0.4rem;
   }
 
   .experienceItem {
-    gap: 0.4rem; // Reduced gap between items
+    gap: 0.4rem;
   }
 
   .compactText {
-    font-size: 0.85rem; // Smaller text for very small screens
-    line-height: 1.4; // Slightly tighter line height
+    font-size: 0.85rem;
+    line-height: 1.4;
   }
 }
 
-// Small screens and up (480px+)
 @media (min-width: 480px) {
   .container {
     padding: 0;
   }
 
   .aboutTitle {
-    margin-bottom: 1.4rem; // Increased margin
+    margin-bottom: 1.4rem;
   }
 
   .cardGrid {
     gap: 1rem;
-    // 2 items per row, max 240px each to prevent overflow
     grid-template-columns: repeat(2, minmax(0, 240px));
   }
 
-  // Center an orphaned 3rd card (or any odd last item)
   .card:last-child:nth-child(odd) {
     grid-column: 1 / -1;
     justify-self: center;
@@ -195,77 +175,68 @@
   }
 
   .cardTitle {
-    font-size: 1.12rem; // Slightly increased
+    font-size: 1.12rem;
   }
 
   .skillsList li {
-    font-size: 0.92rem; // Slightly increased
+    font-size: 0.92rem;
   }
 
   .compactText {
-    font-size: 0.92rem; // Slightly increased
+    font-size: 0.92rem;
   }
 }
 
-// Medium screens (tablets)
 @media (min-width: 600px) {
   .cardGrid {
-    // 2 items per row, max 260px each to prevent overflow
     grid-template-columns: repeat(2, minmax(0, 260px));
   }
 
-  // Center an orphaned 3rd card
   .card:last-child:nth-child(odd) {
     max-width: 260px;
   }
 }
 
-// Media query for screens between 769px and 1100px
 @media (min-width: 769px) and (max-width: 1100px) {
   .container {
-    padding: 0 1.5rem; // Increased padding
+    padding: 0 1.5rem;
   }
 
   .cardGrid {
-    // 2 items per row, max 300px each to prevent overflow
     grid-template-columns: repeat(2, minmax(0, 300px));
   }
 
-  // Center an orphaned 3rd card
   .card:last-child:nth-child(odd) {
     max-width: 300px;
   }
 
   .cardTitle {
-    font-size: 1.05rem; // Original size
+    font-size: 1.05rem;
   }
 
   .skillsList li {
-    font-size: 0.95rem; // Original size
+    font-size: 0.95rem;
   }
 
   .compactText {
-    font-size: 0.95rem; // Original size
+    font-size: 0.95rem;
   }
 }
 
-// Large screens (desktop)
 @media (min-width: 1101px) {
   .container {
-    padding: 0; // Remove padding for large screens
+    padding: 0;
   }
 
   .aboutTitle {
-    font-size: 1.8rem; // Original desktop size
+    font-size: 1.8rem;
   }
 
   .cardGrid {
-    gap: 0.8rem; // Original gap
-    // 3 items per row, max 320px each to prevent overflow
+    gap: 0.8rem;
     grid-template-columns: repeat(3, minmax(0, 320px));
   }
 
-  // Reset the centered odd card logic from mobile/tablet
   .card:last-child:nth-child(odd) {
     grid-column: auto;
     justify-self: auto;
@@ -273,16 +244,15 @@
     width: auto;
   }
 
-  // If there's 1 orphaned item on desktop (like a 4th card)
   .card:last-child:nth-child(3n + 1) {
-    grid-column: 2; // Places it in the middle column naturally
+    grid-column: 2;
   }
 
   .cardTitle {
-    font-size: 1.15rem; // Original size
+    font-size: 1.15rem;
   }
 
   .experienceItem {
-    flex-wrap: nowrap; // No wrapping on desktop
+    flex-wrap: nowrap;
   }
 }

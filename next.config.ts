@@ -1,4 +1,5 @@
 import type { NextConfig } from "next";
+import { version } from "./package.json";
 
 const isDev = process.env.NODE_ENV === 'development';
 
@@ -16,24 +17,28 @@ const nextConfig: NextConfig = {
         deviceSizes: [640, 750, 828, 1080, 1200, 1920],
         imageSizes: [16, 32, 48, 64, 96, 128, 256, 384],
     },
-    
+
+    env: {
+        APP_VERSION: version,
+    },
+
     // Performance optimizations
     compress: !isDev,
     poweredByHeader: false,
-    
+
     // Experimental features for performance
     experimental: {
         optimizeCss: !isDev,
         optimizePackageImports: [
             'react-icons/fa',
-            'react-icons/si', 
+            'react-icons/si',
             'react-icons/fa6',
             'react-icons/bs',
             'react-icons/vsc',
         ],
         webpackBuildWorker: true,
     },
-    
+
     // Turbopack configuration for Next.js 16+
     turbopack: {},
     async headers() {
@@ -67,7 +72,7 @@ const nextConfig: NextConfig = {
                 },
             ];
         }
-        
+
         return [
             {
                 source: '/',

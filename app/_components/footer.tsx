@@ -1,4 +1,4 @@
-"use client";
+'use client';
 import React, { useState, useEffect } from 'react';
 import styles from '@/styles/footer.module.scss';
 import { M_400 } from "@/utils/globalFonts";
@@ -54,6 +54,12 @@ export default function Footer({ children }: FooterProps): React.ReactElement {
                     </p>
                     <p>
                         Licensed under <a className={styles.link} href="https://github.com/enVId-tech/Portfolio-Website/blob/main/LICENSE" target="_blank" rel="noopener noreferrer">GNU General Public License v3</a>.
+                    </p>
+                    <p>
+                        Built with Next.js, React, and TypeScript. View the <a className={styles.link} href="https://github.com/enVId-tech/Portfolio-Website" target="_blank" rel="noopener noreferrer">source code</a>.
+                    </p>
+                    <p>
+                        Build version: {process.env.APP_VERSION || 'unknown'}
                     </p>
                 </div>
 

@@ -96,10 +96,10 @@ const ProjectCard = React.memo(({ project }: { project: Project }) => (
  */
 // eslint-disable-next-line react/display-name
 const FilterButton = React.memo(({
-                                     technology,
-                                     isActive,
-                                     onClick
-                                 }: {
+    technology,
+    isActive,
+    onClick
+}: {
     technology: string;
     isActive: boolean;
     onClick: () => void;
@@ -177,7 +177,7 @@ export default function Projects(): React.ReactElement {
 
         } catch (error) {
             console.error('Error fetching GitHub repositories:', error);
-            
+
             // Provide more specific error messages
             if (error instanceof Error) {
                 setError(error.message);
@@ -189,7 +189,7 @@ export default function Projects(): React.ReactElement {
         }
     }, [filterMode]);
 
-// Set up intelligent fetching with caching
+    // Set up intelligent fetching with caching
     useEffect(() => {
         // Initial fetch when component mounts
         fetchGithubRepos();
@@ -241,9 +241,9 @@ export default function Projects(): React.ReactElement {
         setFilterMode('include');
     }, []);
 
-    const handleSetExcludeMode = useCallback(() => {
-        setFilterMode('exclude');
-    }, []);
+    // const handleSetExcludeMode = useCallback(() => {
+    //     setFilterMode('exclude');
+    // }, []);
 
     const handleSetAllMode = useCallback(() => {
         setFilterMode('all');
@@ -259,14 +259,14 @@ export default function Projects(): React.ReactElement {
                             onClick={handleSetIncludeMode}
                             className={`${styles.filterModeButton} ${filterMode === 'include' ? styles.active : ''}`}
                         >
-                            Included
+                            Showcasing
                         </button>
-                        <button
+                        {/* <button
                             onClick={handleSetExcludeMode}
                             className={`${styles.filterModeButton} ${filterMode === 'exclude' ? styles.active : ''}`}
                         >
                             Excluded
-                        </button>
+                        </button> */}
                         <button
                             onClick={handleSetAllMode}
                             className={`${styles.filterModeButton} ${filterMode === 'all' ? styles.active : ''}`}
