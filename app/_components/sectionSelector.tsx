@@ -3,7 +3,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import styles from '@/styles/sectionSelector.module.scss';
 import { FaHome, FaUser, FaHistory, FaLaptopCode, FaCogs } from 'react-icons/fa';
 import { RiArticleLine } from 'react-icons/ri';
-import {M_600} from "@/utils/globalFonts";
+import { M_600 } from "@/utils/globalFonts";
 
 interface SectionSelectorProps {
     sections: {
@@ -18,7 +18,7 @@ export default function SectionSelector({ sections }: SectionSelectorProps): Rea
     const indicatorRef = useRef<HTMLDivElement>(null);
 
     // Define icons for each section
-    const sectionIcons: {[key: string]: React.ReactNode} = {
+    const sectionIcons: { [key: string]: React.ReactNode } = {
         header: <FaHome />,
         about: <FaUser />,
         timeline: <FaHistory />,

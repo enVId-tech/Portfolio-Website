@@ -28,8 +28,8 @@
 // Grid layout for the cards
 .cardGrid {
   display: grid;
-  grid-template-columns: 1fr; // Default to single column for mobile
-  gap: 1rem; // Slightly increased gap for better mobile separation
+  gap: 1rem;
+  justify-content: center; // Centers the entire grid within the container
 }
 
 // Styling for individual cards
@@ -40,26 +40,13 @@
   border: 1px solid rgba(200, 200, 255, 0.2);
   transition: all 0.3s ease;
   color: white;
-  height: 100%;
-  margin-bottom: 0; // Remove margin-bottom entirely - use grid gap instead
+  height: 280px; // Fixed height for all cards
 
   // Hover and active states for touch devices
-  &:hover, &:active {
+  &:hover,
+  &:active {
     transform: translateY(-2px);
     border-color: rgba(200, 200, 255, 0.4);
-  }
-
-  // Make single cards span all columns
-  &:only-child {
-    grid-column: 1 / -1;
-  }
-}
-
-// When there are exactly 2 cards in the grid
-.cardGrid:has(.card:first-child:nth-last-child(2)),
-.cardGrid:has(.card:first-child:nth-last-child(2) ~ .card) {
-  .card {
-    grid-column: span 1; // Default single column on mobile
   }
 }
 
@@ -67,7 +54,12 @@
 .cardTitle {
   font-size: 1.1rem; // Slightly reduced for mobile
   color: rgba(200, 200, 255, 0.9);
+  margin: 0;
+  padding: 0;
+  margin-top: 0.1rem;
   margin-bottom: 0.6rem;
+  width: 100%;
+  text-align: center;
 }
 
 // Styling for the skills list
@@ -79,7 +71,7 @@
 
   li {
     position: relative;
-    padding: 0.15rem 0 0.15rem 1rem;
+    padding: 0.1rem 0 0.1rem 1rem;
     font-size: 0.9rem; // Slightly smaller for mobile
     line-height: 1.5; // Improved line height for better readability on mobile
 
@@ -127,7 +119,7 @@
   line-height: 1.5; // Improved line height for readability
 }
 
-// Very small screens (300px+) - Support for older/smaller phones
+// Smallest screens (adjusts to device width)
 @media (min-width: 300px) {
   .container {
     padding: 0; // Add back horizontal padding to prevent edge overlap
@@ -137,20 +129,20 @@
   .aboutTitle {
     font-size: clamp(1.2rem, 6vw, 1.5rem); // Smaller range for very small screens
     margin-bottom: 1rem;
-    
+
     &:after {
       width: 30px; // Smaller underline
     }
   }
 
   .cardGrid {
-    gap: 3rem; // Reduced gap for tighter spacing
-    grid-template-columns: 1fr; // Single column for very small screens
+    gap: 1rem;
+    // Fills entire row and adjusts to device width
+    grid-template-columns: 1fr;
   }
 
   .card {
     padding: 0.75rem; // Reduced padding
-    margin: 0.75rem;
     border-radius: 6px; // Slightly smaller border radius
   }
 
@@ -188,8 +180,18 @@
     margin-bottom: 1.4rem; // Increased margin
   }
 
-  .card {
-    margin-bottom: 0; // Remove margin-bottom to rely on grid gap
+  .cardGrid {
+    gap: 1rem;
+    // 2 items per row, max 240px each to prevent overflow
+    grid-template-columns: repeat(2, minmax(0, 240px));
+  }
+
+  // Center an orphaned 3rd card (or any odd last item)
+  .card:last-child:nth-child(odd) {
+    grid-column: 1 / -1;
+    justify-self: center;
+    width: 100%;
+    max-width: 240px;
   }
 
   .cardTitle {
@@ -208,15 +210,13 @@
 // Medium screens (tablets)
 @media (min-width: 600px) {
   .cardGrid {
-    grid-template-columns: repeat(2, 1fr); // Two columns for medium screens
+    // 2 items per row, max 260px each to prevent overflow
+    grid-template-columns: repeat(2, minmax(0, 260px));
   }
 
-  // When exactly 2 cards
-  .cardGrid:has(.card:first-child:nth-last-child(2)),
-  .cardGrid:has(.card:first-child:nth-last-child(2) ~ .card) {
-    .card {
-      grid-column: span 1; // Each card takes half width
-    }
+  // Center an orphaned 3rd card
+  .card:last-child:nth-child(odd) {
+    max-width: 260px;
   }
 }
 
@@ -227,20 +227,13 @@
   }
 
   .cardGrid {
-    grid-template-columns: repeat(2, 1fr); // Two columns
-    gap: 3rem; // Maintain gap
+    // 2 items per row, max 300px each to prevent overflow
+    grid-template-columns: repeat(2, minmax(0, 300px));
   }
 
-  .card {
-    margin-bottom: 0; // Remove extra margin
-  }
-
-  // When exactly 2 cards
-  .cardGrid:has(.card:first-child:nth-last-child(2)),
-  .cardGrid:has(.card:first-child:nth-last-child(2) ~ .card) {
-    .card {
-      grid-column: span 1; // Each card takes half width
-    }
+  // Center an orphaned 3rd card
+  .card:last-child:nth-child(odd) {
+    max-width: 300px;
   }
 
   .cardTitle {
@@ -267,24 +260,26 @@
   }
 
   .cardGrid {
-    grid-template-columns: repeat(3, 1fr); // Original three columns
     gap: 0.8rem; // Original gap
+    // 3 items per row, max 320px each to prevent overflow
+    grid-template-columns: repeat(3, minmax(0, 320px));
   }
 
-  .card {
-    margin-bottom: 0; // Remove extra margin
+  // Reset the centered odd card logic from mobile/tablet
+  .card:last-child:nth-child(odd) {
+    grid-column: auto;
+    justify-self: auto;
+    max-width: none;
+    width: auto;
+  }
+
+  // If there's 1 orphaned item on desktop (like a 4th card)
+  .card:last-child:nth-child(3n + 1) {
+    grid-column: 2; // Places it in the middle column naturally
   }
 
   .cardTitle {
     font-size: 1.15rem; // Original size
-  }
-
-  // When exactly 2 cards in desktop
-  .cardGrid:has(.card:first-child:nth-last-child(2)),
-  .cardGrid:has(.card:first-child:nth-last-child(2) ~ .card) {
-    .card {
-      grid-column: span 3 / span 3; // Original full width
-    }
   }
 
   .experienceItem {

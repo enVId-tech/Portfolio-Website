@@ -3,6 +3,7 @@ import styles from "@/styles/header.module.scss";
 import {M_400, M_600} from "@/utils/globalFonts";
 import { FaGithub, FaLinkedin } from "react-icons/fa";
 import { AiOutlineMail } from "react-icons/ai";
+import { years } from "@/utils/dates";
 
 // Preload critical icons for better performance
 export const dynamic = 'force-static';
@@ -56,7 +57,7 @@ export default function Header({ children }: HeaderProps): React.ReactElement {
                     </a>
                 </nav>
                 <p className={`${styles.description} ${M_400}`}>
-                    Hi, I am Erick. I have 3 years of experience in full-stack website development, including 3 using ReactJS, 3 using Node.js with Express, and 2 using Next.js. Always learning new things all the time, and ready to make solutions.
+                    Hi all, I'm Erick. I have {years.dev} years of experience in full-stack website development, including {years.react} years using ReactJS, {years.fullStack} years using Node.js with Express, and {years.next} years using Next.js. Always learning new things all the time, and ready to make solutions.
                 </p>
             </header>
             { children }

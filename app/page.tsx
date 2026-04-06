@@ -32,7 +32,7 @@ const SectionSelector = dynamic(() => import("@/_components/sectionSelector"));
 
 export const metadata: Metadata = {
     title: "Home",
-    description: "Erick Tran - Full Stack Developer with 3+ years of experience in React, Next.js, Node.js, TypeScript, and modern web technologies. View my portfolio of innovative web applications and development projects.",
+    description: "Erick Tran - Full Stack Developer with 4+ years of experience in React, Next.js, Node.js, TypeScript, and modern web technologies. View my portfolio of innovative web applications and development projects.",
     openGraph: {
         title: "Erick Tran - Full Stack Developer Portfolio",
         description: "Explore the portfolio of Erick Tran, a skilled full stack developer specializing in React, Next.js, Node.js, and modern web technologies.",

@@ -2,7 +2,7 @@ import React, { Suspense } from 'react';
 import '@/styles/globals.scss';
 import '@/utils/consoleOverride';
 import { M_600 } from "@/utils/globalFonts.ts";
-import {AuthProvider} from "@/context/AuthContext.tsx";
+import { AuthProvider } from "@/context/AuthContext.tsx";
 import ClientLayout from './client-layout';
 
 export const metadata = {
@@ -114,19 +114,19 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                 {/* Manifest and Icons */}
                 <link rel="manifest" href="/manifest.json" />
                 <link rel="apple-touch-icon" href="/favicon/apple-touch-icon.png" />
-                
+
                 {/* Theme and Viewport */}
                 <meta name="theme-color" content="#1a1a1a" />
                 <meta name="viewport" content="width=device-width, initial-scale=1" />
             </head>
             <body className={M_600}>
-            <Suspense fallback={<div>Loading...</div>}>
-                <ClientLayout>
-                    <AuthProvider>
-                       {children}
-                    </AuthProvider>
-                </ClientLayout>
-            </Suspense>
+                <Suspense fallback={<div>Loading...</div>}>
+                    <ClientLayout>
+                        <AuthProvider>
+                            {children}
+                        </AuthProvider>
+                    </ClientLayout>
+                </Suspense>
             </body>
         </html>
     );

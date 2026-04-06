@@ -46,9 +46,10 @@
   justify-content: center;
   pointer-events: auto;
 
+
   &:hover {
     .label {
-      opacity: 1;
+      opacity: 1 !important;
       transform: translateX(20px);
     }
 
@@ -60,7 +61,7 @@
 
   &.active {
     .label {
-      opacity: 1;
+      opacity: 0;
       transform: translateX(20px);
     }
 

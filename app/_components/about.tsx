@@ -1,6 +1,7 @@
 import React from 'react';
 import styles from '@/styles/about.module.scss';
-import {M_400, M_600} from "@/utils/globalFonts";
+import { M_400, M_600 } from "@/utils/globalFonts";
+import { years } from '@/utils/dates';
 
 type AboutProps = {
     children?: React.ReactNode;
@@ -17,41 +18,49 @@ export default function About({ children }: AboutProps): React.ReactElement {
 
             <div className={styles.cardGrid}>
                 <div className={`${styles.card} ${styles.skillsCard}`}>
-                    <h3 className={`${styles.cardTitle} ${M_600}`}>Skills</h3>
-                    <ul className={`${styles.skillsList} ${M_400}`}>
-                        <li>Frontend: React, Next.js, TypeScript</li>
-                        <li>Backend: Node.js, Express</li>
-                        <li>Databases: MongoDB, SQL</li>
-                        <li>Other: Git, Docker</li>
-                    </ul>
+                    <h3 className={`${styles.cardTitle} ${M_600}`}>Statistics</h3>
+                    <div className={`${styles.experienceText} ${M_400}`}>
+                        <div className={styles.experienceItem}>
+                            <span className={styles.highlight}>6</span> certifications
+                        </div>
+                        <div className={styles.experienceItem}>
+                            <span className={styles.highlight}>20+</span> projects completed
+                        </div>
+                        <div className={styles.experienceItem}>
+                            <span className={styles.highlight}>5</span> degree programs attending
+                        </div>
+                    </div>
                 </div>
 
                 <div className={styles.card}>
                     <h3 className={`${styles.cardTitle} ${M_600}`}>Experience</h3>
                     <div className={`${styles.experienceText} ${M_400}`}>
                         <div className={styles.experienceItem}>
-                            <span className={styles.highlight}>5y</span> web development
+                            <span className={styles.highlight}>{years.dev}y</span> web development
                         </div>
                         <div className={styles.experienceItem}>
-                            <span className={styles.highlight}>3y</span> full-stack development
+                            <span className={styles.highlight}>{years.fullStack}y</span> full-stack development
                         </div>
                         <div className={styles.experienceItem}>
-                            <span className={styles.highlight}>3y</span> React.js
+                            <span className={styles.highlight}>{years.react}y</span> React.js
                         </div>
                         <div className={styles.experienceItem}>
-                            <span className={styles.highlight}>2y</span> Next.js
+                            <span className={styles.highlight}>{years.next}y</span> Next.js
                         </div>
                     </div>
                 </div>
 
                 <div className={styles.card}>
                     <h3 className={`${styles.cardTitle} ${M_600}`}>Interests</h3>
-                    <p className={`${M_400} ${styles.compactText}`}>
-                        Exploring new technologies and building efficient, scalable web applications.
-                    </p>
+                    <ul className={`${styles.skillsList} ${M_400}`}>
+                        <li>Computer Science</li>
+                        <li>Computer Engineering and Design</li>
+                        <li>IT and Networking</li>
+                        <li>Software Development</li>
+                    </ul>
                 </div>
             </div>
-            { children }
+            {children}
         </section>
     );
 }

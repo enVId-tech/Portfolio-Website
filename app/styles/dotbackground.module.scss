@@ -48,20 +48,25 @@
   align-items: center;
   justify-content: center;
 
+  @media (min-width: 480px) {
+    width: 80%; // Slightly narrower for larger phones
+    padding: 1.8rem 0;
+  }
+
   // Tablet breakpoint
   @media (min-width: 768px) {
-    width: 70%;
+    width: 650px;
     padding: 1.8rem 0;
   }
 
   // Desktop breakpoint
   @media (min-width: 992px) {
-    width: 50%;
+    width: 800px;
     padding: 2rem 0;
   }
 
   // Large desktop breakpoint
   @media (min-width: 1200px) {
-    width: 35%;
+    width: 700px;
   }
 }

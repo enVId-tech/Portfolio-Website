@@ -41,7 +41,7 @@ export default function Footer({ children }: FooterProps): React.ReactElement {
                         <FaGithub className={styles.icon} />
                     </a>
                     <a href="https://www.linkedin.com/in/ericktran-cs/" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn">
-                       <FaLinkedin className={styles.icon} />
+                        <FaLinkedin className={styles.icon} />
                     </a>
                     <a href="https://mail.google.com/mail/?view=cm&fs=1&tf=1&to=erick.tran@etran.dev" target="_blank" aria-label="Email">
                         <FaEnvelope className={styles.icon} />
@@ -49,14 +49,19 @@ export default function Footer({ children }: FooterProps): React.ReactElement {
                 </div>
 
                 <div className={`${styles.copyright} ${M_400}`}>
-                    © 2024-{year} Erick Tran. All rights reserved. <br/>Licensed under <a className={styles.link} href="https://github.com/enVId-tech/Portfolio-Website/blob/main/LICENSE" target="_blank" rel="noopener noreferrer">GNU General Public License v3</a>.
+                    <p>
+                        © 2024-{year} Erick Tran. All rights reserved.
+                    </p>
+                    <p>
+                        Licensed under <a className={styles.link} href="https://github.com/enVId-tech/Portfolio-Website/blob/main/LICENSE" target="_blank" rel="noopener noreferrer">GNU General Public License v3</a>.
+                    </p>
                 </div>
 
                 <button className={styles.scrollTopButton} onClick={scrollToTop} aria-label="Scroll to top">
                     <FaArrowUp />
                 </button>
             </div>
-            { children }
+            {children}
         </footer>
     );
 }

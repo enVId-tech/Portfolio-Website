@@ -39,7 +39,9 @@
   font-size: 0.85rem; // Slightly reduced font size for mobile
   margin-bottom: 4px; // Add margin between wrapped buttons
 
-  &:hover, &:active { // Added active state for touch devices
+  &:hover,
+  &:active {
+    // Added active state for touch devices
     background-color: rgba(114, 72, 222, 0.3); // Background color on hover/active
     transform: translateY(-2px); // Move up on hover/active
     transition: all 0.2s ease-in-out;
@@ -71,7 +73,9 @@
   display: flex; // Flexbox layout
   flex-direction: column; // Column direction
 
-  &:hover, &:active { // Added active state for touch devices
+  &:hover,
+  &:active {
+    // Added active state for touch devices
     transform: translateY(-5px); // Move up on hover/active
     box-shadow: 0 10px 30px rgba(87, 31, 255, 0.2); // Box shadow on hover/active
     border-color: rgba(114, 72, 222, 0.5); // Border color on hover/active
@@ -93,7 +97,9 @@
   object-fit: cover; // Cover the container
   transition: transform 0.5s ease; // Smooth transition for transform
 
-  &:hover, &:active { // Added active state for touch devices
+  &:hover,
+  &:active {
+    // Added active state for touch devices
     transform: scale(1.05); // Scale up on hover/active
   }
 }
@@ -185,7 +191,8 @@
   text-overflow: ellipsis; // Show ellipsis for overflowed text
   max-width: 100%; // Maximum width is 100% of container
 
-  &:hover, &:active {
+  &:hover,
+  &:active {
     background-color: rgba(114, 72, 222, 0.5);
     transform: translateY(-2px);
   }
@@ -229,7 +236,9 @@
   cursor: pointer; // Pointer cursor on hover
   transition: all 0.2s ease; // Smooth transition for all properties
 
-  &:hover, &:active { // Added active state for touch devices
+  &:hover,
+  &:active {
+    // Added active state for touch devices
     background-color: #24292e; // Background color on hover/active
   }
 
