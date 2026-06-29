@@ -48,7 +48,7 @@
     "date-fns": "^4.4.0",
     "dotenv": "^17.4.2",
     "jsonwebtoken": "^9.0.3",
-    "mongodb": "^7.3.0",
+    "mongodb": "^7.4.0",
     "next": "^16.2.9",
     "next-auth": "^4.24.14",
     "npm-version-lib": "^25.12.26-release.17",
