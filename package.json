@@ -32,15 +32,16 @@
   ],
   "license": "MIT",
   "engines": {
-    "node": ">=18.0.0",
-    "npm": ">=9.0.0"
+    "node": ">=20.9.0",
+    "npm": ">=10.0.0"
   },
   "scripts": {
-    "dev": "npm-v dev && next dev --turbopack",
+    "dev": "npm-v dev && next dev",
     "build": "npm-v beta && next build",
     "start": "npm-v release && next start",
-    "lint": "next lint",
-    "ncu": "npx npm-check-updates -u && npm install --force"
+    "lint": "eslint .",
+    "typecheck": "tsc --noEmit",
+    "ncu": "npx npm-check-updates -u && npm install"
   },
   "dependencies": {
     "bcryptjs": "^3.0.3",
