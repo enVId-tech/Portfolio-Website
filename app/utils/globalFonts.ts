@@ -1,4 +1,3 @@
-import {NextFont} from "next/dist/compiled/@next/font";
 import {Montserrat} from "next/font/google";
 // import {Open_Sans} from "next/dist/compiled/@next/font/dist/google";
 
@@ -28,7 +27,7 @@ import {Montserrat} from "next/font/google";
 // });
 
 // Montserrat
-const Montserrat_400: NextFont = Montserrat({
+const Montserrat_400 = Montserrat({
     weight: "400",
     style: 'normal',
     subsets: ['latin'],
@@ -43,7 +42,7 @@ const Montserrat_400: NextFont = Montserrat({
 //     subsets: ['latin'],
 // });
 
-const Montserrat_600: NextFont = Montserrat({
+const Montserrat_600 = Montserrat({
     weight: "600",
     style: 'normal',
     subsets: ['latin'],
