@@ -36,7 +36,6 @@ const nextConfig: NextConfig = {
             'react-icons/bs',
             'react-icons/vsc',
         ],
-        webpackBuildWorker: true,
     },
 
     // Turbopack configuration for Next.js 16+
@@ -59,10 +58,6 @@ const nextConfig: NextConfig = {
                         {
                             key: 'X-Frame-Options',
                             value: 'DENY',
-                        },
-                        {
-                            key: 'X-XSS-Protection',
-                            value: '1; mode=block',
                         },
                         {
                             key: 'Referrer-Policy',
@@ -88,10 +83,6 @@ const nextConfig: NextConfig = {
                     {
                         key: 'X-Frame-Options',
                         value: 'DENY',
-                    },
-                    {
-                        key: 'X-XSS-Protection',
-                        value: '1; mode=block',
                     },
                     {
                         key: 'Referrer-Policy',
@@ -187,10 +178,6 @@ const nextConfig: NextConfig = {
                         value: 'DENY',
                     },
                     {
-                        key: 'X-XSS-Protection',
-                        value: '1; mode=block',
-                    },
-                    {
                         key: 'Referrer-Policy',
                         value: 'strict-origin-when-cross-origin',
                     },
@@ -226,7 +213,5 @@ const nextConfig: NextConfig = {
         ]
     },
 };
-
-module.exports = nextConfig;
 
 export default nextConfig;
