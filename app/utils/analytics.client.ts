@@ -5,7 +5,7 @@ type AnalyticsEvent = {
   url?: string;
   title?: string;
   timestamp: string;
-  meta?: any;
+  meta?: Record<string, unknown>;
 };
 
 async function sendToServer(event: AnalyticsEvent) {
@@ -18,58 +18,44 @@ async function sendToServer(event: AnalyticsEvent) {
     });
   } catch (err) {
     // Non-blocking failure
-    // eslint-disable-next-line no-console
     console.error('Analytics send failed', err);
   }
+}
+
+/** Prefer sendBeacon (survives page unloads) and fall back to fetch. */
+function send(event: AnalyticsEvent) {
+  if (typeof navigator !== 'undefined' && typeof navigator.sendBeacon === 'function') {
+    try {
+      if (navigator.sendBeacon('/api/analytics', JSON.stringify(event))) return;
+    } catch {
+      // fall through to fetch
+    }
+  }
+
+  void sendToServer(event);
 }
 
 export function trackPageview(path: string) {
   if (!path) return;
 
-  const event: AnalyticsEvent = {
+  send({
     type: 'pageview',
     path,
     url: typeof window !== 'undefined' ? window.location.href : path,
     title: typeof document !== 'undefined' ? document.title : undefined,
     timestamp: new Date().toISOString(),
-  };
-
-  const body = JSON.stringify(event);
-
-  if (typeof navigator !== 'undefined' && 'sendBeacon' in navigator) {
-    try {
-      // @ts-ignore
-      navigator.sendBeacon('/api/analytics', body);
-      return;
-    } catch (e) {
-      // fallback to fetch
-    }
-  }
-
-  void sendToServer(event);
+  });
 }
 
-export function trackEvent(name: string, props?: any) {
-  const event: AnalyticsEvent = {
+export function trackEvent(name: string, props?: Record<string, unknown>) {
+  send({
     type: 'event',
     path: typeof window !== 'undefined' ? window.location.pathname : undefined,
     timestamp: new Date().toISOString(),
     meta: { name, props },
-  };
-
-  const body = JSON.stringify(event);
-
-  if (typeof navigator !== 'undefined' && 'sendBeacon' in navigator) {
-    try {
-      // @ts-ignore
-      navigator.sendBeacon('/api/analytics', body);
-      return;
-    } catch (e) {
-      // fallback
-    }
-  }
-
-  void sendToServer(event);
+  });
 }
 
-export default { trackPageview, trackEvent };
+const analytics = { trackPageview, trackEvent };
+
+export default analytics;
