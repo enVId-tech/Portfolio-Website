@@ -26,7 +26,7 @@ if (typeof window !== 'undefined') {
     // Keep console.error for production error tracking
 
     // Store originals in case they're needed for debugging
-    (global as any).__originalConsole = {
+    (globalThis as typeof globalThis & { __originalConsole?: Record<string, unknown> }).__originalConsole = {
       log: originalLog,
       info: originalInfo,
       warn: originalWarn,
