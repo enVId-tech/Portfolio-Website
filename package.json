@@ -50,6 +50,7 @@
     "dotenv": "^18.0.10",
     "jsonwebtoken": "^9.0.3",
     "mongodb": "^7.9.0",
+    "nanoid": "^6.0.2",
     "next": "^16.4.6",
     "npm-version-lib": "^25.12.26-release.17",
     "react": "^19.3.1",
