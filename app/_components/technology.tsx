@@ -35,22 +35,25 @@ interface TechApiResponse {
     tech: TechResponse[];
 }
 
+type IconComponent = React.ComponentType<Record<string, unknown>>;
+type IconLibrary = Record<string, IconComponent | undefined>;
+
 // Cache for dynamically loaded icon libraries
-const iconLibraryCache: { [key: string]: any } = {};
+const iconLibraryCache: Record<string, IconLibrary> = {};
 
 /**
  * Dynamically loads an icon library only when needed
  * @param libraryName - Name of the library to load (SI, FA, FA6, BS, VSC)
  * @returns Promise resolving to the icon library
  */
-async function loadIconLibrary(libraryName: string): Promise<any> {
+async function loadIconLibrary(libraryName: string): Promise<IconLibrary> {
     // Return from cache if already loaded
     if (iconLibraryCache[libraryName]) {
         return iconLibraryCache[libraryName];
     }
 
     // Dynamically import the library based on its name
-    let library;
+    let library: unknown;
     switch (libraryName) {
         case 'SI':
             library = await import('react-icons/si');
@@ -72,8 +75,8 @@ async function loadIconLibrary(libraryName: string): Promise<any> {
     }
 
     // Cache the loaded library
-    iconLibraryCache[libraryName] = library;
-    return library;
+    iconLibraryCache[libraryName] = library as IconLibrary;
+    return iconLibraryCache[libraryName];
 }
 
 type IconLibraryKey = 'SI' | 'FA' | 'FA6' | 'BS' | 'VSC';
@@ -143,14 +146,14 @@ async function createIconElement(
     propsString: string = '',
     children: string = ''
 ): Promise<React.ReactElement | null> {
-    let component;
+    let component: IconComponent | undefined;
 
     if (iconName) {
         // Library and icon name are explicitly provided
         if (['SI', 'FA', 'FA6', 'BS', 'VSC'].includes(libraryOrComponent)) {
             try {
                 const iconLibrary = await loadIconLibrary(libraryOrComponent);
-                component = iconLibrary[iconName as keyof typeof iconLibrary];
+                component = iconLibrary[iconName];
 
                 if (!component) {
                     console.error(`Icon ${iconName} not found in ${libraryOrComponent} library`);
@@ -172,7 +175,7 @@ async function createIconElement(
             if (['SI', 'FA', 'FA6', 'BS', 'VSC'].includes(libName)) {
                 try {
                     const iconLibrary = await loadIconLibrary(libName);
-                    component = iconLibrary[compName as keyof typeof iconLibrary];
+                    component = iconLibrary[compName];
                     if (!component) {
                         console.error(`Icon ${compName} not found in ${libName} library`);
                         return null;
@@ -193,7 +196,7 @@ async function createIconElement(
                 try {
                     const lib = await loadIconLibrary(libName);
                     if (libraryOrComponent in lib) {
-                        component = lib[libraryOrComponent as keyof typeof lib];
+                        component = lib[libraryOrComponent];
                         break;
                     }
                 } catch (error) {
