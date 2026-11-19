@@ -1,24 +1,21 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { MongoClient } from 'mongodb';
+import { connectToDatabase } from '@/utils/db.ts';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 
 const JWT_SECRET = process.env.JWT_SECRET || 'your-fallback-secret-key';
-const MONGODB_URI = process.env.MONGODB_URI || 'mongodb://localhost:27017';
 
 export async function POST(request: NextRequest) {
   try {
     const { username, password } = await request.json();
 
-    const client = await MongoClient.connect(MONGODB_URI);
-    const db = client.db(process.env.CLIENT_DB || 'admin');
+    const { db } = await connectToDatabase();
     const usersCollection = db.collection('admin');
 
     // Find user by username
     const user = await usersCollection.findOne({ username });
 
     if (!user) {
-      await client.close();
       return NextResponse.json({ success: false, message: 'Invalid username or password' }, { status: 401 });
     }
 
@@ -34,7 +31,6 @@ export async function POST(request: NextRequest) {
     const isPasswordValid = await bcrypt.compare(password, user.password);
 
     if (!isPasswordValid) {
-      await client.close();
       return NextResponse.json({ success: false, message: 'Invalid username or password' }, { status: 401 });
     }
 
@@ -44,8 +40,6 @@ export async function POST(request: NextRequest) {
         JWT_SECRET,
         { expiresIn: '24h' }
     );
-
-    await client.close();
 
     return NextResponse.json({
       success: true,
