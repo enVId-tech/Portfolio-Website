@@ -1,5 +1,4 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { MongoClient } from 'mongodb';
 import {connectToDatabase} from "@/utils/db.ts";
 
 // Aggressive caching: revalidate every 15 minutes for blog listings
@@ -50,14 +49,11 @@ export async function GET(request: NextRequest) {
 
 // Create a new blogs post
 export async function POST(request: NextRequest) {
-  const client = new MongoClient(process.env.MONGODB_URI as string);
-
   try {
     // Only parse the body once
     const data = await request.json();
 
-    await client.connect();
-    const db = client.db(process.env.CLIENT_DB);
+    const { db } = await connectToDatabase();
     const collection = db.collection('blogs');
 
     // Generate slug from title if not provided
@@ -100,7 +96,5 @@ export async function POST(request: NextRequest) {
   } catch (error) {
     console.error('Error creating blogs:', error);
     return NextResponse.json({ success: false, error: 'Failed to create blogs post' }, { status: 500 });
-  } finally {
-    await client.close();
   }
 }
