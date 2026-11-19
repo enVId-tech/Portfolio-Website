@@ -6,6 +6,7 @@ import styles from '@/styles/blogpost.module.scss';
 import { M_400, M_600 } from "@/utils/globalFonts";
 import { useAuth } from "@/context/AuthContext";
 import DotBackground from "@/_components/dotbackground";
+import TagsInput from "@/_components/tagsInput";
 import { formatISO } from 'date-fns';
 
 interface BlogPost {
@@ -179,48 +180,6 @@ export default function BlogPost({ slug: propSlug }: BlogPostProps) {
                 tags
             });
         }
-    };
-
-    const TagsInput = ({ tags, onChange }: { tags: string[], onChange: (tags: string[]) => void }) => {
-        const [inputValue, setInputValue] = useState('');
-
-        const handleKeyDown = (e: React.KeyboardEvent) => {
-            if (e.key === 'Enter' || e.key === ',') {
-                e.preventDefault();
-                const newTag = inputValue.trim();
-                if (newTag && !tags.includes(newTag)) {
-                    onChange([...tags, newTag]);
-                }
-                setInputValue('');
-            }
-        };
-
-        const removeTag = (tagToRemove: string) => {
-            onChange(tags.filter(tag => tag !== tagToRemove));
-        };
-
-        return (
-            <div className={styles.tagsInput}>
-                {tags.map(tag => (
-                    <div key={tag} className={styles.tagItem}>
-                        {tag}
-                        <span
-                            className={styles.removeTag}
-                            onClick={() => removeTag(tag)}
-                        >
-              ×
-            </span>
-                    </div>
-                ))}
-                <input
-                    type="text"
-                    value={inputValue}
-                    onChange={(e) => setInputValue(e.target.value)}
-                    onKeyDown={handleKeyDown}
-                    placeholder="Add tag..."
-                />
-            </div>
-        );
     };
 
     if (loading) {
