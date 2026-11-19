@@ -57,7 +57,7 @@ export default function Header({ children }: HeaderProps): React.ReactElement {
                     </a>
                 </nav>
                 <p className={`${styles.description} ${M_400}`}>
-                    Hi all, I'm Erick. I have {years.dev} years of experience in full-stack website development, including {years.react} years using ReactJS, {years.fullStack} years using Node.js with Express, and {years.next} years using Next.js. Always learning new things all the time, and ready to make solutions.
+                    Hi all, I&apos;m Erick. I have {years.dev} years of experience in full-stack website development, including {years.react} years using ReactJS, {years.fullStack} years using Node.js with Express, and {years.next} years using Next.js. Always learning new things all the time, and ready to make solutions.
                 </p>
             </header>
             { children }
