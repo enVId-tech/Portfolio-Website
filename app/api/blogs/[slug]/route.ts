@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { MongoClient, ObjectId } from 'mongodb';
+import { ObjectId } from 'mongodb';
+import { connectToDatabase } from '@/utils/db.ts';
 
 // Aggressive caching: revalidate every 10 minutes for individual blog posts
 export const revalidate = 600;
@@ -13,12 +14,10 @@ interface BlogData {
   [key: string]: unknown;
 }
 
-// Helper function for database connection
+// Helper function for getting a collection from the shared database connection
 async function getCollection(collectionName: string) {
-  const client = new MongoClient(process.env.MONGODB_URI || '');
-  await client.connect();
-  const db = client.db(process.env.CLIENT_DB);
-  return { collection: db.collection(collectionName), client };
+  const { db } = await connectToDatabase();
+  return db.collection(collectionName);
 }
 
 // Get a specific blogs by slug
@@ -27,11 +26,9 @@ export async function GET(
     { params }: { params: Promise<{ slug: string }> }
 ) {
   const id = (await params).slug;
-  let client;
 
   try {
-    const { collection, client: dbClient } = await getCollection('blogs');
-    client = dbClient;
+    const collection = await getCollection('blogs');
 
     const blog = await collection.findOne({ id: id });
 
@@ -53,8 +50,6 @@ export async function GET(
         { success: false, error: 'Failed to fetch blogs' },
         { status: 500 }
     );
-  } finally {
-    if (client) await client.close();
   }
 }
 
@@ -64,7 +59,6 @@ export async function PUT(
     { params }: { params: Promise<{ slug: string }> }
 ) {
   const id = (await params).slug;
-  let client;
 
   if (!id) {
     return NextResponse.json(
@@ -75,8 +69,7 @@ export async function PUT(
 
   try {
     const data: BlogData = await req.json();
-    const { collection, client: dbClient } = await getCollection('blogs');
-    client = dbClient;
+    const collection = await getCollection('blogs');
 
     // Remove _id from update data if it exists
     if (data._id) delete data._id;
@@ -103,8 +96,6 @@ export async function PUT(
         { success: false, error: 'Failed to update blogs' },
         { status: 500 }
     );
-  } finally {
-    if (client) await client.close();
   }
 }
 
@@ -113,13 +104,10 @@ export async function DELETE(
     req: NextRequest,
     { params }: { params: Promise<{ slug: string }> }
 ) {
-  let client;
-
   const id = (await params).slug;
 
   try {
-    const { collection, client: dbClient } = await getCollection('blogs');
-    client = dbClient;
+    const collection = await getCollection('blogs');
 
     const result = await collection.deleteOne({ id: id });
 
@@ -137,7 +125,5 @@ export async function DELETE(
         { success: false, error: 'Failed to delete blogs' },
         { status: 500 }
     );
-  } finally {
-    if (client) await client.close();
   }
 }
