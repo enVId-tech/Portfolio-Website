@@ -1,21 +1,19 @@
-# Use an official node image as the base image
-FROM node:latest
+# Pin the active Node.js LTS line instead of the moving "latest" tag.
+FROM node:26
 
 # Set the working directory in the container
 WORKDIR /nextapp
 
-# COPY public/ /app/public
-# COPY src/ /app/src
-# COPY package.json /app
-# COPY package-lock.json /app
-COPY . /nextapp
+# Install dependencies first so this layer is cached until the lockfile changes
+COPY package.json package-lock.json ./
+RUN npm ci
 
-RUN npm install
+COPY . .
 
 RUN npm run build
 
-# Make port 3040 available to the world outside this container
+# Next.js listens on port 3000 inside the container
 EXPOSE 3000
 
-# Run app.js when the container launches
+# Start the production server
 CMD ["npm", "start"]
