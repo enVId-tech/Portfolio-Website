@@ -2,7 +2,7 @@ import { MongoClient, MongoClientOptions } from 'mongodb';
 import dotenv from 'dotenv';
 import path from 'path';
 
-dotenv.config({ path: path.resolve(process.cwd(), 'stack.env') });
+dotenv.config({ path: path.resolve(process.cwd(), 'stack.env'), quiet: true });
 
 // Database configuration with fallbacks
 const config = {
@@ -11,36 +11,35 @@ const config = {
   DB_NAME: process.env.CLIENT_DB || 'blogs'
 };
 
-// Cached connection
-let cachedClient: MongoClient | null = null;
+// The pending connection is kept on globalThis so concurrent requests share a single client
+// and development hot reloads do not open a new connection pool each time.
+const globalForMongo = globalThis as typeof globalThis & {
+  _mongoClientPromise?: Promise<MongoClient>;
+};
 
 export async function connectToDatabase() {
-  if (cachedClient) {
-    return {
-      client: cachedClient,
-      db: cachedClient.db(config.DB_NAME)
-    };
-  }
-
   if (!config.MONGODB_URI) {
     throw new Error(
       'Please define the MONGODB_URI environment variable in .env.local'
     );
   }
 
-  const options: MongoClientOptions = {};
-  const client = new MongoClient(config.MONGODB_URI, options);
+  if (!globalForMongo._mongoClientPromise) {
+    const options: MongoClientOptions = {};
+    const client = new MongoClient(config.MONGODB_URI, options);
 
-  try {
-    await client.connect();
-    cachedClient = client;
-
-    return {
-      client,
-      db: client.db(config.DB_NAME)
-    };
-  } catch (error) {
-    console.error('Failed to connect to database:', error);
-    throw error;
+    globalForMongo._mongoClientPromise = client.connect().catch((error) => {
+      // Do not cache a failed connection, so the next request tries again
+      globalForMongo._mongoClientPromise = undefined;
+      console.error('Failed to connect to database:', error);
+      throw error;
+    });
   }
+
+  const client = await globalForMongo._mongoClientPromise;
+
+  return {
+    client,
+    db: client.db(config.DB_NAME)
+  };
 }
