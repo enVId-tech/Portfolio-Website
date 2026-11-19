@@ -47,11 +47,6 @@ interface GitHubRepo {
     default_branch: string;
 }
 
-interface PackageJson {
-    dependencies?: Record<string, string>;
-    devDependencies?: Record<string, string>;
-}
-
 async function processRepo(repo: GitHubRepo): Promise<ProcessedProject> {
     try {
         // Get languages using GitHub service
