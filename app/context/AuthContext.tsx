@@ -1,5 +1,5 @@
 "use client";
-import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
+import { createContext, useContext, useState, useEffect, ReactNode } from 'react';
 
 interface User {
   username: string;
@@ -22,39 +22,41 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [token, setToken] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(true);
 
+  // Restore the session from a stored token on mount
   useEffect(() => {
     const storedToken = localStorage.getItem('auth_token');
-    if (storedToken) {
-      verifyToken(storedToken).then(r => r);
-    } else {
+    if (!storedToken) {
       setIsLoading(false);
+      return;
     }
-  }, []);
 
-  const verifyToken = async (storedToken: string) => {
-    try {
-      const response = await fetch('/api/auth/verify', {
-        headers: {
-          Authorization: `Bearer ${storedToken}`
+    const verifyToken = async () => {
+      try {
+        const response = await fetch('/api/auth/verify', {
+          headers: {
+            Authorization: `Bearer ${storedToken}`
+          }
+        });
+
+        const data = await response.json();
+
+        if (data.success) {
+          setUser(data.user);
+          setToken(storedToken);
+        } else {
+          // Token invalid, clear it
+          localStorage.removeItem('auth_token');
         }
-      });
-
-      const data = await response.json();
-
-      if (data.success) {
-        setUser(data.user);
-        setToken(storedToken);
-      } else {
-        // Token invalid, clear it
+      } catch (error) {
+        console.error('Token verification failed:', error);
         localStorage.removeItem('auth_token');
+      } finally {
+        setIsLoading(false);
       }
-    } catch (error) {
-      console.error('Token verification failed:', error);
-      localStorage.removeItem('auth_token');
-    } finally {
-      setIsLoading(false);
-    }
-  };
+    };
+
+    void verifyToken();
+  }, []);
 
   const login = async (username: string, password: string): Promise<boolean> => {
     try {
@@ -92,9 +94,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   };
 
   return (
-      <AuthContext.Provider value={{ user, token, isLoading, login, logout, isAdmin }}>
+      <AuthContext value={{ user, token, isLoading, login, logout, isAdmin }}>
         {children}
-      </AuthContext.Provider>
+      </AuthContext>
   );
 }
 
