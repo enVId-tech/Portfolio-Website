@@ -1,5 +1,6 @@
 import React, { Suspense } from 'react';
 import type { Metadata, Viewport } from 'next';
+import Script from 'next/script';
 import '@/styles/globals.scss';
 import '@/utils/consoleOverride';
 import { M_600 } from "@/utils/globalFonts.ts";
@@ -106,16 +107,22 @@ export const viewport: Viewport = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
     return (
         <html lang="en">
-            <head>
+            <body className={M_600}>
                 {/* Google Analytics (gtag.js) - set NEXT_PUBLIC_GA_ID in env */}
                 {process.env.NEXT_PUBLIC_GA_ID && (
                     <>
-                        <script async src={`https://www.googletagmanager.com/gtag/js?id=${process.env.NEXT_PUBLIC_GA_ID}`} />
-                        <script dangerouslySetInnerHTML={{ __html: `window.dataLayer = window.dataLayer || []; function gtag(){dataLayer.push(arguments);} gtag('js', new Date()); gtag('config', '${process.env.NEXT_PUBLIC_GA_ID}', { page_path: window.location.pathname });` }} />
+                        <Script
+                            src={`https://www.googletagmanager.com/gtag/js?id=${process.env.NEXT_PUBLIC_GA_ID}`}
+                            strategy="afterInteractive"
+                        />
+                        <Script id="google-analytics" strategy="afterInteractive">
+                            {`window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', '${process.env.NEXT_PUBLIC_GA_ID}', { page_path: window.location.pathname });`}
+                        </Script>
                     </>
                 )}
-            </head>
-            <body className={M_600}>
                 <Suspense fallback={<div>Loading...</div>}>
                     <ClientLayout>
                         <AuthProvider>
