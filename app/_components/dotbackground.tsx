@@ -259,7 +259,6 @@ function DotCanvas({ config, contentRef }: DotCanvasProps): React.ReactElement {
             const { maxDistance, pushForce, returnForce, friction, dotSize } = effectiveConfig;
             
             const canvasHeight = canvas.height;
-            const windowHeight = window.innerHeight;
             const windowWidth = window.innerWidth;
 
             const visibleTop = -maxDistance;
