@@ -8,6 +8,9 @@ const eslintConfig = defineConfig([
   {
     rules: {
       "@next/next/no-img-element": "off",
+      // New in eslint-plugin-react-hooks 7. The fetch-on-mount and hydration effects flagged by this rule work as
+      // written, so report them as warnings until they are moved to SWR / useSyncExternalStore.
+      "react-hooks/set-state-in-effect": "warn",
     },
   },
   // Override the default ignores of eslint-config-next.
