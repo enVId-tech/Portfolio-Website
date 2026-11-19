@@ -1,11 +1,12 @@
 import React, { Suspense } from 'react';
+import type { Metadata, Viewport } from 'next';
 import '@/styles/globals.scss';
 import '@/utils/consoleOverride';
 import { M_600 } from "@/utils/globalFonts.ts";
 import { AuthProvider } from "@/context/AuthContext.tsx";
 import ClientLayout from './client-layout';
 
-export const metadata = {
+export const metadata: Metadata = {
     title: {
         template: '%s | Erick Tran - Full Stack Developer',
         default: 'Erick Tran - Full Stack Developer | React, Next.js, Node.js Expert',
@@ -51,6 +52,7 @@ export const metadata = {
         address: false,
         telephone: false,
     },
+    manifest: '/manifest.json',
     metadataBase: new URL('https://etran.dev'),
     alternates: {
         canonical: '/',
@@ -95,15 +97,16 @@ export const metadata = {
     category: 'technology',
 };
 
+export const viewport: Viewport = {
+    width: 'device-width',
+    initialScale: 1,
+    themeColor: '#1a1a1a',
+};
+
 export default function RootLayout({ children }: { children: React.ReactNode }) {
     return (
         <html lang="en">
             <head>
-                {/* DNS Prefetch and Preconnect for performance */}
-                <link rel="dns-prefetch" href="https://fonts.googleapis.com" />
-                <link rel="dns-prefetch" href="https://fonts.gstatic.com" />
-                <link rel="preconnect" href="https://fonts.googleapis.com" crossOrigin="anonymous" />
-                <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
                 {/* Google Analytics (gtag.js) - set NEXT_PUBLIC_GA_ID in env */}
                 {process.env.NEXT_PUBLIC_GA_ID && (
                     <>
@@ -111,13 +114,6 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                         <script dangerouslySetInnerHTML={{ __html: `window.dataLayer = window.dataLayer || []; function gtag(){dataLayer.push(arguments);} gtag('js', new Date()); gtag('config', '${process.env.NEXT_PUBLIC_GA_ID}', { page_path: window.location.pathname });` }} />
                     </>
                 )}
-                {/* Manifest and Icons */}
-                <link rel="manifest" href="/manifest.json" />
-                <link rel="apple-touch-icon" href="/favicon/apple-touch-icon.png" />
-
-                {/* Theme and Viewport */}
-                <meta name="theme-color" content="#1a1a1a" />
-                <meta name="viewport" content="width=device-width, initial-scale=1" />
             </head>
             <body className={M_600}>
                 <Suspense fallback={<div>Loading...</div>}>
