@@ -27,23 +27,19 @@ function NavigationManager({ children }: State) {
       trackPageview(pathname ?? window.location.pathname);
     } catch (e) {
       // swallow analytics errors
-      // eslint-disable-next-line no-console
       console.error('trackPageview error', e);
     }
   }, [pathname]);
 
   useEffect(() => {
+    const GA_ID = process.env.NEXT_PUBLIC_GA_ID;
+    const gtag = (window as Window & { gtag?: (...args: unknown[]) => void }).gtag;
+    if (!GA_ID || typeof gtag !== 'function') return;
+
     try {
-      const GA_ID = process.env.NEXT_PUBLIC_GA_ID;
-      if (GA_ID && typeof window !== 'undefined' && (window as any).gtag) {
-        try {
-          (window as any).gtag('config', GA_ID, { page_path: pathname ?? window.location.pathname });
-        } catch (e) {
-          // ignore
-        }
-      }
-    } catch (e) {
-      // ignore
+      gtag('config', GA_ID, { page_path: pathname ?? window.location.pathname });
+    } catch {
+      // ignore analytics errors
     }
   }, [pathname]);
 
