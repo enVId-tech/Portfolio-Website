@@ -56,7 +56,9 @@ export default function SectionSelector({ sections }: SectionSelectorProps): Rea
         const activeIndex = sections.findIndex(section => section.id === activeSection);
         if (activeIndex === -1) return;
 
-        const dotElements = selectorRef.current.querySelectorAll(`.${styles.dot}`);
+        // Match by class token instead of a selector: hashed CSS module names can start with "-" or a digit,
+        // which makes `.${styles.dot}` an invalid selector and throws.
+        const dotElements = Array.from(selectorRef.current.children).filter(el => el.classList.contains(styles.dot));
         if (!dotElements[activeIndex]) return;
 
         const dotPos = dotElements[activeIndex].getBoundingClientRect();
