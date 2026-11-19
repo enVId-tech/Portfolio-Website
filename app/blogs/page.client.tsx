@@ -216,7 +216,7 @@ export default function Blog() {
                 {filteredPosts.length > 0 ? (
                     <section className={styles.blogGrid}>
                         {filteredPosts.map(post => (
-                            <article key={post.id} className={styles.blogCard} onClick={() => {window.location.href = `/blogs/${post.id}`}}>
+                            <article key={post.id} className={styles.blogCard} onClick={() => router.push(`/blogs/${post.id}`)}>
                                 {post.coverImage && (
                                     <div className={styles.imageContainer}>
                                         <img src={post.coverImage} alt={post.title} />
