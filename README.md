@@ -56,7 +56,7 @@ A modern, full-stack portfolio website built with Next.js 16, React 19, and Type
 ## Getting Started
 
 ### Prerequisites
-- Node.js 18+ 
+- Node.js 20.9+ (Node 26 LTS is used by the Docker image)
 - MongoDB instance (local or cloud)
 - GitHub Personal Access Token (for repository data)
 - Docker (optional, for containerized deployment)
@@ -170,10 +170,11 @@ docker-compose down
 ## Available Scripts
 
 ```bash
-npm run dev          # Start development server with Turbopack
+npm run dev          # Start development server (Turbopack is the default)
 npm run build        # Build for production
 npm run start        # Start production server
 npm run lint         # Run ESLint
+npm run typecheck    # Type-check with tsc
 npm run ncu          # Update all dependencies
 ```
 
