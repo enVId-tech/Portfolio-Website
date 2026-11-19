@@ -1,9 +1,9 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { MongoClient, ObjectId } from 'mongodb';
+import { ObjectId } from 'mongodb';
+import { connectToDatabase } from '@/utils/db.ts';
 import jwt from 'jsonwebtoken';
 
 const JWT_SECRET = process.env.JWT_SECRET || 'your-fallback-secret-key';
-const MONGODB_URI = process.env.MONGODB_URI || 'mongodb://localhost:27017';
 
 export async function GET(request: NextRequest) {
     try {
@@ -18,14 +18,11 @@ export async function GET(request: NextRequest) {
         try {
             const decoded = jwt.verify(token, JWT_SECRET) as { id: string, username: string };
 
-            const client = await MongoClient.connect(MONGODB_URI);
-            const db = client.db(process.env.CLIENT_DB || 'blog');
+            const { db } = await connectToDatabase();
             const usersCollection = db.collection('users');
 
             // Verify user exists
             const user = await usersCollection.findOne({ _id: new ObjectId(decoded.id) });
-
-            await client.close();
 
             if (!user) {
                 return NextResponse.json({ success: false, message: 'User not found' }, { status: 404 });
