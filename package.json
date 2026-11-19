@@ -59,7 +59,6 @@
     "swr": "^2.5.1"
   },
   "devDependencies": {
-    "@eslint/eslintrc": "^3",
     "@types/jsonwebtoken": "^9.0.10",
     "@types/node": "^26",
     "@types/react": "^19",
