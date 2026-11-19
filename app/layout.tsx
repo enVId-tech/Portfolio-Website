@@ -4,7 +4,6 @@ import Script from 'next/script';
 import '@/styles/globals.scss';
 import '@/utils/consoleOverride';
 import { M_600 } from "@/utils/globalFonts.ts";
-import { AuthProvider } from "@/context/AuthContext.tsx";
 import ClientLayout from './client-layout';
 
 export const metadata: Metadata = {
@@ -125,9 +124,7 @@ gtag('config', '${process.env.NEXT_PUBLIC_GA_ID}', { page_path: window.location.
                 )}
                 <Suspense fallback={<div>Loading...</div>}>
                     <ClientLayout>
-                        <AuthProvider>
-                            {children}
-                        </AuthProvider>
+                        {children}
                     </ClientLayout>
                 </Suspense>
             </body>
