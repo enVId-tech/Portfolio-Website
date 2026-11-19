@@ -3,6 +3,17 @@ import { version } from "./package.json";
 
 const isDev = process.env.NODE_ENV === 'development';
 
+const securityHeaders = [
+    { key: 'X-Content-Type-Options', value: 'nosniff' },
+    { key: 'X-Frame-Options', value: 'DENY' },
+    { key: 'Referrer-Policy', value: 'strict-origin-when-cross-origin' },
+];
+
+const cacheControl = (sMaxAge: number, staleWhileRevalidate: number) => ({
+    key: 'Cache-Control',
+    value: `public, s-maxage=${sMaxAge}, stale-while-revalidate=${staleWhileRevalidate}`,
+});
+
 const nextConfig: NextConfig = {
     // Image optimization
     images: {
@@ -51,137 +62,45 @@ const nextConfig: NextConfig = {
                             key: 'Cache-Control',
                             value: 'no-store, no-cache, must-revalidate, proxy-revalidate',
                         },
-                        {
-                            key: 'X-Content-Type-Options',
-                            value: 'nosniff',
-                        },
-                        {
-                            key: 'X-Frame-Options',
-                            value: 'DENY',
-                        },
-                        {
-                            key: 'Referrer-Policy',
-                            value: 'strict-origin-when-cross-origin',
-                        },
+                        ...securityHeaders,
                     ],
                 },
             ];
         }
 
+        // Next.js applies every matching rule in order and a later rule overrides an earlier one for the same header,
+        // so the defaults come first and the more specific routes after them.
         return [
             {
-                source: '/',
+                source: '/(.*)',
                 headers: [
-                    {
-                        key: 'Cache-Control',
-                        value: 'public, s-maxage=1200, stale-while-revalidate=600', // 20 min cache, 10 min stale
-                    },
-                    {
-                        key: 'X-Content-Type-Options',
-                        value: 'nosniff',
-                    },
-                    {
-                        key: 'X-Frame-Options',
-                        value: 'DENY',
-                    },
-                    {
-                        key: 'Referrer-Policy',
-                        value: 'strict-origin-when-cross-origin',
-                    },
+                    cacheControl(1200, 600), // Default 20 min cache
+                    ...securityHeaders,
                 ],
             },
             {
                 source: '/blogs/:path*',
-                headers: [
-                    {
-                        key: 'Cache-Control',
-                        value: 'public, s-maxage=900, stale-while-revalidate=600', // 15 min cache, 10 min stale
-                    },
-                ],
+                headers: [cacheControl(900, 600)], // 15 min cache, 10 min stale
             },
             {
                 source: '/api/tech',
-                headers: [
-                    {
-                        key: 'Cache-Control',
-                        value: 'public, s-maxage=1200, stale-while-revalidate=600', // 20 min cache
-                    },
-                ],
+                headers: [cacheControl(1200, 600)], // 20 min cache
             },
             {
                 source: '/api/timeline',
-                headers: [
-                    {
-                        key: 'Cache-Control',
-                        value: 'public, s-maxage=1200, stale-while-revalidate=600', // 20 min cache
-                    },
-                ],
+                headers: [cacheControl(1200, 600)], // 20 min cache
             },
             {
                 source: '/api/projects',
-                headers: [
-                    {
-                        key: 'Cache-Control',
-                        value: 'public, s-maxage=1200, stale-while-revalidate=600', // 20 min cache
-                    },
-                ],
+                headers: [cacheControl(600, 900)], // 10 min cache, 15 min stale
             },
             {
                 source: '/api/github-repos',
-                headers: [
-                    {
-                        key: 'Cache-Control',
-                        value: 'public, s-maxage=1200, stale-while-revalidate=600', // 20 min cache
-                    },
-                ],
-            },
-            {
-                source: '/api/projects',
-                headers: [
-                    {
-                        key: 'Cache-Control',
-                        value: 'public, s-maxage=600, stale-while-revalidate=900', // 10 min cache, 15 min stale
-                    },
-                ],
-            },
-            {
-                source: '/api/github-repos',
-                headers: [
-                    {
-                        key: 'Cache-Control',
-                        value: 'public, s-maxage=600, stale-while-revalidate=900', // 10 min cache
-                    },
-                ],
+                headers: [cacheControl(600, 900)], // 10 min cache, 15 min stale
             },
             {
                 source: '/api/blogs/:path*',
-                headers: [
-                    {
-                        key: 'Cache-Control',
-                        value: 'public, s-maxage=600, stale-while-revalidate=300', // 10 min cache
-                    },
-                ],
-            },
-            {
-                source: '/(.*)',
-                headers: [
-                    {
-                        key: 'Cache-Control',
-                        value: 'public, s-maxage=1200, stale-while-revalidate=600', // Default 20 min cache
-                    },
-                    {
-                        key: 'X-Content-Type-Options',
-                        value: 'nosniff',
-                    },
-                    {
-                        key: 'X-Frame-Options',
-                        value: 'DENY',
-                    },
-                    {
-                        key: 'Referrer-Policy',
-                        value: 'strict-origin-when-cross-origin',
-                    },
-                ],
+                headers: [cacheControl(600, 300)], // 10 min cache
             },
             {
                 source: '/favicon.ico',
